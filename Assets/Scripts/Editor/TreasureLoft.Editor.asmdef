@@ -1,0 +1,8 @@
+{
+    "name": "TreasureLoft.Editor",
+    "rootNamespace": "TreasureLoft.Editor",
+    "references": [],
+    "includePlatforms": ["Editor"],
+    "excludePlatforms": [],
+    "autoReferenced": false
+}
