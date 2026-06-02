@@ -17,3 +17,7 @@ MonoBehaviour:
   price: 100
   icon: {fileID: 21300000, guid: e1f656a51e28e6849b9e3c3e167c5e13, type: 3}
   description: this is crazy KFC!
+  rarity: 0
+  attack: 1
+  defense: 2
+  movementSpeed: 3

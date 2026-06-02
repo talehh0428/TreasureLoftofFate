@@ -10,8 +10,10 @@ public class ShopItemSlotUI : MonoBehaviour, IPointerClickHandler
     [Header("UI References")]
     [SerializeField] private Image backgroundImage;
     [SerializeField] private Image itemIcon;
+    [SerializeField] private Image rarityBorder;
     [SerializeField] private TMP_Text itemNameText;
     [SerializeField] private TMP_Text itemPriceText;
+    [SerializeField] private TMP_Text discountText;
 
     [Header("Selection Colors")]
     [SerializeField] private Color normalColor = Color.white;
@@ -19,22 +21,26 @@ public class ShopItemSlotUI : MonoBehaviour, IPointerClickHandler
     [SerializeField] private Color soldBackgroundColor = new Color(0.45f, 0.45f, 0.45f, 1f);
     [SerializeField] private Color soldContentColor = new Color(0.55f, 0.55f, 0.55f, 1f);
 
-    private ShopItemDefinition currentItem;
+    [Header("Rarity Colors")]
+    [SerializeField] private Color commonRarityColor = new Color(0.8f, 0.8f, 0.8f, 1f);
+    [SerializeField] private Color fineRarityColor = new Color(0.3f, 0.85f, 0.35f, 1f);
+    [SerializeField] private Color superiorRarityColor = new Color(0.62f, 0.35f, 0.9f, 1f);
+    [SerializeField] private Color epicRarityColor = new Color(1f, 0.82f, 0.18f, 1f);
+    [SerializeField] private Color immortalRarityColor = new Color(0.88f, 0.18f, 0.18f, 1f);
+
+    private ShopItemInstance currentItem;
     private Color iconNormalColor = Color.white;
     private Color itemNameNormalColor = Color.white;
     private Color itemPriceNormalColor = Color.white;
+    private Color discountNormalColor = Color.white;
 
     public event Action<ShopItemSlotUI> Clicked;
 
-    public ShopItemDefinition CurrentItem => currentItem;
-
+    public ShopItemInstance CurrentItem => currentItem;
     public bool HasItem => currentItem != null;
-
     public bool IsSelected { get; private set; }
-
-    public bool IsSold { get; private set; }
-
-    public int Price => currentItem == null ? 0 : currentItem.Price;
+    public bool IsSold => currentItem != null && currentItem.IsSold;
+    public int Price => currentItem == null ? 0 : currentItem.FinalPrice;
 
     private void Awake()
     {
@@ -57,12 +63,11 @@ public class ShopItemSlotUI : MonoBehaviour, IPointerClickHandler
         ApplySelectionVisual();
     }
 
-    public void Setup(ShopItemDefinition itemDefinition)
+    public void Setup(ShopItemInstance itemInstance)
     {
         AutoBind();
-        currentItem = itemDefinition;
+        currentItem = itemInstance;
         IsSelected = false;
-        IsSold = false;
 
         if (currentItem == null)
         {
@@ -83,37 +88,16 @@ public class ShopItemSlotUI : MonoBehaviour, IPointerClickHandler
 
         if (itemPriceText != null)
         {
-            itemPriceText.text = $"{currentItem.Price}¡È Ø";
+            itemPriceText.text = $"{currentItem.FinalPrice}\u7075\u77f3";
+        }
+
+        if (discountText != null)
+        {
+            discountText.text = currentItem.DiscountLabel;
         }
 
         ApplySelectionVisual();
         gameObject.SetActive(true);
-    }
-
-    public void ClearSlot()
-    {
-        currentItem = null;
-        IsSelected = false;
-        IsSold = false;
-
-        if (itemIcon != null)
-        {
-            itemIcon.sprite = null;
-            itemIcon.enabled = false;
-        }
-
-        if (itemNameText != null)
-        {
-            itemNameText.text = string.Empty;
-        }
-
-        if (itemPriceText != null)
-        {
-            itemPriceText.text = string.Empty;
-        }
-
-        ApplySelectionVisual();
-        gameObject.SetActive(false);
     }
 
     public void SetSelected(bool selected)
@@ -143,7 +127,7 @@ public class ShopItemSlotUI : MonoBehaviour, IPointerClickHandler
             return;
         }
 
-        IsSold = true;
+        currentItem.MarkAsSold();
         IsSelected = false;
         ApplySelectionVisual();
     }
@@ -171,6 +155,11 @@ public class ShopItemSlotUI : MonoBehaviour, IPointerClickHandler
             itemIcon = FindChildComponent<Image>("ItemIcon");
         }
 
+        if (rarityBorder == null)
+        {
+            rarityBorder = FindChildComponent<Image>("RarityBorder");
+        }
+
         if (itemNameText == null)
         {
             itemNameText = FindChildComponent<TMP_Text>("ItemName");
@@ -180,20 +169,20 @@ public class ShopItemSlotUI : MonoBehaviour, IPointerClickHandler
         {
             itemPriceText = FindChildComponent<TMP_Text>("ItemPrice");
         }
+
+        if (discountText == null)
+        {
+            discountText = FindChildComponent<TMP_Text>("DiscountText");
+        }
     }
 
     private void ApplySelectionVisual()
     {
         if (backgroundImage != null)
         {
-            if (IsSold)
-            {
-                backgroundImage.color = soldBackgroundColor;
-            }
-            else
-            {
-                backgroundImage.color = IsSelected ? selectedColor : normalColor;
-            }
+            backgroundImage.color = IsSold
+                ? soldBackgroundColor
+                : (IsSelected ? selectedColor : normalColor);
         }
 
         if (itemIcon != null)
@@ -209,6 +198,40 @@ public class ShopItemSlotUI : MonoBehaviour, IPointerClickHandler
         if (itemPriceText != null)
         {
             itemPriceText.color = IsSold ? soldContentColor : itemPriceNormalColor;
+        }
+
+        if (discountText != null)
+        {
+            discountText.color = IsSold ? soldContentColor : discountNormalColor;
+        }
+
+        if (rarityBorder != null)
+        {
+            rarityBorder.color = IsSold ? soldContentColor : GetRarityColor();
+        }
+    }
+
+    private Color GetRarityColor()
+    {
+        if (currentItem == null)
+        {
+            return commonRarityColor;
+        }
+
+        switch (currentItem.Rarity)
+        {
+            case ShopItemRarity.Common:
+                return commonRarityColor;
+            case ShopItemRarity.Fine:
+                return fineRarityColor;
+            case ShopItemRarity.Superior:
+                return superiorRarityColor;
+            case ShopItemRarity.Epic:
+                return epicRarityColor;
+            case ShopItemRarity.Immortal:
+                return immortalRarityColor;
+            default:
+                return commonRarityColor;
         }
     }
 
@@ -238,6 +261,11 @@ public class ShopItemSlotUI : MonoBehaviour, IPointerClickHandler
         if (itemPriceText != null)
         {
             itemPriceNormalColor = itemPriceText.color;
+        }
+
+        if (discountText != null)
+        {
+            discountNormalColor = discountText.color;
         }
     }
 }
