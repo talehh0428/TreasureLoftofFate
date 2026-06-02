@@ -21,9 +21,13 @@ public class ShopController : MonoBehaviour
     [Header("Shop Setup")]
     [SerializeField] private List<ShopItemDefinition> itemCatalog = new List<ShopItemDefinition>();
     [SerializeField] [Min(1)] private int itemsToDisplay = 4;
-    [SerializeField] private bool allowDuplicateStock;
+    [SerializeField] private bool allowDuplicateStock = true;
     [SerializeField] [Min(0)] private int startingMoney = 1000;
     [SerializeField] private string exitSceneName = string.Empty;
+
+    [Header("Discount Settings")]
+    [SerializeField] private ShopDiscountSettings discountSettings = new ShopDiscountSettings();
+    [SerializeField] private ShopRarityWeightTable rarityWeights = new ShopRarityWeightTable();
 
     [Header("Feedback")]
     [SerializeField] private float feedbackDuration = 1.5f;
@@ -32,6 +36,9 @@ public class ShopController : MonoBehaviour
     [SerializeField] private Color neutralMessageColor = Color.white;
 
     private readonly List<ShopItemSlotUI> slotPool = new List<ShopItemSlotUI>();
+    private readonly List<IShopDiscountModifier> discountModifiers = new List<IShopDiscountModifier>();
+    private readonly List<IShopRarityWeightModifier> rarityWeightModifiers = new List<IShopRarityWeightModifier>();
+
     private Coroutine feedbackRoutine;
 
     private void Awake()
@@ -78,9 +85,41 @@ public class ShopController : MonoBehaviour
         }
     }
 
+    public void RegisterDiscountModifier(IShopDiscountModifier modifier)
+    {
+        if (modifier != null && !discountModifiers.Contains(modifier))
+        {
+            discountModifiers.Add(modifier);
+        }
+    }
+
+    public void UnregisterDiscountModifier(IShopDiscountModifier modifier)
+    {
+        if (modifier != null)
+        {
+            discountModifiers.Remove(modifier);
+        }
+    }
+
+    public void RegisterRarityWeightModifier(IShopRarityWeightModifier modifier)
+    {
+        if (modifier != null && !rarityWeightModifiers.Contains(modifier))
+        {
+            rarityWeightModifiers.Add(modifier);
+        }
+    }
+
+    public void UnregisterRarityWeightModifier(IShopRarityWeightModifier modifier)
+    {
+        if (modifier != null)
+        {
+            rarityWeightModifiers.Remove(modifier);
+        }
+    }
+
     public void PopulateShelf()
     {
-        List<ShopItemDefinition> stockedItems = BuildRandomStock();
+        List<ShopItemInstance> stockedItems = BuildStockInstances();
         RebuildSlotPool(stockedItems);
 
         for (int index = 0; index < slotPool.Count; index++)
@@ -91,6 +130,7 @@ public class ShopController : MonoBehaviour
             slot.Setup(stockedItems[index]);
         }
 
+        ShopEvents.RaiseItemSelectionCleared();
         RebuildShelfLayout();
     }
 
@@ -102,32 +142,35 @@ public class ShopController : MonoBehaviour
 
         if (selectedSlots.Count == 0)
         {
-            ShowFeedback("请先选择要购买的商品。", neutralMessageColor);
+            ShowFeedback("\u8bf7\u5148\u9009\u62e9\u8981\u8d2d\u4e70\u7684\u5546\u54c1\u3002", neutralMessageColor);
             return;
         }
 
         int totalPrice = selectedSlots.Sum(slot => slot.Price);
         if (!ShopWallet.TrySpend(totalPrice))
         {
-            ShowFeedback("购买失败：灵石不足。", failureMessageColor);
+            ShowFeedback("\u8d2d\u4e70\u5931\u8d25\uff1a\u7075\u77f3\u4e0d\u8db3\u3002", failureMessageColor);
             return;
         }
 
-        foreach (ShopItemSlotUI slot in selectedSlots)
+        for (int index = 0; index < selectedSlots.Count; index++)
         {
-            ShopItemDefinition purchasedItem = slot.CurrentItem;
+            ShopItemSlotUI slot = selectedSlots[index];
+            ShopItemInstance purchasedItem = slot.CurrentItem;
             HandlePurchasedItem(purchasedItem);
             slot.MarkAsSold();
+            ShopEvents.RaiseItemSold(purchasedItem);
         }
 
-        ShowFeedback($"购买成功，花费 {totalPrice} 灵石。", successMessageColor);
+        ShopEvents.RaiseItemSelectionCleared();
+        ShowFeedback($"\u8d2d\u4e70\u6210\u529f\uff0c\u82b1\u8d39 {totalPrice}\u7075\u77f3\u3002", successMessageColor);
     }
 
     private void HandleLeaveButtonClicked()
     {
         if (string.IsNullOrWhiteSpace(exitSceneName))
         {
-            ShowFeedback("离开场景尚未配置。", neutralMessageColor);
+            ShowFeedback("\u79bb\u5f00\u573a\u666f\u5c1a\u672a\u914d\u7f6e\u3002", neutralMessageColor);
             return;
         }
 
@@ -141,17 +184,33 @@ public class ShopController : MonoBehaviour
             return;
         }
 
-        clickedSlot.SetSelected(clickedSlot.IsSelected);
+        if (clickedSlot.IsSelected)
+        {
+            ShopEvents.RaiseItemSelected(clickedSlot.CurrentItem);
+            return;
+        }
+
+        ShopItemSlotUI fallbackSlot = slotPool.LastOrDefault(
+            slot => slot != clickedSlot && slot.HasItem && slot.IsSelected && !slot.IsSold);
+
+        if (fallbackSlot != null)
+        {
+            ShopEvents.RaiseItemSelected(fallbackSlot.CurrentItem);
+        }
+        else
+        {
+            ShopEvents.RaiseItemSelectionCleared();
+        }
     }
 
-    private void HandlePurchasedItem(ShopItemDefinition itemDefinition)
+    private void HandlePurchasedItem(ShopItemInstance itemInstance)
     {
-        if (itemDefinition == null)
+        if (itemInstance == null)
         {
             return;
         }
 
-        // 这里预留给后续库存系统接入。
+        // Hook for future inventory integration.
     }
 
     private void HandleMoneyChanged(int currentMoney)
@@ -166,43 +225,80 @@ public class ShopController : MonoBehaviour
             return;
         }
 
-        moneyText.text = $"{currentMoney} 灵石";
+        moneyText.text = $"{currentMoney}\u7075\u77f3";
     }
 
-    private List<ShopItemDefinition> BuildRandomStock()
+    private List<ShopItemInstance> BuildStockInstances()
     {
         List<ShopItemDefinition> validItems = itemCatalog
-            .Where(item => item != null)
+            .Where(item => item != null && item.Rarity != ShopItemRarity.Immortal)
             .Distinct()
             .ToList();
 
         if (validItems.Count == 0)
         {
-            ShowFeedback("未配置可上架的商品。", failureMessageColor);
-            return new List<ShopItemDefinition>();
+            ShowFeedback("\u672a\u914d\u7f6e\u53ef\u4e0a\u67b6\u7684\u5546\u54c1\u3002", failureMessageColor);
+            return new List<ShopItemInstance>();
         }
 
-        List<ShopItemDefinition> result = new List<ShopItemDefinition>();
-        int targetCount = Mathf.Max(0, itemsToDisplay);
+        int targetCount = Mathf.Max(1, itemsToDisplay);
+        ShopDiscountSettings effectiveDiscountSettings = BuildEffectiveDiscountSettings();
+        List<ShopItemInstance> result = new List<ShopItemInstance>(targetCount);
+        List<ShopItemDefinition> availableUniqueItems = new List<ShopItemDefinition>(validItems);
 
-        if (allowDuplicateStock)
+        for (int index = 0; index < targetCount; index++)
         {
-            for (int index = 0; index < targetCount; index++)
+            if (!allowDuplicateStock && availableUniqueItems.Count == 0)
             {
-                int randomIndex = Random.Range(0, validItems.Count);
-                result.Add(validItems[randomIndex]);
+                break;
             }
 
-            return result;
+            List<ShopItemDefinition> sourceCatalog = allowDuplicateStock ? validItems : availableUniqueItems;
+
+            ShopItemDefinition definition = ShopGenerationUtility.DrawWeightedItem(
+                sourceCatalog,
+                rarityWeights,
+                rarityWeightModifiers);
+
+            if (definition == null)
+            {
+                continue;
+            }
+
+            if (!allowDuplicateStock)
+            {
+                availableUniqueItems.Remove(definition);
+            }
+
+            float discountRate = index == 0
+                ? effectiveDiscountSettings.GuaranteedDiscount
+                : ShopGenerationUtility.SampleTruncatedExponential(effectiveDiscountSettings);
+
+            result.Add(new ShopItemInstance(definition, discountRate));
         }
 
-        List<ShopItemDefinition> shuffledItems = validItems
-            .OrderBy(_ => Random.value)
-            .ToList();
-
-        int count = Mathf.Min(targetCount, shuffledItems.Count);
-        result.AddRange(shuffledItems.Take(count));
         return result;
+    }
+
+    private ShopDiscountSettings BuildEffectiveDiscountSettings()
+    {
+        ShopDiscountSettings effectiveSettings = discountSettings == null
+            ? new ShopDiscountSettings()
+            : discountSettings.Clone();
+
+        for (int index = 0; index < discountModifiers.Count; index++)
+        {
+            IShopDiscountModifier modifier = discountModifiers[index];
+            if (modifier == null)
+            {
+                continue;
+            }
+
+            modifier.ModifyDiscountSettings(effectiveSettings);
+        }
+
+        effectiveSettings.Validate();
+        return effectiveSettings;
     }
 
     private void AutoBindSceneReferences()
@@ -285,7 +381,7 @@ public class ShopController : MonoBehaviour
         shelfScrollView.verticalScrollbarVisibility = ScrollRect.ScrollbarVisibility.AutoHideAndExpandViewport;
     }
 
-    private void RebuildSlotPool(IReadOnlyList<ShopItemDefinition> stockedItems)
+    private void RebuildSlotPool(IReadOnlyList<ShopItemInstance> stockedItems)
     {
         if (contentRoot == null || itemSlotPrefab == null)
         {
@@ -299,7 +395,6 @@ public class ShopController : MonoBehaviour
         {
             ShopItemSlotUI slot = Instantiate(itemSlotPrefab, contentRoot);
             slot.name = $"ItemSlot_{index + 1:00}";
-            slot.Setup(stockedItems[index]);
             slotPool.Add(slot);
         }
     }
@@ -317,9 +412,9 @@ public class ShopController : MonoBehaviour
             childrenToDestroy.Add(child.gameObject);
         }
 
-        foreach (GameObject childObject in childrenToDestroy)
+        for (int index = 0; index < childrenToDestroy.Count; index++)
         {
-            Destroy(childObject);
+            Destroy(childrenToDestroy[index]);
         }
     }
 
@@ -327,7 +422,9 @@ public class ShopController : MonoBehaviour
     {
         if (feedbackText == null)
         {
-            Debug.LogWarning("ShopController 缺少 FeedbackText 引用，请在 ShopCanvas 下创建并绑定一个 TMP 文本用于提示消息。", this);
+            Debug.LogWarning(
+                "ShopController is missing FeedbackText. Please create and bind a TMP text under ShopCanvas.",
+                this);
             return;
         }
 
