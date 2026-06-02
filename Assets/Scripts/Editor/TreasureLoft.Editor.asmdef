@@ -1,7 +1,10 @@
 {
     "name": "TreasureLoft.Editor",
     "rootNamespace": "TreasureLoft.Editor",
-    "references": [],
+    "references": [
+        "Unity.TextMeshPro",
+        "Unity.TextMeshPro.Editor"
+    ],
     "includePlatforms": ["Editor"],
     "excludePlatforms": [],
     "autoReferenced": false
