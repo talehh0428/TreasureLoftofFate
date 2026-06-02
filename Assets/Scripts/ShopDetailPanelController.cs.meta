@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scripts/ShopDetailPanelController.cs.meta
 guid: 76ca2555291946b458805dddbfbc1234
+========
+guid: ac7df6887f1ad4f459c35eabd95620c7
+>>>>>>>> 49aa3b9 (feat: 场景修改与NPC预制体构建):Assets/Scripts/NPCDefinition.cs.meta
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
