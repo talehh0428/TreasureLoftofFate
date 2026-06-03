@@ -65,6 +65,7 @@ public class ShopController : MonoBehaviour
 
     private void Start()
     {
+        ShopItemUnlockRegistry.RegisterDefaults(itemCatalog);
         ShopWallet.InitializeIfNeeded(startingMoney);
         RefreshMoneyText(ShopWallet.CurrentMoney);
         PopulateShelf();
@@ -209,6 +210,8 @@ public class ShopController : MonoBehaviour
         {
             return;
         }
+
+        ShopItemUnlockRegistry.Unlock(itemInstance.Definition);
 
         // Hook for future inventory integration.
     }
