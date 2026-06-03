@@ -4893,7 +4893,7 @@ GameObject:
   - component: {fileID: 1515009032}
   - component: {fileID: 1515009031}
   m_Layer: 0
-  m_Name: CenterPanel
+  m_Name: DetailPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
