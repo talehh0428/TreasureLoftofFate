@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8674259911278817860}
   - component: {fileID: 6934160265250916538}
   m_Layer: 0
-  m_Name: Name
+  m_Name: NpcName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -146,7 +146,7 @@ GameObject:
   - component: {fileID: 338567780760281702}
   - component: {fileID: 2421692736242511263}
   m_Layer: 0
-  m_Name: Tittle
+  m_Name: NpcDescription
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -280,7 +280,7 @@ GameObject:
   - component: {fileID: 5563407060655966338}
   - component: {fileID: 3353339479614035559}
   m_Layer: 0
-  m_Name: Avatar
+  m_Name: NpcAvatar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -480,6 +480,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   backgroundImage: {fileID: 9212516485675985998}
-  npcAvatar: {fileID: 0}
-  npcNameText: {fileID: 0}
-  npcTittleText: {fileID: 0}
+  npcAvatar: {fileID: 3353339479614035559}
+  npcNameText: {fileID: 6934160265250916538}
+  npcTittleText: {fileID: 2421692736242511263}
