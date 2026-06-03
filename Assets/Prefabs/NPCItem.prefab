@@ -146,7 +146,7 @@ GameObject:
   - component: {fileID: 338567780760281702}
   - component: {fileID: 2421692736242511263}
   m_Layer: 0
-  m_Name: Faction
+  m_Name: Tittle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -199,7 +199,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u63CF\u8FF0"
+  m_text: "\u79F0\u53F7"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ded9b449f00c5054b8f97f59796a394f, type: 2}
   m_sharedMaterial: {fileID: 5618616920204111152, guid: ded9b449f00c5054b8f97f59796a394f, type: 2}
@@ -355,6 +355,7 @@ GameObject:
   - component: {fileID: 7614872324766685101}
   - component: {fileID: 9212516485675985998}
   - component: {fileID: 773078120487271985}
+  - component: {fileID: 5180773909831003301}
   m_Layer: 0
   m_Name: NPCItem
   m_TagString: Untagged
@@ -466,3 +467,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &5180773909831003301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6562598786562737268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10074e8e0d988d94384a256cdbab9783, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  backgroundImage: {fileID: 9212516485675985998}
+  npcAvatar: {fileID: 0}
+  npcNameText: {fileID: 0}
+  npcTittleText: {fileID: 0}

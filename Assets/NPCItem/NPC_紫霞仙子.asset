@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ac7df6887f1ad4f459c35eabd95620c7, type: 3}
-  m_Name: NPC_\u7D2B\u971E\u4ED9\u5B50
+  m_Name: "NPC_\u7D2B\u971E\u4ED9\u5B50"
   m_EditorClassIdentifier: 
-  npcId: npc_zixia
+  npcId: 0002
   displayName: "\u7D2B\u971E\u4ED9\u5B50"
   avatar: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   description: "\u4ED9\u95E8\u5F1F\u5B50"

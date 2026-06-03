@@ -11,9 +11,10 @@ public class NPCItemUI : MonoBehaviour, IPointerClickHandler
     [SerializeField] private Image backgroundImage;
     [SerializeField] private Image npcAvatar;
     [SerializeField] private TMP_Text npcNameText;
-    [SerializeField] private TMP_Text npcDescriptionText;
+    [SerializeField] private TMP_Text npcTittleText;
 
     private NPCDefinition currentNpc;
+    private Color normalColor;
 
     public event Action<NPCItemUI> Clicked;
 
@@ -24,6 +25,7 @@ public class NPCItemUI : MonoBehaviour, IPointerClickHandler
     private void Awake()
     {
         AutoBind();
+        CacheNormalColor();
     }
 
     private void Reset()
@@ -58,9 +60,9 @@ public class NPCItemUI : MonoBehaviour, IPointerClickHandler
             npcNameText.text = currentNpc.DisplayName;
         }
 
-        if (npcDescriptionText != null)
+        if (npcTittleText != null)
         {
-            npcDescriptionText.text = currentNpc.Description;
+            npcTittleText.text = currentNpc.Description;
         }
 
         gameObject.SetActive(true);
@@ -81,12 +83,32 @@ public class NPCItemUI : MonoBehaviour, IPointerClickHandler
             npcNameText.text = string.Empty;
         }
 
-        if (npcDescriptionText != null)
+        if (npcTittleText != null)
         {
-            npcDescriptionText.text = string.Empty;
+            npcTittleText.text = string.Empty;
         }
 
         gameObject.SetActive(false);
+    }
+
+    public void SetHighlight(bool isHighlighted)
+    {
+        if (backgroundImage == null)
+        {
+            return;
+        }
+
+        backgroundImage.color = isHighlighted
+            ? new Color(0.35f, 0.25f, 0.1f, 0.95f)
+            : normalColor;
+    }
+
+    private void CacheNormalColor()
+    {
+        if (backgroundImage != null)
+        {
+            normalColor = backgroundImage.color;
+        }
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -116,9 +138,9 @@ public class NPCItemUI : MonoBehaviour, IPointerClickHandler
             npcNameText = FindChildComponent<TMP_Text>("NpcName");
         }
 
-        if (npcDescriptionText == null)
+        if (npcTittleText == null)
         {
-            npcDescriptionText = FindChildComponent<TMP_Text>("NpcDescription");
+            npcTittleText = FindChildComponent<TMP_Text>("NpcDescription");
         }
     }
 
