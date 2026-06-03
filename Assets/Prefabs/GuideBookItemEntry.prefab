@@ -163,6 +163,7 @@ GameObject:
   - component: {fileID: 7305094859044893140}
   - component: {fileID: 836291023489995527}
   - component: {fileID: 2716324273204080251}
+  - component: {fileID: 582883283799792569}
   m_Layer: 5
   m_Name: GuideBookItemEntry
   m_TagString: Untagged
@@ -273,6 +274,29 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &582883283799792569
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5331051474777861540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02f90e757dcc9a243a21b731c0774907, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: {fileID: 2716324273204080251}
+  backgroundImage: {fileID: 836291023489995527}
+  iconImage: {fileID: 2623485135268868495}
+  nameText: {fileID: 3094622001767206808}
+  lockedName: ???
+  normalBackgroundColor: {r: 0.58, g: 0.48, b: 0.29, a: 1}
+  selectedBackgroundColor: {r: 0.83, g: 0.69, b: 0.42, a: 1}
+  normalTextColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedTextColor: {r: 0.17, g: 0.12, b: 0.05, a: 1}
+  lockedTintColor: {r: 0.55, g: 0.55, b: 0.55, a: 1}
+  unlockedTintColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &5963745307346452817
 GameObject:
   m_ObjectHideFlags: 0
