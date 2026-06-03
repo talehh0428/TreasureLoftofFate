@@ -2643,17 +2643,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 1274286828}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76ca2555291946b458805dddbfbc1234, type: 3}
+  m_Script: {fileID: 11500000, guid: a84dd99379868944a9253cab6fb6a24c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemIcon: {fileID: 122498786}
-  itemNameText: {fileID: 964888887}
-  rarityText: {fileID: 1576636303}
-  priceText: {fileID: 736616819}
-  attackText: {fileID: 892434487}
-  defenseText: {fileID: 1434854150}
-  speedText: {fileID: 1915788037}
-  descriptionText: {fileID: 288485159}
+  itemIcon: {fileID: 0}
+  itemNameText: {fileID: 0}
+  rarityText: {fileID: 0}
+  priceText: {fileID: 0}
+  attackText: {fileID: 0}
+  defenseText: {fileID: 0}
+  speedText: {fileID: 0}
+  descriptionText: {fileID: 0}
   emptyDescription: "\u8BF7\u9009\u62E9\u5546\u54C1\u67E5\u770B\u8BE6\u60C5"
 --- !u!114 &1274286831
 MonoBehaviour:
