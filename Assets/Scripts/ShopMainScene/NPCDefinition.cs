@@ -10,6 +10,7 @@ public class NPCDefinition : ScriptableObject
     [SerializeField] private int attack;
     [SerializeField] private int defense;
     [SerializeField] private int movementSpeed;
+    [SerializeField] [TextArea] private string prompt;
 
     public string NpcId
     {
@@ -44,6 +45,8 @@ public class NPCDefinition : ScriptableObject
     public int Defense => Mathf.Max(0, defense);
 
     public int MovementSpeed => Mathf.Max(0, movementSpeed);
+
+    public string Prompt => prompt;
 
     private void OnValidate()
     {
