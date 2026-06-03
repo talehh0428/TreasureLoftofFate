@@ -1,0 +1,45 @@
+# Unity .gitattributes — 统一全平台/全协作者文件处理规则
+
+# ===== 二进制 Asset 文件 =====
+# 标记为二进制，不转换行尾符（-text），禁止文本合并（-merge）
+*.asset binary -text -merge
+*.unity binary -text -merge
+*.prefab binary -text -merge
+*.mat binary -text -merge
+*.controller binary -text -merge
+*.anim binary -text -merge
+*.fbx binary -text -merge
+*.blend binary -text -merge
+*.png binary -text -merge
+*.jpg binary -text -merge
+*.jpeg binary -text -merge
+*.tga binary -text -merge
+*.psd binary -text -merge
+*.tif binary -text -merge
+*.wav binary -text -merge
+*.mp3 binary -text -merge
+*.ogg binary -text -merge
+*.ttf binary -text -merge
+*.otf binary -text -merge
+*.dll binary -text -merge
+*.so binary -text -merge
+*.bundle binary -text -merge
+*.unitypackage binary -text -merge
+
+# ===== 代码文件 =====
+# 采用 LF 行尾，避免 Windows/Mac/Linux 差异
+*.cs text eol=lf
+*.js text eol=lf
+*.ts text eol=lf
+*.shader text eol=lf
+*.hlsl text eol=lf
+*.cginc text eol=lf
+*.json text eol=lf
+
+# ===== Meta 文件 =====
+# Unity 的 .meta 文件本质是 YAML 文本，统一 LF
+*.meta text eol=lf
+
+# ===== 文档 =====
+*.md text eol=lf
+*.txt text eol=lf
