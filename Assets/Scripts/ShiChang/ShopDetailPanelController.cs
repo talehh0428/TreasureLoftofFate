@@ -12,10 +12,6 @@ public class ShopDetailPanelController : MonoBehaviour
     [SerializeField] private TMP_Text attackText;
     [SerializeField] private TMP_Text defenseText;
     [SerializeField] private TMP_Text speedText;
-    [SerializeField] private TMP_Text descriptionText;
-
-    [Header("Empty State")]
-    [SerializeField] [TextArea] private string emptyDescription = "\u8bf7\u9009\u62e9\u5546\u54c1\u67e5\u770b\u8be6\u60c5";
 
     private const string CurrencyLabel = "\u7075\u77f3";
 
@@ -81,10 +77,6 @@ public class ShopDetailPanelController : MonoBehaviour
             speedText.text = $"\u9041\u901f\u2014{itemInstance.MovementSpeed}";
         }
 
-        if (descriptionText != null)
-        {
-            descriptionText.text = itemInstance.Description;
-        }
     }
 
     private void HandleItemSelectionCleared()
@@ -130,10 +122,6 @@ public class ShopDetailPanelController : MonoBehaviour
             speedText.text = string.Empty;
         }
 
-        if (descriptionText != null)
-        {
-            descriptionText.text = emptyDescription;
-        }
     }
 
     private void AutoBind()
@@ -173,10 +161,6 @@ public class ShopDetailPanelController : MonoBehaviour
             speedText = FindChildComponent<TMP_Text>("DetailSpeed");
         }
 
-        if (descriptionText == null)
-        {
-            descriptionText = FindChildComponent<TMP_Text>("DetailDescription");
-        }
     }
 
     private T FindChildComponent<T>(string childName) where T : Component
