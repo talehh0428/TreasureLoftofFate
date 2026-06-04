@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -21,13 +22,11 @@ public class GuideBookController : MonoBehaviour
     [SerializeField] private Sprite lockedIcon;
     [SerializeField] private RectTransform leftPageRoot;
     [SerializeField] private Image listBackgroundImage;
-    [SerializeField] private TMP_Text leftTitle;
-    [SerializeField] private string itemTabTitle = "物品图鉴";
-    [SerializeField] private string customerTabTitle = "顾客图鉴";
 
     [Header("Tabs")]
     [SerializeField] private Button itemTabButton;
     [SerializeField] private Button customerTabButton;
+    [SerializeField] private Button closeButton;
 
     [Header("Panels")]
     [SerializeField] private GameObject itemListRoot;
@@ -39,6 +38,7 @@ public class GuideBookController : MonoBehaviour
     private readonly List<GuideBookItemEntryUI> spawnedEntries = new List<GuideBookItemEntryUI>();
     private readonly List<ShopItemDefinition> sortedDefinitions = new List<ShopItemDefinition>();
     private GuideBookItemEntryUI selectedEntry;
+    private bool isUnloading;
 
     private void Awake()
     {
@@ -55,11 +55,41 @@ public class GuideBookController : MonoBehaviour
     private void OnEnable()
     {
         ShopItemUnlockRegistry.ItemUnlocked += HandleItemUnlocked;
+
+        if (itemTabButton != null)
+        {
+            itemTabButton.onClick.AddListener(SelectItemTab);
+        }
+
+        if (customerTabButton != null)
+        {
+            customerTabButton.onClick.AddListener(SelectCustomerTab);
+        }
+
+        if (closeButton != null)
+        {
+            closeButton.onClick.AddListener(CloseGuideBookScene);
+        }
     }
 
     private void OnDisable()
     {
         ShopItemUnlockRegistry.ItemUnlocked -= HandleItemUnlocked;
+
+        if (itemTabButton != null)
+        {
+            itemTabButton.onClick.RemoveListener(SelectItemTab);
+        }
+
+        if (customerTabButton != null)
+        {
+            customerTabButton.onClick.RemoveListener(SelectCustomerTab);
+        }
+
+        if (closeButton != null)
+        {
+            closeButton.onClick.RemoveListener(CloseGuideBookScene);
+        }
     }
 
     private void OnValidate()
@@ -74,14 +104,34 @@ public class GuideBookController : MonoBehaviour
         if (itemTabButton != null)
         {
             itemTabButton.onClick.RemoveListener(SelectItemTab);
-            itemTabButton.onClick.AddListener(SelectItemTab);
         }
 
         if (customerTabButton != null)
         {
             customerTabButton.onClick.RemoveListener(SelectCustomerTab);
-            customerTabButton.onClick.AddListener(SelectCustomerTab);
         }
+
+        if (closeButton != null)
+        {
+            closeButton.onClick.RemoveListener(CloseGuideBookScene);
+        }
+    }
+
+    public void CloseGuideBookScene()
+    {
+        if (isUnloading)
+        {
+            return;
+        }
+
+        Scene currentScene = gameObject.scene;
+        if (!currentScene.IsValid() || !currentScene.isLoaded)
+        {
+            return;
+        }
+
+        isUnloading = true;
+        SceneManager.UnloadSceneAsync(currentScene);
     }
 
     private void LoadDefinitions()
@@ -197,11 +247,6 @@ public class GuideBookController : MonoBehaviour
             itemListRoot.SetActive(true);
         }
 
-        if (leftTitle != null)
-        {
-            leftTitle.text = itemTabTitle;
-        }
-
         if (bottomHint != null)
         {
             bottomHint.gameObject.SetActive(true);
@@ -221,11 +266,6 @@ public class GuideBookController : MonoBehaviour
         if (itemListRoot != null)
         {
             itemListRoot.SetActive(false);
-        }
-
-        if (leftTitle != null)
-        {
-            leftTitle.text = customerTabTitle;
         }
 
         if (bottomHint != null)
@@ -267,9 +307,14 @@ public class GuideBookController : MonoBehaviour
             return;
         }
 
-        unselectedTransform.SetSiblingIndex(backgroundTransform.GetSiblingIndex());
-        backgroundTransform.SetSiblingIndex(unselectedTransform.GetSiblingIndex() + 1);
-        selectedTransform.SetSiblingIndex(backgroundTransform.GetSiblingIndex() + 1);
+        int baseIndex = Mathf.Min(
+            selectedTransform.GetSiblingIndex(),
+            unselectedTransform.GetSiblingIndex(),
+            backgroundTransform.GetSiblingIndex());
+
+        unselectedTransform.SetSiblingIndex(baseIndex);
+        backgroundTransform.SetSiblingIndex(baseIndex + 1);
+        selectedTransform.SetSiblingIndex(baseIndex + 2);
     }
 
     private GuideBookEntryData BuildEntryData(ShopItemDefinition definition)
@@ -328,9 +373,9 @@ public class GuideBookController : MonoBehaviour
             customerTabButton = FindButtonByName("CustomerTabButton", "顾客");
         }
 
-        if (leftTitle == null)
+        if (closeButton == null)
         {
-            leftTitle = FindChildComponent<TMP_Text>("BookPanel/LeftPage/LeftTitle");
+            closeButton = FindButtonByName("CloseButton", "ExitButton", "BackButton", "返回");
         }
 
         if (itemListRoot == null)
