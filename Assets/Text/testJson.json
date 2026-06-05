@@ -1,0 +1,197 @@
+{
+  "version": "1.0.0",
+  "events": [
+    {
+      "id": "AP01E001",
+      "type": "personal",
+      "title": "P01个人线结束测试",
+      "participants": [ "P01" ],
+      "priority": 10,
+      "once": true,
+      "trigger": {
+        "requirements": [],
+        "conditions": []
+      },
+      "outcomes": [
+        {
+          "id": "AP01E001O001",
+          "priority": 100,
+          "conditions": [],
+          "text": "P01完成了自己的个人路线，暂时没有新的个人事件。",
+          "next": []
+        }
+      ]
+    },
+    {
+      "id": "AP02E001",
+      "type": "personal",
+      "title": "P02退场测试",
+      "participants": [ "P02" ],
+      "priority": 10,
+      "once": true,
+      "trigger": {
+        "requirements": [],
+        "conditions": []
+      },
+      "outcomes": [
+        {
+          "id": "AP02E001O001",
+          "priority": 100,
+          "conditions": [],
+          "text": "P02离开了当前区域，暂时不会再参与事件判断。",
+          "next": [
+            {
+              "target": "P02",
+              "nextId": "EVENT_INACTIVE"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C001",
+      "type": "common",
+      "title": "P01结束后仍可参与多人事件",
+      "participants": [ "P01", "P03" ],
+      "priority": 100,
+      "once": true,
+      "trigger": {
+        "requirements": [
+          {
+            "target": "P01",
+            "eventId": "EVENT_FINISHED"
+          },
+          {
+            "target": "P03",
+            "eventId": "AP03E001"
+          }
+        ],
+        "conditions": [
+          {
+            "scope": "npc",
+            "target": "P01",
+            "attr": "attack",
+            "op": ">=",
+            "value": 1
+          }
+        ]
+      },
+      "outcomes": [
+        {
+          "id": "C001O001",
+          "priority": 100,
+          "conditions": [],
+          "text": "P01虽然个人路线结束，但仍然和P03一起参与了多人事件。",
+          "next": [
+            {
+              "target": "P01",
+              "nextId": "AP01E002"
+            },
+            {
+              "target": "P03",
+              "nextId": "AP03E002"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C002",
+      "type": "common",
+      "title": "P02退场后不应触发多人事件",
+      "participants": [ "P02", "P03" ],
+      "priority": 90,
+      "once": true,
+      "trigger": {
+        "requirements": [
+          {
+            "target": "P02",
+            "eventId": "EVENT_INACTIVE"
+          },
+          {
+            "target": "P03",
+            "eventId": "AP03E001"
+          }
+        ],
+        "conditions": []
+      },
+      "outcomes": [
+        {
+          "id": "C002O001",
+          "priority": 100,
+          "conditions": [],
+          "text": "错误测试：如果看到这句话，说明 EVENT_INACTIVE 仍被多人事件触发了。",
+          "next": []
+        }
+      ]
+    },
+    {
+      "id": "AP03E001",
+      "type": "personal",
+      "title": "P03等待事件",
+      "participants": [ "P03" ],
+      "priority": 10,
+      "once": false,
+      "trigger": {
+        "requirements": [],
+        "conditions": []
+      },
+      "outcomes": [
+        {
+          "id": "AP03E001O001",
+          "priority": 100,
+          "conditions": [],
+          "text": "P03独自等待其他人的行动结果。",
+          "next": [
+            {
+              "target": "P03",
+              "nextId": "AP03E001"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AP01E002",
+      "type": "personal",
+      "title": "P01被多人事件拉回个人线",
+      "participants": [ "P01" ],
+      "priority": 10,
+      "once": true,
+      "trigger": {
+        "requirements": [],
+        "conditions": []
+      },
+      "outcomes": [
+        {
+          "id": "AP01E002O001",
+          "priority": 100,
+          "conditions": [],
+          "text": "P01被多人事件重新带回了新的个人事件。",
+          "next": []
+        }
+      ]
+    },
+    {
+      "id": "AP03E002",
+      "type": "personal",
+      "title": "P03多人事件后续",
+      "participants": [ "P03" ],
+      "priority": 10,
+      "once": true,
+      "trigger": {
+        "requirements": [],
+        "conditions": []
+      },
+      "outcomes": [
+        {
+          "id": "AP03E002O001",
+          "priority": 100,
+          "conditions": [],
+          "text": "P03在多人事件后获得了新的个人后续。",
+          "next": []
+        }
+      ]
+    }
+  ]
+}
