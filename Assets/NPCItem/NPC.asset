@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac7df6887f1ad4f459c35eabd95620c7, type: 3}
   m_Name: NPC
   m_EditorClassIdentifier: 
-  npcId: 0000
+  npcId: 5000
   displayName: Sample
   avatar: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   description: "\u6563\u4FEE"
   attack: 1
   defense: 1
   movementSpeed: 1
+  prompt: 

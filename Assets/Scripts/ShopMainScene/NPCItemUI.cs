@@ -12,15 +12,19 @@ public class NPCItemUI : MonoBehaviour, IPointerClickHandler
     [SerializeField] private Image npcAvatar;
     [SerializeField] private TMP_Text npcNameText;
     [SerializeField] private TMP_Text npcTittleText;
+    [SerializeField] private GameObject spokenBadge;
 
     private NPCDefinition currentNpc;
     private Color normalColor;
+    private bool hasLeft;
 
     public event Action<NPCItemUI> Clicked;
 
     public NPCDefinition CurrentNpc => currentNpc;
 
     public bool HasNpc => currentNpc != null;
+
+    public bool HasLeft => hasLeft;
 
     private void Awake()
     {
@@ -42,6 +46,7 @@ public class NPCItemUI : MonoBehaviour, IPointerClickHandler
     {
         AutoBind();
         currentNpc = definition;
+        hasLeft = false;
 
         if (currentNpc == null)
         {
@@ -65,27 +70,84 @@ public class NPCItemUI : MonoBehaviour, IPointerClickHandler
             npcTittleText.text = currentNpc.Description;
         }
 
+        if (spokenBadge != null)
+        {
+            spokenBadge.SetActive(false);
+        }
+
+        // 恢复正常的颜色
+        if (backgroundImage != null)
+        {
+            backgroundImage.color = normalColor;
+        }
+
         gameObject.SetActive(true);
+    }
+
+    /// <summary>标记该 NPC 已经交谈过</summary>
+    public void SetSpoken(bool spoken)
+    {
+        if (spokenBadge != null)
+        {
+            spokenBadge.SetActive(spoken);
+        }
+    }
+
+    /// <summary>标记该 NPC 已交易离开（禁用点击，变为灰色）</summary>
+    public void MarkAsLeft()
+    {
+        hasLeft = true;
+
+        if (backgroundImage != null)
+        {
+            Color grayColor = normalColor;
+            grayColor.a *= 0.4f;
+            backgroundImage.color = grayColor;
+        }
+
+        if (npcAvatar != null)
+        {
+            npcAvatar.color = new Color(0.5f, 0.5f, 0.5f, 0.5f);
+        }
+
+        if (npcNameText != null)
+        {
+            npcNameText.color = new Color(0.5f, 0.5f, 0.5f, 0.5f);
+        }
+
+        if (npcTittleText != null)
+        {
+            npcTittleText.color = new Color(0.5f, 0.5f, 0.5f, 0.5f);
+        }
     }
 
     public void ClearSlot()
     {
         currentNpc = null;
+        hasLeft = false;
 
         if (npcAvatar != null)
         {
             npcAvatar.sprite = null;
             npcAvatar.enabled = false;
+            npcAvatar.color = Color.white;
         }
 
         if (npcNameText != null)
         {
             npcNameText.text = string.Empty;
+            npcNameText.color = Color.white;
         }
 
         if (npcTittleText != null)
         {
             npcTittleText.text = string.Empty;
+            npcTittleText.color = Color.white;
+        }
+
+        if (spokenBadge != null)
+        {
+            spokenBadge.SetActive(false);
         }
 
         gameObject.SetActive(false);
@@ -93,7 +155,7 @@ public class NPCItemUI : MonoBehaviour, IPointerClickHandler
 
     public void SetHighlight(bool isHighlighted)
     {
-        if (backgroundImage == null)
+        if (backgroundImage == null || hasLeft)
         {
             return;
         }
@@ -113,7 +175,7 @@ public class NPCItemUI : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (!HasNpc)
+        if (!HasNpc || hasLeft)
         {
             return;
         }
@@ -142,6 +204,15 @@ public class NPCItemUI : MonoBehaviour, IPointerClickHandler
         if (npcTittleText == null)
         {
             npcTittleText = FindChildComponent<TMP_Text>("NpcDescription");
+        }
+
+        if (spokenBadge == null)
+        {
+            Transform badgeTrans = transform.Find("SpokenBadge");
+            if (badgeTrans != null)
+            {
+                spokenBadge = badgeTrans.gameObject;
+            }
         }
     }
 
