@@ -23,7 +23,7 @@ public class ShopController : MonoBehaviour
     [SerializeField] [Min(1)] private int itemsToDisplay = 4;
     [SerializeField] private bool allowDuplicateStock = true;
     [SerializeField] [Min(0)] private int startingMoney = 1000;
-    [SerializeField] private string exitSceneName = string.Empty;
+    [SerializeField] private string exitSceneName = "ShopMainScene";
 
     [Header("Discount Settings")]
     [SerializeField] private ShopDiscountSettings discountSettings = new ShopDiscountSettings();
@@ -65,6 +65,10 @@ public class ShopController : MonoBehaviour
 
     private void Start()
     {
+        // 重置运行时的静态数据，避免编辑器反复 Play 时累积
+        WarehouseInventory.ResetRuntimeState();
+        ShopItemUnlockRegistry.ResetRuntimeState();
+
         ShopItemUnlockRegistry.RegisterDefaults(itemCatalog);
         ShopWallet.InitializeIfNeeded(startingMoney);
         RefreshMoneyText(ShopWallet.CurrentMoney);

@@ -45,6 +45,42 @@ public static class WarehouseInventory
         return ItemsById.TryGetValue(itemId, out stack);
     }
 
+    public static bool Remove(string itemId, int quantity = 1)
+    {
+        if (string.IsNullOrWhiteSpace(itemId) || quantity <= 0)
+        {
+            return false;
+        }
+
+        if (!ItemsById.TryGetValue(itemId, out WarehouseItemStack existingStack))
+        {
+            return false;
+        }
+
+        int newQuantity = existingStack.Quantity - quantity;
+        if (newQuantity <= 0)
+        {
+            ItemsById.Remove(itemId);
+        }
+        else
+        {
+            ItemsById[itemId] = new WarehouseItemStack(existingStack.Definition, newQuantity);
+        }
+
+        Changed?.Invoke();
+        return true;
+    }
+
+    public static int GetQuantity(string itemId)
+    {
+        if (string.IsNullOrWhiteSpace(itemId))
+        {
+            return 0;
+        }
+
+        return ItemsById.TryGetValue(itemId, out WarehouseItemStack stack) ? stack.Quantity : 0;
+    }
+
     public static IReadOnlyList<WarehouseItemStack> GetStacks()
     {
         return ItemsById.Values

@@ -4,7 +4,7 @@ using TMPro;
 public class SpiritStonesDisplay : MonoBehaviour
 {
     [SerializeField]
-    private int startingMoney = 100;
+    private int defaultStartingMoney = 1000;
 
     private TextMeshProUGUI textComponent;
 
@@ -15,7 +15,10 @@ public class SpiritStonesDisplay : MonoBehaviour
 
     private void Start()
     {
-        ShopWallet.InitializeIfNeeded(startingMoney);
+        if (!ShopWallet.IsInitialized)
+        {
+            ShopWallet.InitializeIfNeeded(defaultStartingMoney);
+        }
         UpdateText(ShopWallet.CurrentMoney);
     }
 

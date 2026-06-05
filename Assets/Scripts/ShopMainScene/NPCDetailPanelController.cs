@@ -20,8 +20,24 @@ public class NPCDetailPanelController : MonoBehaviour
     [SerializeField] private TMP_Text defenseText;
     [SerializeField] private TMP_Text movementSpeedText;
 
+    [Header("Actions")]
+    [SerializeField] private Button dialogueButton;
+
     [Header("Empty State")]
     [SerializeField] [TextArea] private string emptyDescription = "请选择 NPC 查看详情";
+
+    private NPCDefinition currentNpc;
+
+    public event System.Action<NPCDefinition> DialogueRequested;
+
+    /// <summary>由外部控制对话按钮是否可点击</summary>
+    public void SetDialogueButtonInteractable(bool interactable)
+    {
+        if (dialogueButton != null)
+        {
+            dialogueButton.interactable = interactable;
+        }
+    }
 
     private void Awake()
     {
@@ -33,16 +49,35 @@ public class NPCDetailPanelController : MonoBehaviour
     {
         NPCEvents.NPCSelected += HandleNPCSelected;
         NPCEvents.NPCSelectionCleared += HandleNPCSelectionCleared;
+
+        if (dialogueButton != null)
+        {
+            dialogueButton.onClick.AddListener(HandleDialogueButtonClicked);
+        }
     }
 
     private void OnDisable()
     {
         NPCEvents.NPCSelected -= HandleNPCSelected;
         NPCEvents.NPCSelectionCleared -= HandleNPCSelectionCleared;
+
+        if (dialogueButton != null)
+        {
+            dialogueButton.onClick.RemoveListener(HandleDialogueButtonClicked);
+        }
+    }
+
+    private void HandleDialogueButtonClicked()
+    {
+        if (currentNpc != null)
+        {
+            DialogueRequested?.Invoke(currentNpc);
+        }
     }
 
     private void HandleNPCSelected(NPCDefinition npc)
     {
+        currentNpc = npc;
         ShowDetail();
 
         if (npc == null)
@@ -73,6 +108,11 @@ public class NPCDetailPanelController : MonoBehaviour
         }
 
         UpdateAttributePanel(npc);
+
+        if (dialogueButton != null)
+        {
+            dialogueButton.gameObject.SetActive(true);
+        }
     }
 
     private void UpdateAttributePanel(NPCDefinition npc)
@@ -82,16 +122,23 @@ public class NPCDetailPanelController : MonoBehaviour
             attributePanel.SetActive(true);
         }
 
-        // 攻击 = Attack
-        if (attackText != null) attackText.text = $"攻击：{npc.Attack}";
-        // 防御 = Defense
-        if (defenseText != null) defenseText.text = $"防御：{npc.Defense}";
-        // 遁速 = MovementSpeed
-        if (movementSpeedText != null) movementSpeedText.text = $"遁速：{npc.MovementSpeed}";
+        int displayAttack = NPCInteractionData.GetEffectiveAttack(npc);
+        int displayDefense = NPCInteractionData.GetEffectiveDefense(npc);
+        int displaySpeed = NPCInteractionData.GetEffectiveSpeed(npc);
+
+        if (attackText != null)
+            attackText.text = $"攻击：{displayAttack}";
+
+        if (defenseText != null)
+            defenseText.text = $"防御：{displayDefense}";
+
+        if (movementSpeedText != null)
+            movementSpeedText.text = $"遁速：{displaySpeed}";
     }
 
     private void HandleNPCSelectionCleared()
     {
+        currentNpc = null;
         HideDetail();
     }
 
@@ -115,6 +162,8 @@ public class NPCDetailPanelController : MonoBehaviour
 
     private void ShowEmptyState()
     {
+        currentNpc = null;
+
         if (fullBodyImage != null)
         {
             fullBodyImage.sprite = null;
@@ -139,6 +188,11 @@ public class NPCDetailPanelController : MonoBehaviour
         if (attributePanel != null)
         {
             attributePanel.SetActive(false);
+        }
+
+        if (dialogueButton != null)
+        {
+            dialogueButton.gameObject.SetActive(false);
         }
     }
 
@@ -208,6 +262,12 @@ public class NPCDetailPanelController : MonoBehaviour
             attackText ??= FindChildComponent<TMP_Text>(attributePanel.transform, "AttackText");
             defenseText ??= FindChildComponent<TMP_Text>(attributePanel.transform, "DefenseText");
             movementSpeedText ??= FindChildComponent<TMP_Text>(attributePanel.transform, "MovementSpeedText");
+        }
+
+        // 自动绑定对话按钮
+        if (dialogueButton == null)
+        {
+            dialogueButton = FindChildComponent<Button>(root, "DialogueButton");
         }
     }
 
