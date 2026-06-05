@@ -2,6 +2,7 @@ using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Image))]
@@ -10,10 +11,13 @@ public class WarehouseItemSlotUI : MonoBehaviour, IPointerClickHandler
     [Header("UI References")]
     [SerializeField] private Image backgroundImage;
     [SerializeField] private Image itemIcon;
+    [SerializeField] private Image quantityBarImage;
     [SerializeField] private TMP_Text quantityText;
 
     [Header("Selection")]
-    [SerializeField] private Color selectedOverlayColor = new Color(1f, 0.9f, 0.45f, 1f);
+    [SerializeField] private Color quantityBarNormalColor = new Color(0.92f, 0.9f, 0.84f, 1f);
+    [FormerlySerializedAs("selectedOverlayColor")]
+    [SerializeField] private Color quantityBarSelectedColor = new Color(1f, 0.9f, 0.45f, 1f);
 
     [Header("Rarity Backgrounds")]
     [SerializeField] private Color commonColor = new Color(0.55f, 0.58f, 0.62f, 1f);
@@ -107,13 +111,28 @@ public class WarehouseItemSlotUI : MonoBehaviour, IPointerClickHandler
         {
             quantityText = FindChildComponent<TMP_Text>("QuantityText");
         }
+
+        if (quantityBarImage == null)
+        {
+            quantityBarImage = FindChildComponent<Image>("QuantityBar");
+        }
+
+        if (quantityBarImage == null && quantityText != null && quantityText.transform.parent != transform)
+        {
+            quantityBarImage = quantityText.transform.parent.GetComponent<Image>();
+        }
     }
 
     private void ApplyVisual()
     {
         if (backgroundImage != null)
         {
-            backgroundImage.color = IsSelected ? selectedOverlayColor : GetRarityColor();
+            backgroundImage.color = GetRarityColor();
+        }
+
+        if (quantityBarImage != null)
+        {
+            quantityBarImage.color = IsSelected ? quantityBarSelectedColor : quantityBarNormalColor;
         }
     }
 
