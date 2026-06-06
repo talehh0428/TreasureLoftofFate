@@ -1,0 +1,160 @@
+{
+  "version": "1.0.0",
+  "events": [
+    {
+      "id": "AP09E001",
+      "type": "personal",
+      "title": "陆川·临战购装",
+      "participants": ["P09"],
+      "priority": 10,
+      "once": true,
+      "trigger": {
+        "requirements": [],
+        "conditions": [
+          { "scope": "world", "attr": "round", "op": ">=", "value": 3 }
+        ]
+      },
+      "outcomes": [
+        {
+          "id": "AP09E001O001",
+          "priority": 100,
+          "conditions": [],
+          "text": "陆川大步走进铺子，目光扫过货架。他没磨叽，伸手一指那件最有分量的法宝：'掌柜的，这个。'他把大半年的积蓄拍在了柜台上——那些灵石本来攒着要向苏晴提亲的，现在全拿来买命了。出门前回头说了一句：'赢了请你喝喜酒。'",
+          "next": [
+            { "target": "P09", "nextId": "EVENT_FINISHED" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AP10E001",
+      "type": "personal",
+      "title": "简恒·临战购装",
+      "participants": ["P10"],
+      "priority": 10,
+      "once": true,
+      "trigger": {
+        "requirements": [],
+        "conditions": [
+          { "scope": "world", "attr": "round", "op": ">=", "value": 3 }
+        ]
+      },
+      "outcomes": [
+        {
+          "id": "AP10E001O001",
+          "priority": 100,
+          "conditions": [],
+          "text": "简恒绕着货架走了一圈，把所有东西看了一遍，最后停在了一件护具面前。拿起来翻来覆去看了几遍，轻轻放下。'多少？'问完沉默两秒，'我要了。'他把灵石齐齐整整地码在柜台上——那是在北坊猎了三头妖兽才攒够的——然后默默走了出去，从头到尾没有看陆川一眼。",
+          "next": [
+            { "target": "P10", "nextId": "EVENT_FINISHED" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C002",
+      "type": "common",
+      "title": "城外决斗",
+      "participants": ["P09", "P10"],
+      "priority": 80,
+      "once": true,
+      "trigger": {
+        "requirements": [
+          { "target": "P09", "eventId": "EVENT_FINISHED" },
+          { "target": "P10", "eventId": "EVENT_FINISHED" }
+        ],
+        "conditions": [
+          { "scope": "world", "attr": "round", "op": ">=", "value": 4 }
+        ]
+      },
+      "outcomes": [
+        {
+          "id": "C002O001",
+          "priority": 100,
+          "conditions": [
+            { "scope": "npc", "target": "P09", "attr": "attack", "op": ">=", "value": 8 },
+            { "scope": "npc", "target": "P10", "attr": "defense", "op": "<", "value": 5 }
+          ],
+          "text": "城外废弃矿场。两个人面对面站了一炷香的时间，谁也没先动手。然后陆川动了——他在铺子里买的那件东西化作一道凌厉的攻势，简恒的防御在那一击之下形同虚设。胜负只在一瞬。第二天，有人看见陆川一个人走回了南坊，扶着墙，浑身是血，但还站着。",
+          "next": [
+            { "target": "P09", "nextId": "AP09E002" },
+            { "target": "P10", "nextId": "EVENT_INACTIVE" }
+          ]
+        },
+        {
+          "id": "C002O002",
+          "priority": 100,
+          "conditions": [
+            { "scope": "npc", "target": "P10", "attr": "defense", "op": ">=", "value": 5 },
+            { "scope": "npc", "target": "P09", "attr": "attack", "op": "<", "value": 7 }
+          ],
+          "text": "城外废弃矿场。陆川的拳头砸下来的时候，简恒没有躲——他身上的护具替他接住了那一击。然后反击。他的动作快得看不清，陆川甚至没来得及挥出第二下。第二天，只有简恒一个人回到了南坊，左肩塌着，一步一步走得很慢。但他走到老苏头的茶摊前站了一会儿，然后转身——走向了那间杂货铺。",
+          "next": [
+            { "target": "P10", "nextId": "AP10E002" },
+            { "target": "P09", "nextId": "EVENT_INACTIVE" }
+          ]
+        },
+        {
+          "id": "C002O003",
+          "priority": 1,
+          "conditions": [],
+          "text": "城外废弃矿场。那天晚上，住在附近的散修听见了打斗声——不是一下两下，是持续的、不死不休的那种。声音持续了一整夜，天亮前忽然停了。后来有人在矿场入口捡到一只磨毛的袖子和一颗碎了的护心镜碎片。南坊茶馆外那面旧木板上多了两个名字，老吴写的时候手抖了一下——因为两个名字，他并排写上去了。",
+          "next": [
+            { "target": "P09", "nextId": "EVENT_INACTIVE" },
+            { "target": "P10", "nextId": "EVENT_INACTIVE" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AP09E002",
+      "type": "personal",
+      "title": "陆川·凯旋归铺",
+      "participants": ["P09"],
+      "priority": 10,
+      "once": true,
+      "trigger": {
+        "requirements": [],
+        "conditions": [
+          { "scope": "world", "attr": "round", "op": ">=", "value": 5 }
+        ]
+      },
+      "outcomes": [
+        {
+          "id": "AP09E002O001",
+          "priority": 100,
+          "conditions": [],
+          "text": "陆川又来了。身上还缠着绷带，左眼肿得只剩一条缝，但他是笑着进来的。'掌柜的，上回说赢了请你喝喜酒——'他从怀里摸出一个皱巴巴的红纸包，放在柜台上，'先来你这儿挑件东西。不是给我自己买的。'他指了指店里唯一一支发簪形状的低阶法器。'苏晴喜欢这个颜色。'他掏灵石的时候手还在抖，但这次不是因为紧张——是因为高兴。",
+          "next": [
+            { "target": "P09", "nextId": "EVENT_INACTIVE" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AP10E002",
+      "type": "personal",
+      "title": "简恒·凯旋归铺",
+      "participants": ["P10"],
+      "priority": 10,
+      "once": true,
+      "trigger": {
+        "requirements": [],
+        "conditions": [
+          { "scope": "world", "attr": "round", "op": ">=", "value": 5 }
+        ]
+      },
+      "outcomes": [
+        {
+          "id": "AP10E002O001",
+          "priority": 100,
+          "conditions": [],
+          "text": "简恒推门进来的时候，左肩明显不对劲——脱臼了自己接回去的，接歪了。但他还是那副表情，不痛不痒，像什么都没发生过。他绕货架走了一圈，最后拿了一盒最便宜的疗伤膏药。付完灵石，他多放了一样东西在柜台上：一颗拇指大的夜光石，成色一般，但打磨得很仔细——一看就是自己磨的。他没解释，也没说是给谁的。但那天之后，老苏头的茶摊上，苏晴的发间多了一颗微微发光的小石头。简恒再也没来过这条街。",
+          "next": [
+            { "target": "P10", "nextId": "EVENT_INACTIVE" }
+          ]
+        }
+      ]
+    }
+  ]
+}

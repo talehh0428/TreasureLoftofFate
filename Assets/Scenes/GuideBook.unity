@@ -1354,8 +1354,6 @@ MonoBehaviour:
   attackText: {fileID: 443498302}
   defenseText: {fileID: 11867382}
   speedText: {fileID: 472630119}
-  descriptionText: {fileID: 1105185571}
-  emptyDescription: "\u8BF7\u9009\u62E9\u5546\u54C1\u67E5\u770B\u8BE6\u60C5"
 --- !u!114 &619894471
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2491,7 +2489,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_TargetDisplay: 0
 --- !u!224 &1460650028
 RectTransform:
