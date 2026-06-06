@@ -6,6 +6,7 @@ public class NPCDefinition : ScriptableObject
     [SerializeField] private string npcId;
     [SerializeField] private string displayName;
     [SerializeField] private Sprite avatar;
+    [SerializeField] private Sprite portrait;
     [SerializeField] [TextArea] private string description;
     [SerializeField] private int attack;
     [SerializeField] private int defense;
@@ -39,6 +40,8 @@ public class NPCDefinition : ScriptableObject
     }
 
     public Sprite Avatar => avatar;
+
+    public Sprite Portrait => portrait;
 
     public string Description => description;
 
