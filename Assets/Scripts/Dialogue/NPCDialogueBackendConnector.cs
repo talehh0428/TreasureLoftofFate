@@ -90,6 +90,11 @@ public class NPCDialogueBackendConnector : MonoBehaviour
     {
         isRequesting = true;
 
+        if (dialogueController != null && npc != null)
+        {
+            dialogueController.ShowLoading(npc.DisplayName, npc.Portrait);
+        }
+
         string url = CombineUrl(baseUrl, "/api/npc/dialogue");
         string json = CreateRequestJson();
 
