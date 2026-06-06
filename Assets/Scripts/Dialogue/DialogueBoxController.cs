@@ -19,7 +19,12 @@ public class DialogueBoxController : MonoBehaviour
     [Header("Typing")]
     [SerializeField] private float charactersPerSecond = 35f;
 
+    [Header("Loading")]
+    [SerializeField] private string loadingPrefix = string.Empty;
+    [SerializeField] private float loadingFrameSeconds = 0.35f;
+
     private Coroutine typingCoroutine;
+    private Coroutine loadingCoroutine;
     private Action<DialogueChoiceResult> pendingChoiceCallback;
     private string activeFullText = string.Empty;
     private DialogueChoice[] activeChoices;
@@ -61,6 +66,7 @@ public class DialogueBoxController : MonoBehaviour
         }
 
         pendingChoiceCallback = onChoiceSelected;
+        StopLoading();
         activeFullText = body.text ?? string.Empty;
         activeChoices = body.choices;
         SetVisible(true);
@@ -93,9 +99,46 @@ public class DialogueBoxController : MonoBehaviour
             typingCoroutine = null;
         }
 
+        StopLoading();
         pendingChoiceCallback = null;
         HideChoices();
         SetVisible(false);
+    }
+
+    public void ShowLoading(string npcName, Sprite portrait)
+    {
+        if (!HasRequiredReferences())
+        {
+            Debug.LogError("[DialogueBoxController] UI references are incomplete. Please assign CanvasGroup, name text, portrait image, dialogue text, three choice buttons, and their TMP labels.");
+            return;
+        }
+
+        SetVisible(true);
+        HideChoices();
+
+        if (typingCoroutine != null)
+        {
+            StopCoroutine(typingCoroutine);
+            typingCoroutine = null;
+        }
+
+        if (npcNameText != null)
+        {
+            npcNameText.text = npcName ?? string.Empty;
+        }
+
+        if (portraitImage != null)
+        {
+            portraitImage.sprite = portrait;
+            portraitImage.enabled = portrait != null;
+        }
+
+        if (loadingCoroutine != null)
+        {
+            StopCoroutine(loadingCoroutine);
+        }
+
+        loadingCoroutine = StartCoroutine(AnimateLoadingText());
     }
 
     public void SkipTyping()
@@ -149,6 +192,33 @@ public class DialogueBoxController : MonoBehaviour
 
         typingCoroutine = null;
         ShowChoices(choices);
+    }
+
+    private IEnumerator AnimateLoadingText()
+    {
+        if (dialogueText == null)
+        {
+            yield break;
+        }
+
+        int dotCount = 1;
+        while (true)
+        {
+            dialogueText.text = loadingPrefix + new string('.', dotCount);
+            dotCount = dotCount >= 3 ? 1 : dotCount + 1;
+            yield return new WaitForSeconds(Mathf.Max(0.05f, loadingFrameSeconds));
+        }
+    }
+
+    private void StopLoading()
+    {
+        if (loadingCoroutine == null)
+        {
+            return;
+        }
+
+        StopCoroutine(loadingCoroutine);
+        loadingCoroutine = null;
     }
 
     private void ShowChoices(DialogueChoice[] choices)

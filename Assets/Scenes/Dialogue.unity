@@ -474,6 +474,8 @@ MonoBehaviour:
   - {fileID: 1549906308}
   - {fileID: 82171524}
   charactersPerSecond: 35
+  loadingPrefix: "\u601D\u8003\u4E2D"
+  loadingFrameSeconds: 0.35
 --- !u!225 &544406993
 CanvasGroup:
   m_ObjectHideFlags: 0
