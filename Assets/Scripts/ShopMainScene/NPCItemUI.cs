@@ -181,7 +181,6 @@ public class NPCItemUI : MonoBehaviour, IPointerClickHandler
         }
 
         Clicked?.Invoke(this);
-        NPCEvents.RaiseNPCSelected(currentNpc);
     }
 
     private void AutoBind()

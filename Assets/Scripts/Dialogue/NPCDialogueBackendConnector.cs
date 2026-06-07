@@ -27,6 +27,10 @@ public class NPCDialogueBackendConnector : MonoBehaviour
     private int currentRound;
     private bool isRequesting;
     private string lastNpcDialogue = string.Empty;
+    private NPCDefinition activeNpc;
+
+    public event Action<NPCDefinition> DialogueCompleted;
+    public event Action<NPCDefinition> DialogueFailed;
 
     private void Awake()
     {
@@ -45,8 +49,12 @@ public class NPCDialogueBackendConnector : MonoBehaviour
             return;
         }
 
+        activeNpc = npc;
+
         if (!ValidateSetup())
         {
+            DialogueFailed?.Invoke(activeNpc);
+            activeNpc = null;
             return;
         }
 
@@ -64,15 +72,20 @@ public class NPCDialogueBackendConnector : MonoBehaviour
 
     public void EndBackendDialogue()
     {
+        NPCDefinition completedNpc = activeNpc != null ? activeNpc : npc;
+
         isRequesting = false;
         currentRound = 0;
         lastNpcDialogue = string.Empty;
+        activeNpc = null;
         history.Clear();
 
         if (dialogueController != null)
         {
             dialogueController.UnloadDialogue();
         }
+
+        DialogueCompleted?.Invoke(completedNpc);
     }
 
     private void RequestNextDialogue()
@@ -115,6 +128,7 @@ public class NPCDialogueBackendConnector : MonoBehaviour
                     "[NPCDialogueBackendConnector] Unity blocked this request before sending it.\n" +
                     $"Url: {url}\nError: {exception.Message}");
                 isRequesting = false;
+                DialogueFailed?.Invoke(activeNpc);
                 yield break;
             }
 
@@ -130,6 +144,7 @@ public class NPCDialogueBackendConnector : MonoBehaviour
                     $"[NPCDialogueBackendConnector] Request failed. " +
                     $"Status: {request.responseCode}, Error: {request.error}, Body:\n{responseText}");
                 isRequesting = false;
+                DialogueFailed?.Invoke(activeNpc);
                 yield break;
             }
 
@@ -139,6 +154,7 @@ public class NPCDialogueBackendConnector : MonoBehaviour
                 string message = response != null ? response.message : "Invalid response JSON.";
                 Debug.LogError($"[NPCDialogueBackendConnector] Backend returned failure: {message}\n{responseText}");
                 isRequesting = false;
+                DialogueFailed?.Invoke(activeNpc);
                 yield break;
             }
 
