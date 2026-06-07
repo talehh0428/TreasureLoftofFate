@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac7df6887f1ad4f459c35eabd95620c7, type: 3}
+  m_Name: P99
+  m_EditorClassIdentifier: 
+  npcId: fei-ren
+  displayName: "\u8D39\u4EC1"
+  avatar: {fileID: 0}
+  portrait: {fileID: 21300000, guid: e5ed6e1227bc9694e89bcb3a4066ad8a, type: 3}
+  description: 
+  attack: 1
+  defense: 1
+  movementSpeed: 0
+  prompt: "1\u2014\u5728\u4E00\u4E2A\u98CE\u96E8\u4EA4\u52A0\u7684\u591C\u665A\uFF0C\u8D39\u4EC1\u6765\u5230\u5546\u94FA\uFF0C\u5E0C\u671B\u8D2D\u4E70\u62A4\u8EAB\u6CD5\u5B9D\uFF0C\u7528\u4E8E\u5373\u5C06\u524D\u5F80\u57CE\u5357\u9057\u8FF9\u7684\u51C6\u5907\u3002"
+  currentEventID: AP10E001
+  nextEventID: 

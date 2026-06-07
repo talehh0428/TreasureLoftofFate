@@ -41,6 +41,10 @@ public class ShopController : MonoBehaviour
 
     private Coroutine feedbackRoutine;
 
+    public event System.Action LeaveRequested;
+
+    public Button LeaveButton => leaveButton;
+
     private void Awake()
     {
         AutoBindSceneReferences();
@@ -172,6 +176,12 @@ public class ShopController : MonoBehaviour
 
     private void HandleLeaveButtonClicked()
     {
+        if (LeaveRequested != null)
+        {
+            LeaveRequested.Invoke();
+            return;
+        }
+
         if (string.IsNullOrWhiteSpace(exitSceneName))
         {
             ShowFeedback("\u79bb\u5f00\u573a\u666f\u5c1a\u672a\u914d\u7f6e\u3002", neutralMessageColor);

@@ -58,7 +58,7 @@ public class MainSceneHudController : MonoBehaviour
             return;
         }
 
-        moneyText.text = $"{currentMoney}灵石";
+        moneyText.text = $"{currentMoney}";
     }
 
     private void RefreshRoundText(int currentRound)

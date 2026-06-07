@@ -8,6 +8,7 @@ public class NPCEventScheduler : MonoBehaviour
     [SerializeField] private NPCEventJsonLoader jsonLoader;
     [SerializeField] private List<NPCDefinition> npcs = new();
     [SerializeField] private int currentRound = 1;
+    [SerializeField] [Min(1)] private int maxRound = 100;
     [SerializeField] private string finishedEventID = NPCEventSpecialIds.Finished;
     [SerializeField] private string inactiveEventID = NPCEventSpecialIds.Inactive;
 
@@ -17,6 +18,22 @@ public class NPCEventScheduler : MonoBehaviour
     public event Action<int> RoundChanged;
 
     public int CurrentRound => currentRound;
+
+    public int MaxRound => maxRound;
+
+    public bool CanAdvanceRound => currentRound < maxRound;
+
+    public bool TryProcessNextRound()
+    {
+        if (!CanAdvanceRound)
+        {
+            Debug.Log($"NPCEventScheduler: 已达到最大回合 {maxRound}，后续逻辑待补充。");
+            return false;
+        }
+
+        ProcessTurn(currentRound + 1);
+        return true;
+    }
 
     public void LoadDatabase()
     {
@@ -39,6 +56,7 @@ public class NPCEventScheduler : MonoBehaviour
     {
         SetCurrentRound(round);
         database ??= jsonLoader != null ? jsonLoader.Load() : new NPCEventDatabase();
+        Debug.Log($"NPCEventScheduler: 开始处理第 {currentRound} 回合事件调度。");
 
         Dictionary<string, NPCDefinition> npcById = BuildNpcLookup();
         NPCEventConditionEvaluator evaluator = new NPCEventConditionEvaluator(npcById, round, inactiveEventID);
@@ -50,6 +68,7 @@ public class NPCEventScheduler : MonoBehaviour
         ProcessPersonalEvents(evaluator, npcById, occupiedNpcIds, promptTextsByNpcId);
         AppendRoundPromptEntries(npcById, promptTextsByNpcId);
         AdvanceNpcEvents();
+        Debug.Log($"NPCEventScheduler: 第 {currentRound} 回合事件调度结束。");
     }
 
     private void SetCurrentRound(int round)
@@ -223,6 +242,7 @@ public class NPCEventScheduler : MonoBehaviour
             foreach (string participantId in eventConfig.participants)
             {
                 AddPromptText(promptTextsByNpcId, participantId, outcome.text);
+                LogTriggeredEvent(participantId, outcome.text);
             }
         }
 
@@ -299,8 +319,17 @@ public class NPCEventScheduler : MonoBehaviour
                 continue;
             }
 
-            npc.AppendPromptEntry(string.Join("&&", pair.Value));
+            string promptEntry = string.Join("&&", pair.Value);
+            Debug.Log($"NPCEventScheduler: Prompt更改 -> {npc.NpcId} {npc.DisplayName}: {promptEntry}");
+            npc.AppendPromptEntry(promptEntry);
         }
+    }
+
+    private void LogTriggeredEvent(string participantId, string text)
+    {
+        NPCDefinition npc = npcs.FirstOrDefault(candidate => candidate != null && candidate.NpcId == participantId);
+        string npcName = npc == null ? "Unknown" : npc.DisplayName;
+        Debug.Log($"NPCEventScheduler: 发生事件 -> {participantId} {npcName}: {text}");
     }
 
     private void AdvanceNpcEvents()
