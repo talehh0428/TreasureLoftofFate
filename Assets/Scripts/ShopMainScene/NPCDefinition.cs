@@ -84,6 +84,13 @@ public class NPCDefinition : ScriptableObject
         nextEventID = string.Empty;
     }
 
+    public void ApplyStatBonus(int attackBonus, int defenseBonus, int movementSpeedBonus)
+    {
+        attack = Mathf.Max(0, attack + Mathf.Max(0, attackBonus));
+        defense = Mathf.Max(0, defense + Mathf.Max(0, defenseBonus));
+        movementSpeed = Mathf.Max(0, movementSpeed + Mathf.Max(0, movementSpeedBonus));
+    }
+
     private int GetNextPromptEntryIndex()
     {
         if (string.IsNullOrWhiteSpace(prompt))
