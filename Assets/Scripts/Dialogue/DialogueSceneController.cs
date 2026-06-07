@@ -31,7 +31,7 @@ public class DialogueSceneController : MonoBehaviour
 
         if (dontDestroyOnLoad)
         {
-            DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(transform.root.gameObject);
         }
 
         if (dialogueBox != null)

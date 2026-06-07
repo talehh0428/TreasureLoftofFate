@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -12,6 +13,10 @@ public class NPCEventScheduler : MonoBehaviour
 
     private NPCEventDatabase database;
     private readonly HashSet<string> triggeredOnceEventIds = new();
+
+    public event Action<int> RoundChanged;
+
+    public int CurrentRound => currentRound;
 
     public void LoadDatabase()
     {
@@ -32,6 +37,7 @@ public class NPCEventScheduler : MonoBehaviour
 
     public void ProcessTurn(int round)
     {
+        SetCurrentRound(round);
         database ??= jsonLoader != null ? jsonLoader.Load() : new NPCEventDatabase();
 
         Dictionary<string, NPCDefinition> npcById = BuildNpcLookup();
@@ -44,6 +50,18 @@ public class NPCEventScheduler : MonoBehaviour
         ProcessPersonalEvents(evaluator, npcById, occupiedNpcIds, promptTextsByNpcId);
         AppendRoundPromptEntries(npcById, promptTextsByNpcId);
         AdvanceNpcEvents();
+    }
+
+    private void SetCurrentRound(int round)
+    {
+        int nextRound = Mathf.Max(1, round);
+        if (currentRound == nextRound)
+        {
+            return;
+        }
+
+        currentRound = nextRound;
+        RoundChanged?.Invoke(currentRound);
     }
 
     private Dictionary<string, NPCDefinition> BuildNpcLookup()
