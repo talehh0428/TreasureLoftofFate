@@ -1295,7 +1295,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9308176, g: 0.9308176, b: 0.9308176, a: 1}
+  m_Color: {r: 0.101960786, g: 0.07058824, b: 0.050980393, a: 0.9019608}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1593,8 +1593,15 @@ MonoBehaviour:
   marketToNpcMessage: "\u574A\u5E02\u7ED3\u675F"
   nextRoundMessage: "\u65B0\u4E00\u56DE\u5408"
   dialogueConnector: {fileID: 99494674}
-  npcCatalog:
-  - {fileID: 11400000, guid: e0fed5a67d1478a4c8481ae2c8602e94, type: 2}
+  commonVisitorAvatar: {fileID: 0}
+  minCommonVisitorsPerRound: 2
+  maxCommonVisitorsPerRound: 5
+  commonVisitorNames:
+  - "\u9752\u8863\u6563\u4FEE"
+  - "\u4E91\u6E38\u9053\u4EBA"
+  - "\u8D76\u8DEF\u5251\u5BA2"
+  - "\u5916\u95E8\u5F1F\u5B50"
+  - "\u91C7\u836F\u4FEE\u58EB"
 --- !u!114 &1811037546
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1608,6 +1615,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jsonLoader: {fileID: 164089786}
+  initialStateJson: {fileID: 0}
   npcs:
   - {fileID: 11400000, guid: 701d628c50c836a4caf22330a1a63af8, type: 2}
   - {fileID: 11400000, guid: e0fed5a67d1478a4c8481ae2c8602e94, type: 2}
