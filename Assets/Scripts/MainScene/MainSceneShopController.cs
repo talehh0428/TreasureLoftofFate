@@ -23,12 +23,25 @@ public class MainSceneShopController : MonoBehaviour
     [Header("Dialogue")]
     [SerializeField] private NPCDialogueBackendConnector dialogueConnector;
 
-    [Header("NPC Catalog")]
-    [SerializeField] private List<NPCDefinition> npcCatalog = new List<NPCDefinition>();
+    [Header("Common Visitors")]
+    [SerializeField] private Sprite commonVisitorAvatar;
+    [SerializeField] [Min(0)] private int minCommonVisitorsPerRound = 2;
+    [SerializeField] [Min(0)] private int maxCommonVisitorsPerRound = 5;
+    [SerializeField] private List<string> commonVisitorNames = new List<string>
+    {
+        "青衣散修",
+        "云游道人",
+        "赶路剑客",
+        "外门弟子",
+        "采药修士"
+    };
 
     private ShopMainSceneController shopSceneController;
     private ShopController marketSceneController;
-    private NPCDefinition selectedNpc;
+    private ShopVisitor selectedVisitor;
+    private readonly List<NPCDefinition> nextRoundSpecialVisitors = new List<NPCDefinition>();
+    private readonly List<ShopVisitor> currentRoundVisitors = new List<ShopVisitor>();
+    private const string InactiveEventId = NPCEventSpecialIds.Inactive;
     private bool isLoadingMarketScene;
     private bool isLoadingShopScene;
     private bool isLoadingTradeScene;
@@ -47,6 +60,7 @@ public class MainSceneShopController : MonoBehaviour
         }
 
         SubscribeDialogueConnector();
+        SubscribeRoundScheduler();
     }
 
     private void OnDisable()
@@ -59,6 +73,7 @@ public class MainSceneShopController : MonoBehaviour
         UnbindMarketSceneController();
         UnbindShopSceneController();
         UnsubscribeDialogueConnector();
+        UnsubscribeRoundScheduler();
     }
 
     [ContextMenu("Open Market Scene")]
@@ -120,33 +135,30 @@ public class MainSceneShopController : MonoBehaviour
         SceneManager.UnloadSceneAsync(loadedScene);
     }
 
-    public void SetNpcCatalog(IEnumerable<NPCDefinition> definitions)
-    {
-        npcCatalog = definitions == null
-            ? new List<NPCDefinition>()
-            : definitions.Where(npc => npc != null).Distinct().ToList();
-
-        if (shopSceneController != null)
-        {
-            shopSceneController.SetNpcCatalog(npcCatalog);
-            RefreshActionButtons();
-        }
-    }
-
     public void CompleteTradeForNpc(NPCDefinition npc)
     {
-        if (npc == null || shopSceneController == null)
+        CompleteTradeForVisitor(FindCurrentVisitorByDefinition(npc));
+    }
+
+    public void CompleteTradeForVisitor(ShopVisitor visitor)
+    {
+        if (visitor != null && !currentRoundVisitors.Contains(visitor) && visitor.Definition != null)
+        {
+            visitor = FindCurrentVisitorByDefinition(visitor.Definition);
+        }
+
+        if (visitor == null || shopSceneController == null)
         {
             return;
         }
 
-        shopSceneController.SetNpcTraded(npc);
+        shopSceneController.SetVisitorTraded(visitor);
         RefreshActionButtons();
     }
 
     public void CompleteTradeForSelectedNpc()
     {
-        CompleteTradeForNpc(selectedNpc);
+        CompleteTradeForVisitor(selectedVisitor);
     }
 
     private IEnumerator OpenShopSceneRoutine()
@@ -226,11 +238,12 @@ public class MainSceneShopController : MonoBehaviour
         UnbindShopSceneController();
 
         shopSceneController = controller;
-        shopSceneController.NpcSelected += HandleNpcSelected;
-        shopSceneController.SetNpcCatalog(npcCatalog);
+        shopSceneController.VisitorSelected += HandleVisitorSelected;
+        RebuildCurrentRoundVisitors();
+        shopSceneController.SetVisitors(currentRoundVisitors);
 
         BindShopButtons();
-        selectedNpc = shopSceneController.SelectedNpc;
+        selectedVisitor = shopSceneController.SelectedVisitor;
         RefreshActionButtons();
     }
 
@@ -350,25 +363,25 @@ public class MainSceneShopController : MonoBehaviour
         }
 
         UnbindShopButtons();
-        shopSceneController.NpcSelected -= HandleNpcSelected;
+        shopSceneController.VisitorSelected -= HandleVisitorSelected;
         shopSceneController = null;
-        selectedNpc = null;
+        selectedVisitor = null;
     }
 
-    private void HandleNpcSelected(NPCDefinition npc)
+    private void HandleVisitorSelected(ShopVisitor visitor)
     {
-        selectedNpc = npc;
+        selectedVisitor = visitor;
         RefreshActionButtons();
     }
 
     private void HandleTalkClicked()
     {
-        if (selectedNpc == null || shopSceneController == null || isDialogueRunning)
+        if (selectedVisitor == null || shopSceneController == null || isDialogueRunning || !selectedVisitor.CanTalk)
         {
             return;
         }
 
-        if (shopSceneController.HasTalked(selectedNpc))
+        if (shopSceneController.HasTalked(selectedVisitor))
         {
             RefreshActionButtons();
             return;
@@ -382,12 +395,12 @@ public class MainSceneShopController : MonoBehaviour
 
         isDialogueRunning = true;
         RefreshActionButtons();
-        dialogueConnector.StartBackendDialogue(selectedNpc);
+        dialogueConnector.StartBackendDialogue(selectedVisitor.Definition);
     }
 
     private void HandleTradeClicked()
     {
-        if (selectedNpc == null || shopSceneController == null || shopSceneController.HasTraded(selectedNpc))
+        if (selectedVisitor == null || shopSceneController == null || !selectedVisitor.CanTrade || shopSceneController.HasTraded(selectedVisitor))
         {
             return;
         }
@@ -397,7 +410,7 @@ public class MainSceneShopController : MonoBehaviour
             return;
         }
 
-        TradeSceneContext.Set(selectedNpc, this);
+        TradeSceneContext.Set(selectedVisitor, this);
 
         Scene loadedScene = SceneManager.GetSceneByName(tradeSceneName);
         if (loadedScene.isLoaded)
@@ -432,6 +445,16 @@ public class MainSceneShopController : MonoBehaviour
         StartCoroutine(PlayTransitionRoutine(
             nextRoundMessage,
             ShopSceneToNextMarketRoutine()));
+    }
+
+    private void HandleNpcEventUpdated(NPCDefinition npc)
+    {
+        if (npc == null || nextRoundSpecialVisitors.Contains(npc))
+        {
+            return;
+        }
+
+        nextRoundSpecialVisitors.Add(npc);
     }
 
     private IEnumerator MarketToShopSceneRoutine()
@@ -504,6 +527,69 @@ public class MainSceneShopController : MonoBehaviour
         yield return transition.Play(message, coveredOperation);
     }
 
+    private void RebuildCurrentRoundVisitors()
+    {
+        currentRoundVisitors.Clear();
+
+        List<NPCDefinition> specialVisitors = nextRoundSpecialVisitors
+            .Where(npc => npc != null)
+            .Where(npc => npc.CurrentEventID != InactiveEventId)
+            .Distinct()
+            .ToList();
+
+        for (int index = 0; index < specialVisitors.Count; index++)
+        {
+            currentRoundVisitors.Add(ShopVisitor.FromDefinition(specialVisitors[index]));
+        }
+
+        nextRoundSpecialVisitors.Clear();
+        currentRoundVisitors.AddRange(CreateCommonVisitors());
+    }
+
+    private List<ShopVisitor> CreateCommonVisitors()
+    {
+        List<ShopVisitor> visitors = new List<ShopVisitor>();
+        int minCount = Mathf.Min(minCommonVisitorsPerRound, maxCommonVisitorsPerRound);
+        int maxCount = Mathf.Max(minCommonVisitorsPerRound, maxCommonVisitorsPerRound);
+        int count = Random.Range(minCount, maxCount + 1);
+
+        for (int index = 0; index < count; index++)
+        {
+            string visitorName = PickCommonVisitorName();
+            string visitorId = $"CommonVisitor_{roundScheduler?.CurrentRound ?? 1}_{index + 1}_{Random.Range(1000, 9999)}";
+            visitors.Add(ShopVisitor.CreateCommon(
+                visitorId,
+                visitorName,
+                commonVisitorAvatar));
+        }
+
+        return visitors;
+    }
+
+    private string PickCommonVisitorName()
+    {
+        List<string> validNames = commonVisitorNames
+            .Where(name => !string.IsNullOrWhiteSpace(name))
+            .ToList();
+
+        if (validNames.Count == 0)
+        {
+            return "来访修士";
+        }
+
+        return validNames[Random.Range(0, validNames.Count)];
+    }
+
+    private ShopVisitor FindCurrentVisitorByDefinition(NPCDefinition definition)
+    {
+        if (definition == null)
+        {
+            return null;
+        }
+
+        return currentRoundVisitors.FirstOrDefault(visitor => visitor != null && visitor.Definition == definition);
+    }
+
     private IEnumerator OpenTradeSceneRoutine()
     {
         isLoadingTradeScene = true;
@@ -529,7 +615,7 @@ public class MainSceneShopController : MonoBehaviour
 
         if (completedNpc != null && shopSceneController != null)
         {
-            shopSceneController.SetNpcTalked(completedNpc);
+            shopSceneController.SetVisitorTalked(FindCurrentVisitorByDefinition(completedNpc));
         }
 
         RefreshActionButtons();
@@ -548,9 +634,9 @@ public class MainSceneShopController : MonoBehaviour
             return;
         }
 
-        bool hasSelectedNpc = selectedNpc != null;
-        bool canTalk = hasSelectedNpc && !shopSceneController.HasTalked(selectedNpc) && !isDialogueRunning;
-        bool canTrade = hasSelectedNpc && !shopSceneController.HasTraded(selectedNpc);
+        bool hasSelectedVisitor = selectedVisitor != null;
+        bool canTalk = hasSelectedVisitor && selectedVisitor.CanTalk && !shopSceneController.HasTalked(selectedVisitor) && !isDialogueRunning;
+        bool canTrade = hasSelectedVisitor && selectedVisitor.CanTrade && !shopSceneController.HasTraded(selectedVisitor);
 
         shopSceneController.SetTalkAvailable(canTalk);
         shopSceneController.SetTradeAvailable(canTrade);
@@ -578,6 +664,27 @@ public class MainSceneShopController : MonoBehaviour
 
         dialogueConnector.DialogueCompleted -= HandleDialogueCompleted;
         dialogueConnector.DialogueFailed -= HandleDialogueFailed;
+    }
+
+    private void SubscribeRoundScheduler()
+    {
+        if (roundScheduler == null)
+        {
+            return;
+        }
+
+        roundScheduler.NpcEventUpdated -= HandleNpcEventUpdated;
+        roundScheduler.NpcEventUpdated += HandleNpcEventUpdated;
+    }
+
+    private void UnsubscribeRoundScheduler()
+    {
+        if (roundScheduler == null)
+        {
+            return;
+        }
+
+        roundScheduler.NpcEventUpdated -= HandleNpcEventUpdated;
     }
 
     private void AutoBind()

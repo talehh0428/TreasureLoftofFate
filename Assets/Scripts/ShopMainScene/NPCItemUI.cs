@@ -11,18 +11,19 @@ public class NPCItemUI : MonoBehaviour, IPointerClickHandler
     [SerializeField] private Image backgroundImage;
     [SerializeField] private Image npcAvatar;
     [SerializeField] private TMP_Text npcNameText;
-    [SerializeField] private TMP_Text npcTittleText;
     [SerializeField] private GameObject spokenBadge;
 
-    private NPCDefinition currentNpc;
+    private ShopVisitor currentVisitor;
     private Color normalColor;
     private bool hasLeft;
 
     public event Action<NPCItemUI> Clicked;
 
-    public NPCDefinition CurrentNpc => currentNpc;
+    public NPCDefinition CurrentNpc => currentVisitor?.Definition;
 
-    public bool HasNpc => currentNpc != null;
+    public ShopVisitor CurrentVisitor => currentVisitor;
+
+    public bool HasNpc => currentVisitor != null;
 
     public bool HasLeft => hasLeft;
 
@@ -44,11 +45,16 @@ public class NPCItemUI : MonoBehaviour, IPointerClickHandler
 
     public void Setup(NPCDefinition definition)
     {
+        Setup(ShopVisitor.FromDefinition(definition));
+    }
+
+    public void Setup(ShopVisitor visitor)
+    {
         AutoBind();
-        currentNpc = definition;
+        currentVisitor = visitor;
         hasLeft = false;
 
-        if (currentNpc == null)
+        if (currentVisitor == null)
         {
             gameObject.SetActive(false);
             return;
@@ -56,18 +62,15 @@ public class NPCItemUI : MonoBehaviour, IPointerClickHandler
 
         if (npcAvatar != null)
         {
-            npcAvatar.sprite = currentNpc.Avatar;
-            npcAvatar.enabled = currentNpc.Avatar != null;
+            npcAvatar.sprite = currentVisitor.Avatar;
+            npcAvatar.enabled = currentVisitor.Avatar != null;
+            npcAvatar.color = Color.white;
         }
 
         if (npcNameText != null)
         {
-            npcNameText.text = currentNpc.DisplayName;
-        }
-
-        if (npcTittleText != null)
-        {
-            npcTittleText.text = currentNpc.Description;
+            npcNameText.text = currentVisitor.DisplayName;
+            npcNameText.color = Color.white;
         }
 
         if (spokenBadge != null)
@@ -115,15 +118,11 @@ public class NPCItemUI : MonoBehaviour, IPointerClickHandler
             npcNameText.color = new Color(0.5f, 0.5f, 0.5f, 0.5f);
         }
 
-        if (npcTittleText != null)
-        {
-            npcTittleText.color = new Color(0.5f, 0.5f, 0.5f, 0.5f);
-        }
     }
 
     public void ClearSlot()
     {
-        currentNpc = null;
+        currentVisitor = null;
         hasLeft = false;
 
         if (npcAvatar != null)
@@ -137,12 +136,6 @@ public class NPCItemUI : MonoBehaviour, IPointerClickHandler
         {
             npcNameText.text = string.Empty;
             npcNameText.color = Color.white;
-        }
-
-        if (npcTittleText != null)
-        {
-            npcTittleText.text = string.Empty;
-            npcTittleText.color = Color.white;
         }
 
         if (spokenBadge != null)
@@ -198,11 +191,6 @@ public class NPCItemUI : MonoBehaviour, IPointerClickHandler
         if (npcNameText == null)
         {
             npcNameText = FindChildComponent<TMP_Text>("NpcName");
-        }
-
-        if (npcTittleText == null)
-        {
-            npcTittleText = FindChildComponent<TMP_Text>("NpcDescription");
         }
 
         if (spokenBadge == null)

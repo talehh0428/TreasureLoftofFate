@@ -1018,6 +1018,16 @@ MonoBehaviour:
   dialogueConnector: {fileID: 99494674}
   npcCatalog:
   - {fileID: 11400000, guid: e0fed5a67d1478a4c8481ae2c8602e94, type: 2}
+  commonVisitorAvatar: {fileID: 21300000, guid: e1f656a51e28e6849b9e3c3e167c5e13, type: 3}
+  commonVisitorDescription: "\u6765\u5E97\u4EA4\u6613\u7684\u666E\u901A\u4FEE\u58EB"
+  minCommonVisitorsPerRound: 2
+  maxCommonVisitorsPerRound: 5
+  commonVisitorNames:
+  - "\u9752\u8863\u6563\u4FEE"
+  - "\u4E91\u6E38\u9053\u4EBA"
+  - "\u8D76\u8DEF\u5251\u5BA2"
+  - "\u5916\u95E8\u5F1F\u5B50"
+  - "\u91C7\u836F\u4FEE\u58EB"
 --- !u!114 &1811037546
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1031,6 +1041,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jsonLoader: {fileID: 164089786}
+  initialStateJson: {fileID: 4900000, guid: a2c791f7786616141875d2a4628f7d33, type: 3}
   npcs:
   - {fileID: 11400000, guid: 701d628c50c836a4caf22330a1a63af8, type: 2}
   - {fileID: 11400000, guid: e0fed5a67d1478a4c8481ae2c8602e94, type: 2}
@@ -1426,7 +1437,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 5
+  m_SortingOrder: 2
   m_TargetDisplay: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

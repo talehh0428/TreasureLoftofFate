@@ -29,6 +29,12 @@ public class GuideBookDetailPanelController : MonoBehaviour
     {
         AutoBind();
 
+        if (entryData.IsNpc)
+        {
+            ShowNpc(entryData);
+            return;
+        }
+
         if (entryData.Definition == null)
         {
             ShowEmpty(lockedIcon);
@@ -44,6 +50,33 @@ public class GuideBookDetailPanelController : MonoBehaviour
         ApplyLocked(entryData, lockedIcon);
     }
 
+    public void ShowNpc(GuideBookEntryData entryData)
+    {
+        AutoBind();
+
+        if (!entryData.IsNpc)
+        {
+            ShowEmpty();
+            return;
+        }
+
+        if (detailIcon != null)
+        {
+            detailIcon.sprite = entryData.Icon;
+            detailIcon.enabled = entryData.Icon != null;
+        }
+
+        SetActive(detailRarity, false);
+        SetActive(detailPrice, false);
+        SetText(detailName, entryData.DisplayName);
+        SetText(detailRarity, string.Empty);
+        SetText(detailPrice, string.Empty);
+        SetText(detailAttack, $"攻击—{entryData.Attack}");
+        SetText(detailDefense, $"防御—{entryData.Defense}");
+        SetText(detailSpeed, $"遁速—{entryData.MovementSpeed}");
+        SetText(detailDescription, entryData.Description);
+    }
+
     public void ShowEmpty(Sprite lockedIcon = null)
     {
         if (detailIcon != null)
@@ -52,6 +85,8 @@ public class GuideBookDetailPanelController : MonoBehaviour
             detailIcon.enabled = lockedIcon != null;
         }
 
+        SetActive(detailRarity, true);
+        SetActive(detailPrice, true);
         SetText(detailName, string.Empty);
         SetText(detailRarity, string.Empty);
         SetText(detailPrice, string.Empty);
@@ -69,6 +104,8 @@ public class GuideBookDetailPanelController : MonoBehaviour
             detailIcon.enabled = entryData.Icon != null;
         }
 
+        SetActive(detailRarity, true);
+        SetActive(detailPrice, true);
         SetText(detailName, entryData.DisplayName);
         SetText(detailRarity, entryData.Rarity.ToDisplayName());
         SetText(detailPrice, $"{entryData.Price}灵石");
@@ -86,6 +123,8 @@ public class GuideBookDetailPanelController : MonoBehaviour
             detailIcon.enabled = lockedIcon != null;
         }
 
+        SetActive(detailRarity, true);
+        SetActive(detailPrice, true);
         SetText(detailName, lockedName);
         SetText(detailRarity, entryData.Rarity.ToDisplayName());
         SetText(detailPrice, lockedPrice);
@@ -143,6 +182,14 @@ public class GuideBookDetailPanelController : MonoBehaviour
         if (target != null)
         {
             target.text = value;
+        }
+    }
+
+    private void SetActive(Component target, bool isActive)
+    {
+        if (target != null)
+        {
+            target.gameObject.SetActive(isActive);
         }
     }
 

@@ -18,16 +18,18 @@ public class ShopMainSceneController : MonoBehaviour
     [SerializeField] private Button leaveButton;
 
     private readonly List<NPCItemUI> npcPool = new List<NPCItemUI>();
-    private readonly List<NPCDefinition> currentRoundNpcs = new List<NPCDefinition>();
+    private readonly List<ShopVisitor> currentRoundVisitors = new List<ShopVisitor>();
     private readonly HashSet<string> talkedNpcIds = new HashSet<string>();
     private readonly HashSet<string> tradedNpcIds = new HashSet<string>();
 
     private NPCItemUI selectedNpcSlot;
-    private NPCDefinition selectedNpc;
+    private ShopVisitor selectedVisitor;
 
-    public event Action<NPCDefinition> NpcSelected;
+    public event Action<ShopVisitor> VisitorSelected;
 
-    public NPCDefinition SelectedNpc => selectedNpc;
+    public ShopVisitor SelectedVisitor => selectedVisitor;
+
+    public NPCDefinition SelectedNpc => selectedVisitor?.Definition;
 
     public Button TalkButton => talkButton;
 
@@ -49,63 +51,107 @@ public class ShopMainSceneController : MonoBehaviour
 
     public void SetNpcCatalog(IEnumerable<NPCDefinition> definitions)
     {
-        npcCatalog = definitions == null
-            ? new List<NPCDefinition>()
-            : definitions.Where(npc => npc != null).Distinct().ToList();
+        IEnumerable<ShopVisitor> visitors = definitions == null
+            ? Enumerable.Empty<ShopVisitor>()
+            : definitions.Where(npc => npc != null).Distinct().Select(ShopVisitor.FromDefinition);
 
-        PopulateNPCs();
+        SetVisitors(visitors);
+    }
+
+    public void SetVisitors(IEnumerable<ShopVisitor> visitors)
+    {
+        currentRoundVisitors.Clear();
+        if (visitors != null)
+        {
+            currentRoundVisitors.AddRange(visitors.Where(visitor => visitor != null));
+        }
+
+        npcCatalog = currentRoundVisitors
+            .Where(visitor => visitor != null && visitor.Definition != null)
+            .Select(visitor => visitor.Definition)
+            .Distinct()
+            .ToList();
+
+        talkedNpcIds.Clear();
+        tradedNpcIds.Clear();
+        selectedVisitor = null;
+        selectedNpcSlot = null;
+
+        RebuildVisibleVisitorPool();
+        RefreshActionButtons();
     }
 
     public void PopulateNPCs()
     {
-        List<NPCDefinition> validNpcs = npcCatalog
+        List<ShopVisitor> visitors = npcCatalog
             .Where(npc => npc != null)
             .Distinct()
+            .Select(ShopVisitor.FromDefinition)
             .ToList();
 
-        currentRoundNpcs.Clear();
-        currentRoundNpcs.AddRange(validNpcs);
+        currentRoundVisitors.Clear();
+        currentRoundVisitors.AddRange(visitors);
         talkedNpcIds.Clear();
         tradedNpcIds.Clear();
-        selectedNpc = null;
+        selectedVisitor = null;
         selectedNpcSlot = null;
 
-        RebuildVisibleNpcPool();
+        RebuildVisibleVisitorPool();
         RefreshActionButtons();
     }
 
     public void SetNpcTalked(NPCDefinition talkedNpc)
     {
-        if (talkedNpc == null)
+        SetVisitorTalked(FindVisitorByDefinition(talkedNpc));
+    }
+
+    public void SetVisitorTalked(ShopVisitor talkedVisitor)
+    {
+        if (talkedVisitor == null)
         {
             return;
         }
 
-        talkedNpcIds.Add(GetNpcStateKey(talkedNpc));
-        RemoveNpcIfRoundFlowCompleted(talkedNpc);
+        talkedNpcIds.Add(GetVisitorStateKey(talkedVisitor));
+        RemoveVisitorIfRoundFlowCompleted(talkedVisitor);
         RefreshActionButtons();
     }
 
     public void SetNpcTraded(NPCDefinition tradedNpc)
     {
-        if (tradedNpc == null)
+        SetVisitorTraded(FindVisitorByDefinition(tradedNpc));
+    }
+
+    public void SetVisitorTraded(ShopVisitor tradedVisitor)
+    {
+        if (tradedVisitor == null)
         {
             return;
         }
 
-        tradedNpcIds.Add(GetNpcStateKey(tradedNpc));
-        RemoveNpcIfRoundFlowCompleted(tradedNpc);
+        tradedNpcIds.Add(GetVisitorStateKey(tradedVisitor));
+        RemoveVisitorIfRoundFlowCompleted(tradedVisitor);
         RefreshActionButtons();
     }
 
     public bool HasTalked(NPCDefinition npc)
     {
-        return npc != null && talkedNpcIds.Contains(GetNpcStateKey(npc));
+        return HasTalked(FindVisitorByDefinition(npc));
+    }
+
+    public bool HasTalked(ShopVisitor visitor)
+    {
+        return visitor != null && talkedNpcIds.Contains(GetVisitorStateKey(visitor));
     }
 
     public bool HasTraded(NPCDefinition npc)
     {
-        return npc != null && tradedNpcIds.Contains(GetNpcStateKey(npc));
+        return HasTraded(FindVisitorByDefinition(npc));
+    }
+
+    public bool HasTraded(ShopVisitor visitor)
+    {
+        return visitor != null && tradedNpcIds.Contains(GetVisitorStateKey(visitor));
     }
 
     public void SetTalkAvailable(bool isAvailable)
@@ -120,7 +166,7 @@ public class ShopMainSceneController : MonoBehaviour
 
     public void ClearSelection()
     {
-        selectedNpc = null;
+        selectedVisitor = null;
         selectedNpcSlot = null;
         RefreshNpcHighlights();
         RefreshActionButtons();
@@ -134,34 +180,34 @@ public class ShopMainSceneController : MonoBehaviour
         }
 
         selectedNpcSlot = clickedNpc;
-        selectedNpc = clickedNpc.CurrentNpc;
+        selectedVisitor = clickedNpc.CurrentVisitor;
 
         RefreshNpcHighlights();
         RefreshActionButtons();
 
-        Debug.Log($"NPC 已选中: {selectedNpc.DisplayName}");
-        NpcSelected?.Invoke(selectedNpc);
+        Debug.Log($"NPC 已选中: {selectedVisitor.DisplayName}");
+        VisitorSelected?.Invoke(selectedVisitor);
     }
 
-    private void RebuildVisibleNpcPool()
+    private void RebuildVisibleVisitorPool()
     {
-        List<NPCDefinition> visibleNpcs = currentRoundNpcs
-            .Where(npc => npc != null && !IsRoundFlowCompleted(npc))
+        List<ShopVisitor> visibleVisitors = currentRoundVisitors
+            .Where(visitor => visitor != null && !IsRoundFlowCompleted(visitor))
             .ToList();
 
-        RebuildNpcPool(visibleNpcs);
+        RebuildVisitorPool(visibleVisitors);
 
         for (int index = 0; index < npcPool.Count; index++)
         {
             NPCItemUI npcSlot = npcPool[index];
             npcSlot.Clicked -= HandleNpcClicked;
             npcSlot.Clicked += HandleNpcClicked;
-            npcSlot.Setup(visibleNpcs[index]);
+            npcSlot.Setup(visibleVisitors[index]);
         }
 
-        if (selectedNpc != null && !visibleNpcs.Contains(selectedNpc))
+        if (selectedVisitor != null && !visibleVisitors.Contains(selectedVisitor))
         {
-            selectedNpc = null;
+            selectedVisitor = null;
             selectedNpcSlot = null;
         }
 
@@ -169,18 +215,18 @@ public class ShopMainSceneController : MonoBehaviour
         RebuildNpcLayout();
     }
 
-    private void RemoveNpcIfRoundFlowCompleted(NPCDefinition npc)
+    private void RemoveVisitorIfRoundFlowCompleted(ShopVisitor visitor)
     {
-        if (npc == null || !IsRoundFlowCompleted(npc))
+        if (visitor == null || !IsRoundFlowCompleted(visitor))
         {
             return;
         }
 
-        RebuildVisibleNpcPool();
+        RebuildVisibleVisitorPool();
         RefreshActionButtons();
     }
 
-    private void RebuildNpcPool(IReadOnlyList<NPCDefinition> npcDefinitions)
+    private void RebuildVisitorPool(IReadOnlyList<ShopVisitor> visitors)
     {
         if (npcContentRoot == null || npcItemPrefab == null)
         {
@@ -190,11 +236,11 @@ public class ShopMainSceneController : MonoBehaviour
         ClearExistingNpcObjects();
         npcPool.Clear();
 
-        for (int index = 0; index < npcDefinitions.Count; index++)
+        for (int index = 0; index < visitors.Count; index++)
         {
             NPCItemUI npcSlot = Instantiate(npcItemPrefab, npcContentRoot);
             npcSlot.name = $"NpcSlot_{index + 1:00}";
-            npcSlot.Setup(npcDefinitions[index]);
+            npcSlot.Setup(visitors[index]);
             npcPool.Add(npcSlot);
         }
     }
@@ -245,8 +291,8 @@ public class ShopMainSceneController : MonoBehaviour
 
     private void RefreshActionButtons()
     {
-        SetButtonAvailable(talkButton, selectedNpc != null && !HasTalked(selectedNpc));
-        SetButtonAvailable(tradeButton, selectedNpc != null && !HasTraded(selectedNpc));
+        SetButtonAvailable(talkButton, selectedVisitor != null && selectedVisitor.CanTalk && !HasTalked(selectedVisitor));
+        SetButtonAvailable(tradeButton, selectedVisitor != null && selectedVisitor.CanTrade && !HasTraded(selectedVisitor));
     }
 
     private void SetButtonAvailable(Button button, bool isAvailable)
@@ -263,21 +309,31 @@ public class ShopMainSceneController : MonoBehaviour
         button.colors = colors;
     }
 
-    private bool IsRoundFlowCompleted(NPCDefinition npc)
+    private bool IsRoundFlowCompleted(ShopVisitor visitor)
     {
-        return HasTalked(npc) && HasTraded(npc);
+        bool talkDone = !visitor.CanTalk || HasTalked(visitor);
+        bool tradeDone = !visitor.CanTrade || HasTraded(visitor);
+        return talkDone && tradeDone;
     }
 
-    private string GetNpcStateKey(NPCDefinition npc)
+    private string GetVisitorStateKey(ShopVisitor visitor)
     {
-        if (npc == null)
+        if (visitor == null)
         {
             return string.Empty;
         }
 
-        return string.IsNullOrWhiteSpace(npc.NpcId)
-            ? npc.GetInstanceID().ToString()
-            : npc.NpcId;
+        return visitor.StateKey;
+    }
+
+    private ShopVisitor FindVisitorByDefinition(NPCDefinition definition)
+    {
+        if (definition == null)
+        {
+            return null;
+        }
+
+        return currentRoundVisitors.FirstOrDefault(visitor => visitor != null && visitor.Definition == definition);
     }
 
     private void AutoBindSceneReferences()
