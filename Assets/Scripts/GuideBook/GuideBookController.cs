@@ -10,11 +10,21 @@ using UnityEditor;
 
 public class GuideBookController : MonoBehaviour
 {
+    private const string DefaultCustomerTabHint = "人物图鉴初始收录全部人物。";
+
+    private enum GuideBookTab
+    {
+        Items,
+        Customers
+    }
+
     [Header("Data Source")]
     [SerializeField] private string resourcesFolderName = "ShopItem";
     [SerializeField] private string editorAssetFolder = "Assets/ShopItem";
     [SerializeField] private List<ShopItemDefinition> itemDefinitions = new List<ShopItemDefinition>();
     [SerializeField] private string defaultSelectedItemId = "0001";
+    [SerializeField] private List<NPCDefinition> npcDefinitions = new List<NPCDefinition>();
+    [SerializeField] private string defaultSelectedNpcId;
 
     [Header("Left List")]
     [SerializeField] private Transform contentRoot;
@@ -33,11 +43,13 @@ public class GuideBookController : MonoBehaviour
     [SerializeField] private GuideBookDetailPanelController detailPanel;
     [SerializeField] private TMP_Text bottomHint;
     [SerializeField] [TextArea] private string itemTabHint = "已解锁的物品会显示真实信息。";
-    [SerializeField] [TextArea] private string customerTabHint = "顾客图鉴功能暂未开放。";
+    [SerializeField] [TextArea] private string customerTabHint = DefaultCustomerTabHint;
 
     private readonly List<GuideBookItemEntryUI> spawnedEntries = new List<GuideBookItemEntryUI>();
     private readonly List<ShopItemDefinition> sortedDefinitions = new List<ShopItemDefinition>();
+    private readonly List<NPCDefinition> sortedNpcDefinitions = new List<NPCDefinition>();
     private GuideBookItemEntryUI selectedEntry;
+    private GuideBookTab currentTab = GuideBookTab.Items;
     private bool isUnloading;
 
     private void Awake()
@@ -46,10 +58,9 @@ public class GuideBookController : MonoBehaviour
         SetupTabPresentation();
         LoadDefinitions();
         ShopItemUnlockRegistry.RegisterDefaults(sortedDefinitions);
-        BuildEntries();
+        LoadNpcDefinitions();
         ConfigureButtons();
         SelectItemTab();
-        SelectDefaultEntry();
     }
 
     private void OnEnable()
@@ -151,6 +162,14 @@ public class GuideBookController : MonoBehaviour
             .OrderBy(definition => definition.ItemId));
     }
 
+    private void LoadNpcDefinitions()
+    {
+        sortedNpcDefinitions.Clear();
+        sortedNpcDefinitions.AddRange(npcDefinitions
+            .Where(definition => definition != null)
+            .OrderBy(definition => definition.NpcId));
+    }
+
     private void BuildEntries()
     {
         if (contentRoot == null || entryPrefab == null)
@@ -160,14 +179,18 @@ public class GuideBookController : MonoBehaviour
 
         ClearEntries();
 
-        for (int index = 0; index < sortedDefinitions.Count; index++)
+        IReadOnlyList<GuideBookEntryData> entries = BuildCurrentEntryData();
+
+        for (int index = 0; index < entries.Count; index++)
         {
-            ShopItemDefinition definition = sortedDefinitions[index];
+            GuideBookEntryData entryData = entries[index];
             GuideBookItemEntryUI entry = Instantiate(entryPrefab, contentRoot);
-            entry.name = $"GuideBookItemEntry_{definition.ItemId}";
+            entry.name = currentTab == GuideBookTab.Items
+                ? $"GuideBookItemEntry_{entryData.ItemId}"
+                : $"GuideBookNpcEntry_{entryData.ItemId}";
             entry.Clicked += HandleEntryClicked;
             entry.transform.SetSiblingIndex(index);
-            entry.Setup(BuildEntryData(definition), lockedIcon);
+            entry.Setup(entryData, lockedIcon);
             spawnedEntries.Add(entry);
         }
 
@@ -176,8 +199,10 @@ public class GuideBookController : MonoBehaviour
 
     private void SelectDefaultEntry()
     {
-        GuideBookItemEntryUI defaultEntry = spawnedEntries.FirstOrDefault(entry =>
-            entry.CurrentEntry.ItemId == defaultSelectedItemId);
+        string defaultId = currentTab == GuideBookTab.Items ? defaultSelectedItemId : defaultSelectedNpcId;
+        GuideBookItemEntryUI defaultEntry = string.IsNullOrWhiteSpace(defaultId)
+            ? null
+            : spawnedEntries.FirstOrDefault(entry => entry.CurrentEntry.ItemId == defaultId);
 
         if (defaultEntry == null && spawnedEntries.Count > 0)
         {
@@ -222,10 +247,15 @@ public class GuideBookController : MonoBehaviour
 
     private void HandleItemUnlocked(string itemId)
     {
+        if (currentTab != GuideBookTab.Items)
+        {
+            return;
+        }
+
         for (int index = 0; index < spawnedEntries.Count; index++)
         {
             GuideBookItemEntryUI entry = spawnedEntries[index];
-            if (entry == null || entry.CurrentEntry.ItemId != itemId)
+            if (entry == null || entry.CurrentEntry.IsNpc || entry.CurrentEntry.ItemId != itemId)
             {
                 continue;
             }
@@ -242,6 +272,8 @@ public class GuideBookController : MonoBehaviour
 
     private void SelectItemTab()
     {
+        currentTab = GuideBookTab.Items;
+
         if (itemListRoot != null)
         {
             itemListRoot.SetActive(true);
@@ -255,31 +287,29 @@ public class GuideBookController : MonoBehaviour
 
         ApplyTabStacking(itemTabButton, customerTabButton);
 
-        if (selectedEntry != null && detailPanel != null)
-        {
-            detailPanel.Show(selectedEntry.CurrentEntry, lockedIcon);
-        }
+        BuildEntries();
+        SelectDefaultEntry();
     }
 
     private void SelectCustomerTab()
     {
+        currentTab = GuideBookTab.Customers;
+
         if (itemListRoot != null)
         {
-            itemListRoot.SetActive(false);
+            itemListRoot.SetActive(true);
         }
 
         if (bottomHint != null)
         {
             bottomHint.gameObject.SetActive(true);
-            bottomHint.text = customerTabHint;
+            bottomHint.text = GetCustomerTabHint();
         }
 
         ApplyTabStacking(customerTabButton, itemTabButton);
 
-        if (detailPanel != null)
-        {
-            detailPanel.ShowEmpty();
-        }
+        BuildEntries();
+        SelectDefaultEntry();
     }
 
     private void SetupTabPresentation()
@@ -320,6 +350,37 @@ public class GuideBookController : MonoBehaviour
     private GuideBookEntryData BuildEntryData(ShopItemDefinition definition)
     {
         return new GuideBookEntryData(definition, ShopItemUnlockRegistry.IsUnlocked(definition));
+    }
+
+    private string GetCustomerTabHint()
+    {
+        if (string.IsNullOrWhiteSpace(customerTabHint) || customerTabHint.Contains("暂未开放"))
+        {
+            return DefaultCustomerTabHint;
+        }
+
+        return customerTabHint;
+    }
+
+    private GuideBookEntryData BuildEntryData(NPCDefinition definition)
+    {
+        return new GuideBookEntryData(definition);
+    }
+
+    private IReadOnlyList<GuideBookEntryData> BuildCurrentEntryData()
+    {
+        if (currentTab == GuideBookTab.Customers)
+        {
+            return sortedNpcDefinitions
+                .Where(definition => definition != null)
+                .Select(BuildEntryData)
+                .ToList();
+        }
+
+        return sortedDefinitions
+            .Where(definition => definition != null)
+            .Select(BuildEntryData)
+            .ToList();
     }
 
     private void ClearEntries()

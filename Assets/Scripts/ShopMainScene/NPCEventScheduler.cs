@@ -6,6 +6,7 @@ using UnityEngine;
 public class NPCEventScheduler : MonoBehaviour
 {
     [SerializeField] private NPCEventJsonLoader jsonLoader;
+    [SerializeField] private TextAsset initialStateJson;
     [SerializeField] private List<NPCDefinition> npcs = new();
     [SerializeField] private int currentRound = 1;
     [SerializeField] [Min(1)] private int maxRound = 100;
@@ -14,8 +15,10 @@ public class NPCEventScheduler : MonoBehaviour
 
     private NPCEventDatabase database;
     private readonly HashSet<string> triggeredOnceEventIds = new();
+    private bool hasInitializedNpcStates;
 
     public event Action<int> RoundChanged;
+    public event Action<NPCDefinition> NpcEventUpdated;
 
     public int CurrentRound => currentRound;
 
@@ -56,18 +59,21 @@ public class NPCEventScheduler : MonoBehaviour
     {
         SetCurrentRound(round);
         database ??= jsonLoader != null ? jsonLoader.Load() : new NPCEventDatabase();
+        EnsureNpcInitialStatesInitialized();
         Debug.Log($"NPCEventScheduler: 开始处理第 {currentRound} 回合事件调度。");
 
         Dictionary<string, NPCDefinition> npcById = BuildNpcLookup();
+        Dictionary<string, NpcEventStateSnapshot> beforeStates = CaptureNpcEventStates(npcById);
         NPCEventConditionEvaluator evaluator = new NPCEventConditionEvaluator(npcById, round, inactiveEventID);
         HashSet<string> occupiedNpcIds = new HashSet<string>();
         Dictionary<string, List<string>> promptTextsByNpcId = new Dictionary<string, List<string>>();
 
-        ProcessWorldEvents(evaluator, promptTextsByNpcId);
+        ProcessWorldEvents(evaluator, npcById, promptTextsByNpcId);
         ProcessCommonEvents(evaluator, npcById, occupiedNpcIds, promptTextsByNpcId);
         ProcessPersonalEvents(evaluator, npcById, occupiedNpcIds, promptTextsByNpcId);
         AppendRoundPromptEntries(npcById, promptTextsByNpcId);
         AdvanceNpcEvents();
+        PublishUpdatedNpcs(npcById, beforeStates);
         Debug.Log($"NPCEventScheduler: 第 {currentRound} 回合事件调度结束。");
     }
 
@@ -106,8 +112,65 @@ public class NPCEventScheduler : MonoBehaviour
         return npcById;
     }
 
+    private void EnsureNpcInitialStatesInitialized()
+    {
+        if (hasInitializedNpcStates)
+        {
+            return;
+        }
+
+        hasInitializedNpcStates = true;
+        Dictionary<string, NPCDefinition> npcById = BuildNpcLookup();
+
+        if (initialStateJson == null || string.IsNullOrWhiteSpace(initialStateJson.text))
+        {
+            Debug.LogWarning("NPCEventScheduler: 未配置 NPC 初始事件状态 JSON，保持现有 CurrentEventID。");
+            return;
+        }
+
+        NPCInitialEventStateConfig config = JsonUtility.FromJson<NPCInitialEventStateConfig>(initialStateJson.text);
+        if (config?.initialStates == null)
+        {
+            Debug.LogWarning("NPCEventScheduler: NPC 初始事件状态 JSON 解析失败或 initialStates 字段为空。");
+            return;
+        }
+
+        HashSet<string> initializedNpcIds = new HashSet<string>();
+        foreach (NPCInitialEventStateEntry entry in config.initialStates)
+        {
+            if (entry == null || string.IsNullOrWhiteSpace(entry.npcId))
+            {
+                Debug.LogWarning("NPCEventScheduler: NPC 初始事件状态 JSON 中存在缺少 npcId 的条目，已跳过。");
+                continue;
+            }
+
+            if (!npcById.TryGetValue(entry.npcId, out NPCDefinition npc))
+            {
+                Debug.LogWarning($"NPCEventScheduler: 初始事件状态引用了未在 NPC 列表中找到的 NPC ID: {entry.npcId}");
+                continue;
+            }
+
+            npc.CurrentEventID = entry.currentEventId;
+            npc.ClearNextEventID();
+            npc.ClearPrompt();
+            initializedNpcIds.Add(npc.NpcId);
+            Debug.Log($"NPCEventScheduler: 初始化 NPC 事件状态 -> {npc.NpcId} {npc.DisplayName}: {npc.CurrentEventID}");
+        }
+
+        foreach (NPCDefinition npc in npcs)
+        {
+            if (npc == null || initializedNpcIds.Contains(npc.NpcId))
+            {
+                continue;
+            }
+
+            Debug.LogWarning($"NPCEventScheduler: NPC {npc.NpcId} {npc.DisplayName} 未出现在初始事件状态 JSON 中，保持 CurrentEventID: {npc.CurrentEventID}");
+        }
+    }
+
     private void ProcessWorldEvents(
         NPCEventConditionEvaluator evaluator,
+        IReadOnlyDictionary<string, NPCDefinition> npcById,
         Dictionary<string, List<string>> promptTextsByNpcId)
     {
         foreach (NPCEventConfig eventConfig in database.WorldEvents)
@@ -123,7 +186,7 @@ public class NPCEventScheduler : MonoBehaviour
                 continue;
             }
 
-            ApplyOutcome(eventConfig, outcome, promptTextsByNpcId);
+            ApplyOutcome(eventConfig, outcome, npcById, promptTextsByNpcId);
         }
     }
 
@@ -147,7 +210,7 @@ public class NPCEventScheduler : MonoBehaviour
                 continue;
             }
 
-            ApplyOutcome(eventConfig, outcome, promptTextsByNpcId);
+            ApplyOutcome(eventConfig, outcome, npcById, promptTextsByNpcId);
             foreach (string participant in eventConfig.participants)
             {
                 occupiedNpcIds.Add(participant);
@@ -184,7 +247,7 @@ public class NPCEventScheduler : MonoBehaviour
                 continue;
             }
 
-            ApplyOutcome(eventConfig, outcome, promptTextsByNpcId);
+            ApplyOutcome(eventConfig, outcome, npcById, promptTextsByNpcId);
         }
     }
 
@@ -212,9 +275,18 @@ public class NPCEventScheduler : MonoBehaviour
         {
             if (requirement == null ||
                 string.IsNullOrWhiteSpace(requirement.target) ||
-                string.IsNullOrWhiteSpace(requirement.eventId) ||
-                !npcById.TryGetValue(requirement.target, out NPCDefinition npc) ||
-                npc.CurrentEventID == inactiveEventID ||
+                string.IsNullOrWhiteSpace(requirement.eventId))
+            {
+                return false;
+            }
+
+            if (!npcById.TryGetValue(requirement.target, out NPCDefinition npc))
+            {
+                Debug.LogWarning($"NPCEventScheduler: 事件 {eventConfig.id} 的 requirement 引用了未在 NPC 列表中找到的 NPC ID: {requirement.target}");
+                return false;
+            }
+
+            if (npc.CurrentEventID == inactiveEventID ||
                 npc.CurrentEventID != requirement.eventId)
             {
                 return false;
@@ -235,12 +307,14 @@ public class NPCEventScheduler : MonoBehaviour
     private void ApplyOutcome(
         NPCEventConfig eventConfig,
         NPCEventOutcome outcome,
+        IReadOnlyDictionary<string, NPCDefinition> npcById,
         Dictionary<string, List<string>> promptTextsByNpcId)
     {
         if (!string.IsNullOrWhiteSpace(outcome.text))
         {
             foreach (string participantId in eventConfig.participants)
             {
+                WarnIfNpcMissing(eventConfig.id, participantId, "participants", npcById);
                 AddPromptText(promptTextsByNpcId, participantId, outcome.text);
                 LogTriggeredEvent(participantId, outcome.text);
             }
@@ -250,7 +324,12 @@ public class NPCEventScheduler : MonoBehaviour
 
         foreach (NPCEventNext next in outcome.next)
         {
-            NPCDefinition npc = npcs.FirstOrDefault(candidate => candidate != null && candidate.NpcId == next.target);
+            if (!npcById.TryGetValue(next.target, out NPCDefinition npc))
+            {
+                WarnIfNpcMissing(eventConfig.id, next.target, "outcome.next", npcById);
+                continue;
+            }
+
             if (npc != null)
             {
                 npc.NextEventID = next.nextId;
@@ -264,6 +343,20 @@ public class NPCEventScheduler : MonoBehaviour
         {
             triggeredOnceEventIds.Add(eventConfig.id);
         }
+    }
+
+    private void WarnIfNpcMissing(
+        string eventId,
+        string npcId,
+        string sourceField,
+        IReadOnlyDictionary<string, NPCDefinition> npcById)
+    {
+        if (string.IsNullOrWhiteSpace(npcId) || npcById.ContainsKey(npcId))
+        {
+            return;
+        }
+
+        Debug.LogWarning($"NPCEventScheduler: 事件 {eventId} 的 {sourceField} 引用了未在 NPC 列表中找到的 NPC ID: {npcId}");
     }
 
     private void MarkParticipantsFinishedWhenNoNext(
@@ -344,5 +437,62 @@ public class NPCEventScheduler : MonoBehaviour
             npc.CurrentEventID = npc.NextEventID;
             npc.ClearNextEventID();
         }
+    }
+
+    private Dictionary<string, NpcEventStateSnapshot> CaptureNpcEventStates(IReadOnlyDictionary<string, NPCDefinition> npcById)
+    {
+        Dictionary<string, NpcEventStateSnapshot> states = new Dictionary<string, NpcEventStateSnapshot>();
+        foreach (KeyValuePair<string, NPCDefinition> pair in npcById)
+        {
+            NPCDefinition npc = pair.Value;
+            if (npc == null)
+            {
+                continue;
+            }
+
+            states[pair.Key] = new NpcEventStateSnapshot(npc.CurrentEventID, npc.NextEventID);
+        }
+
+        return states;
+    }
+
+    private void PublishUpdatedNpcs(
+        IReadOnlyDictionary<string, NPCDefinition> npcById,
+        IReadOnlyDictionary<string, NpcEventStateSnapshot> beforeStates)
+    {
+        foreach (KeyValuePair<string, NPCDefinition> pair in npcById)
+        {
+            NPCDefinition npc = pair.Value;
+            if (npc == null || string.IsNullOrWhiteSpace(npc.NpcId))
+            {
+                continue;
+            }
+
+            beforeStates.TryGetValue(pair.Key, out NpcEventStateSnapshot before);
+            if (before.CurrentEventID == npc.CurrentEventID && before.NextEventID == npc.NextEventID)
+            {
+                continue;
+            }
+
+            if (npc.CurrentEventID == inactiveEventID)
+            {
+                continue;
+            }
+
+            Debug.Log($"NPCEventScheduler: 事件状态更新，加入下回合来访 -> {npc.NpcId} {npc.DisplayName}");
+            NpcEventUpdated?.Invoke(npc);
+        }
+    }
+
+    private readonly struct NpcEventStateSnapshot
+    {
+        public NpcEventStateSnapshot(string currentEventID, string nextEventID)
+        {
+            CurrentEventID = currentEventID ?? string.Empty;
+            NextEventID = nextEventID ?? string.Empty;
+        }
+
+        public readonly string CurrentEventID;
+        public readonly string NextEventID;
     }
 }

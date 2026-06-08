@@ -30,6 +30,7 @@ public class TradeSceneController : MonoBehaviour
     private readonly List<TradeInventorySlotUI> warehouseSlots = new List<TradeInventorySlotUI>();
     private readonly List<TradeOfferSlotUI> offerSlots = new List<TradeOfferSlotUI>();
 
+    private ShopVisitor currentVisitor;
     private NPCDefinition currentNpc;
     private TradeInventorySlotUI selectedWarehouseSlot;
     private string selectedItemId;
@@ -39,6 +40,7 @@ public class TradeSceneController : MonoBehaviour
     {
         AutoBind();
         ConfigureScrollViews();
+        currentVisitor = TradeSceneContext.CurrentVisitor;
         currentNpc = TradeSceneContext.CurrentNpc;
         RebuildAll();
     }
@@ -61,6 +63,7 @@ public class TradeSceneController : MonoBehaviour
     private void OnDisable()
     {
         WarehouseInventory.Changed -= RebuildAll;
+        ShopEvents.RaiseWalletPreviewChanged(0);
 
         if (tradeButton != null)
         {
@@ -181,7 +184,7 @@ public class TradeSceneController : MonoBehaviour
 
     private void HandleTradeClicked()
     {
-        if (currentNpc == null)
+        if (currentVisitor == null && currentNpc == null)
         {
             ShowFeedback("未找到交易对象。");
             return;
@@ -208,13 +211,17 @@ public class TradeSceneController : MonoBehaviour
             }
         }
 
+        ShopEvents.RaiseWalletPreviewChanged(0);
         ShopWallet.AddMoney(totalEarnings);
-        currentNpc.ApplyStatBonus(totalAttack, totalDefense, totalSpeed);
+        if (currentNpc != null)
+        {
+            currentNpc.ApplyStatBonus(totalAttack, totalDefense, totalSpeed);
+        }
 
         MainSceneShopController sourceController = TradeSceneContext.SourceController;
         if (sourceController != null)
         {
-            sourceController.CompleteTradeForNpc(currentNpc);
+            sourceController.CompleteTradeForVisitor(currentVisitor);
         }
 
         offerQuantities.Clear();
@@ -353,9 +360,11 @@ public class TradeSceneController : MonoBehaviour
             summaryText.text = $"预交易 {itemCount}/{maxTradeItemCount} 件  可得 {earnings} 灵石";
         }
 
+        ShopEvents.RaiseWalletPreviewChanged(earnings);
+
         if (tradeButton != null)
         {
-            tradeButton.interactable = currentNpc != null && itemCount > 0;
+            tradeButton.interactable = (currentVisitor != null || currentNpc != null) && itemCount > 0;
         }
     }
 

@@ -13,6 +13,7 @@ public class MainSceneHudController : MonoBehaviour
     [SerializeField] private TMP_Text moneyText;
 
     private bool isSubscribedToScheduler;
+    private int previewWalletDelta;
 
     private void Awake()
     {
@@ -25,6 +26,7 @@ public class MainSceneHudController : MonoBehaviour
     private void OnEnable()
     {
         ShopWallet.MoneyChanged += HandleMoneyChanged;
+        ShopEvents.WalletPreviewChanged += HandleWalletPreviewChanged;
         SubscribeScheduler();
         RefreshMoneyText(ShopWallet.CurrentMoney);
         RefreshRoundText(GetCurrentRoundValue());
@@ -33,6 +35,7 @@ public class MainSceneHudController : MonoBehaviour
     private void OnDisable()
     {
         ShopWallet.MoneyChanged -= HandleMoneyChanged;
+        ShopEvents.WalletPreviewChanged -= HandleWalletPreviewChanged;
         UnsubscribeScheduler();
     }
 
@@ -44,6 +47,12 @@ public class MainSceneHudController : MonoBehaviour
     private void HandleMoneyChanged(int currentMoney)
     {
         RefreshMoneyText(currentMoney);
+    }
+
+    private void HandleWalletPreviewChanged(int previewDelta)
+    {
+        previewWalletDelta = previewDelta;
+        RefreshMoneyText(ShopWallet.CurrentMoney);
     }
 
     private void HandleRoundChanged(int currentRound)
@@ -58,7 +67,14 @@ public class MainSceneHudController : MonoBehaviour
             return;
         }
 
-        moneyText.text = $"{currentMoney}";
+        if (previewWalletDelta == 0)
+        {
+            moneyText.text = $"{currentMoney}";
+            return;
+        }
+
+        int previewMoney = Mathf.Max(0, currentMoney + previewWalletDelta);
+        moneyText.text = $"{currentMoney}\uff08{previewMoney}\uff09";
     }
 
     private void RefreshRoundText(int currentRound)

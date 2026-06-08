@@ -140,6 +140,7 @@ public class ShopController : MonoBehaviour
         }
 
         ShopEvents.RaiseItemSelectionCleared();
+        PublishPurchasePreview();
         RebuildShelfLayout();
     }
 
@@ -171,6 +172,7 @@ public class ShopController : MonoBehaviour
 
         ShopEvents.RaiseItemSelectionCleared();
         RefreshMoneyText(ShopWallet.CurrentMoney);
+        PublishPurchasePreview();
         ShowFeedback($"\u8d2d\u4e70\u6210\u529f\uff0c\u82b1\u8d39 {totalPrice}\u7075\u77f3\u3002", successMessageColor);
     }
 
@@ -202,6 +204,7 @@ public class ShopController : MonoBehaviour
         {
             ShopEvents.RaiseItemSelected(clickedSlot.CurrentItem);
             RefreshMoneyText(ShopWallet.CurrentMoney);
+            PublishPurchasePreview();
             return;
         }
 
@@ -218,6 +221,7 @@ public class ShopController : MonoBehaviour
         }
 
         RefreshMoneyText(ShopWallet.CurrentMoney);
+        PublishPurchasePreview();
     }
 
     private void HandlePurchasedItem(ShopItemInstance itemInstance)
@@ -261,6 +265,12 @@ public class ShopController : MonoBehaviour
         return slotPool
             .Where(slot => slot.gameObject.activeSelf && slot.HasItem && slot.IsSelected && !slot.IsSold)
             .ToList();
+    }
+
+    private void PublishPurchasePreview()
+    {
+        int selectedTotalPrice = GetSelectedPurchasableSlots().Sum(slot => slot.Price);
+        ShopEvents.RaisePurchasePreviewChanged(selectedTotalPrice);
     }
 
     private List<ShopItemInstance> BuildStockInstances()
