@@ -66,6 +66,7 @@ public class ShopController : MonoBehaviour
     private void OnEnable()
     {
         ShopWallet.MoneyChanged += HandleMoneyChanged;
+        RegisterEconomyBuffModifier();
 
         if (buyButton != null)
         {
@@ -89,6 +90,7 @@ public class ShopController : MonoBehaviour
     private void OnDisable()
     {
         ShopWallet.MoneyChanged -= HandleMoneyChanged;
+        UnregisterEconomyBuffModifier();
 
         if (buyButton != null)
         {
@@ -283,7 +285,7 @@ public class ShopController : MonoBehaviour
     private List<ShopItemInstance> BuildStockInstances()
     {
         List<ShopItemDefinition> validItems = itemCatalog
-            .Where(item => item != null && item.Rarity != ShopItemRarity.Immortal)
+            .Where(item => item != null)
             .Distinct()
             .ToList();
 
@@ -351,6 +353,30 @@ public class ShopController : MonoBehaviour
 
         effectiveSettings.Validate();
         return effectiveSettings;
+    }
+
+    private void RegisterEconomyBuffModifier()
+    {
+        EconomyBuffSystem economyBuffSystem = EconomyBuffSystem.Instance;
+        if (economyBuffSystem == null)
+        {
+            return;
+        }
+
+        RegisterDiscountModifier(economyBuffSystem);
+        RegisterRarityWeightModifier(economyBuffSystem);
+    }
+
+    private void UnregisterEconomyBuffModifier()
+    {
+        EconomyBuffSystem economyBuffSystem = EconomyBuffSystem.Instance;
+        if (economyBuffSystem == null)
+        {
+            return;
+        }
+
+        UnregisterDiscountModifier(economyBuffSystem);
+        UnregisterRarityWeightModifier(economyBuffSystem);
     }
 
     private void AutoBindSceneReferences()

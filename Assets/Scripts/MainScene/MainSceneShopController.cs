@@ -16,6 +16,7 @@ public class MainSceneShopController : MonoBehaviour
 
     [Header("Round Flow")]
     [SerializeField] private NPCEventScheduler roundScheduler;
+    [SerializeField] private EconomyBuffSystem economyBuffSystem;
     [SerializeField] private ScreenFadeTransition transition;
     [SerializeField] private string marketToNpcMessage = "坊市结束";
     [SerializeField] private string nextRoundMessage = "新一回合";
@@ -465,6 +466,12 @@ public class MainSceneShopController : MonoBehaviour
 
     private IEnumerator ShopSceneToNextMarketRoutine()
     {
+        if (economyBuffSystem != null)
+        {
+            int endingRound = roundScheduler == null ? 1 : roundScheduler.CurrentRound;
+            yield return economyBuffSystem.ProcessEndRoundRoutine(endingRound);
+        }
+
         if (!roundScheduler.TryProcessNextRound())
         {
             yield break;
@@ -697,6 +704,11 @@ public class MainSceneShopController : MonoBehaviour
         if (roundScheduler == null)
         {
             roundScheduler = FindObjectOfType<NPCEventScheduler>(true);
+        }
+
+        if (economyBuffSystem == null)
+        {
+            economyBuffSystem = FindObjectOfType<EconomyBuffSystem>(true);
         }
 
         if (transition == null)
