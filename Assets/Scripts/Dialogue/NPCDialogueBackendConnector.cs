@@ -12,10 +12,13 @@ public class NPCDialogueBackendConnector : MonoBehaviour
     [SerializeField] private NPCDefinition npc;
     [SerializeField] [Min(1)] private int maxRounds = 3;
     [SerializeField] private string closingChoiceText = "我了解了，先聊到这里吧";
+    [SerializeField] private string timeoutDialogueText = "连接后端超时，请尝试重新连接。";
+    [SerializeField] private string retryChoiceText = "尝试重连";
 
     [Header("Backend")]
     [SerializeField] private string baseUrl = "http://127.0.0.1:3000";
     [SerializeField] private int timeoutSeconds = 30;
+    [SerializeField] private NpcIdMapping[] npcIdMappings = Array.Empty<NpcIdMapping>();
 
     [Header("Generation")]
     [SerializeField] private string model = string.Empty;
@@ -144,6 +147,13 @@ public class NPCDialogueBackendConnector : MonoBehaviour
                     $"[NPCDialogueBackendConnector] Request failed. " +
                     $"Status: {request.responseCode}, Error: {request.error}, Body:\n{responseText}");
                 isRequesting = false;
+
+                if (IsTimeoutFailure(request))
+                {
+                    ShowTimeoutRetryDialogue();
+                    yield break;
+                }
+
                 DialogueFailed?.Invoke(activeNpc);
                 yield break;
             }
@@ -169,7 +179,7 @@ public class NPCDialogueBackendConnector : MonoBehaviour
     {
         StringBuilder builder = new StringBuilder();
         builder.Append('{');
-        AppendJsonString(builder, "npcId", npc.NpcId);
+        AppendJsonString(builder, "npcId", GetMappedNpcId(npc.NpcId));
         builder.Append(',');
         AppendJsonString(builder, "eventSummary", BuildEventSummary());
         builder.Append(',');
@@ -190,6 +200,32 @@ public class NPCDialogueBackendConnector : MonoBehaviour
 
         builder.Append('}');
         return builder.ToString();
+    }
+
+    private string GetMappedNpcId(string sourceNpcId)
+    {
+        if (string.IsNullOrWhiteSpace(sourceNpcId))
+        {
+            return string.Empty;
+        }
+
+        for (int i = 0; i < npcIdMappings.Length; i++)
+        {
+            NpcIdMapping mapping = npcIdMappings[i];
+            if (mapping == null || string.IsNullOrWhiteSpace(mapping.fromNpcId))
+            {
+                continue;
+            }
+
+            if (string.Equals(mapping.fromNpcId.Trim(), sourceNpcId.Trim(), StringComparison.OrdinalIgnoreCase))
+            {
+                return string.IsNullOrWhiteSpace(mapping.toBackendNpcId)
+                    ? sourceNpcId
+                    : mapping.toBackendNpcId.Trim();
+            }
+        }
+
+        return sourceNpcId;
     }
 
     private string BuildEventSummary()
@@ -287,6 +323,50 @@ public class NPCDialogueBackendConnector : MonoBehaviour
         };
 
         dialogueController.ShowDialogue(body, _ => EndBackendDialogue());
+    }
+
+    private void ShowTimeoutRetryDialogue()
+    {
+        DialogueBody body = new DialogueBody
+        {
+            npcName = npc != null ? npc.DisplayName : string.Empty,
+            portrait = npc != null ? npc.Portrait : null,
+            text = timeoutDialogueText,
+            choices = new[]
+            {
+                new DialogueChoice { id = "retry", text = retryChoiceText }
+            }
+        };
+
+        dialogueController.ShowDialogue(body, HandleRetryChoice);
+    }
+
+    private void HandleRetryChoice(DialogueChoiceResult result)
+    {
+        if (isRequesting)
+        {
+            return;
+        }
+
+        if (string.Equals(result.Id, "retry", StringComparison.OrdinalIgnoreCase))
+        {
+            RequestNextDialogue();
+            return;
+        }
+
+        EndBackendDialogue();
+    }
+
+    private bool IsTimeoutFailure(UnityWebRequest request)
+    {
+        if (request == null || request.result != UnityWebRequest.Result.ConnectionError)
+        {
+            return false;
+        }
+
+        string error = request.error ?? string.Empty;
+        return error.IndexOf("timeout", StringComparison.OrdinalIgnoreCase) >= 0
+            || error.IndexOf("timed out", StringComparison.OrdinalIgnoreCase) >= 0;
     }
 
     private bool ValidateSetup()
@@ -397,6 +477,13 @@ public readonly struct DialogueHistoryEntry
 
     public readonly string npcDialogue;
     public readonly string playerChoice;
+}
+
+[Serializable]
+public class NpcIdMapping
+{
+    public string fromNpcId;
+    public string toBackendNpcId;
 }
 
 [Serializable]

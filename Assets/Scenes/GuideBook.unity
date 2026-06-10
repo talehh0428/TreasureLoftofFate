@@ -2433,7 +2433,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 3
   m_TargetDisplay: 0
 --- !u!224 &1460650028
 RectTransform:
@@ -2474,6 +2474,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2eed01bc05b18d7449c7df9f421492c5, type: 2}
   - {fileID: 11400000, guid: 24d81a64763b99b4a9d2c4f382cbcc58, type: 2}
   defaultSelectedItemId: 0001
+  npcDefinitions: []
+  defaultSelectedNpcId: 
   contentRoot: {fileID: 2068238010}
   entryPrefab: {fileID: 582883283799792569, guid: b08d2843bafb7b74a9ff1e5e3407196c, type: 3}
   lockedIcon: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
