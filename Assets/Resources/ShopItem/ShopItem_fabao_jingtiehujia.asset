@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 025c29d5619685c4f84dfa859ade29fa, type: 3}
+  m_Name: ShopItem_fabao_jingtiehujia
+  m_EditorClassIdentifier: 
+  itemId: fabao_jingtiehujia
+  displayName: 精铁护甲
+  price: 6
+  icon: {fileID: 21300000, guid: da57e90a7abc44c48979259441dd67ec, type: 3}
+  description: 粗铁锻打而成的护心镜，仅能护住胸口要害。穿上后沉甸甸的，行动略为不便，但总比没有强。
+  unlockedByDefault: 0
+  rarity: 0
+  attack: 0
+  defense: 2
+  movementSpeed: 0

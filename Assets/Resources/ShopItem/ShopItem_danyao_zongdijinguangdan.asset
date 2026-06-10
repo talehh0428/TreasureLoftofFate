@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 025c29d5619685c4f84dfa859ade29fa, type: 3}
+  m_Name: ShopItem_danyao_zongdijinguangdan
+  m_EditorClassIdentifier: 
+  itemId: danyao_zongdijinguangdan
+  displayName: 纵地金光丹
+  price: 8800
+  icon: {fileID: 21300000, guid: b18d9a698612fb54cbbc995cd36adbb7, type: 3}
+  description: 取材于一道上古遗留的纵地金光术残卷，以金光石粉炼成。服下后身化金光遁出百里，是逃命的终极手段。
+  unlockedByDefault: 0
+  rarity: 4
+  attack: 12
+  defense: 18
+  movementSpeed: 130

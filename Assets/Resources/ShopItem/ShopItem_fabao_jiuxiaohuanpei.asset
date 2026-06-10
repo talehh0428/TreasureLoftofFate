@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 025c29d5619685c4f84dfa859ade29fa, type: 3}
+  m_Name: ShopItem_fabao_jiuxiaohuanpei
+  m_EditorClassIdentifier: 
+  itemId: fabao_jiuxiaohuanpei
+  displayName: 九霄环佩
+  price: 11000
+  icon: {fileID: 21300000, guid: 387f591437a0a4d4781a2e1dc1d34d5f, type: 3}
+  description: 一套九枚古玉环佩，每枚刻有不同的仙禽之形。佩戴全套可召九禽虚影护体飞遁，进退从容。据说是上古仙人的随身之物。
+  unlockedByDefault: 0
+  rarity: 4
+  attack: 20
+  defense: 30
+  movementSpeed: 150

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 025c29d5619685c4f84dfa859ade29fa, type: 3}
+  m_Name: ShopItem_danyao_longxuedan
+  m_EditorClassIdentifier: 
+  itemId: danyao_longxuedan
+  displayName: 龙血丹
+  price: 7400
+  icon: {fileID: 21300000, guid: dd7547cd6fd68794ab6161565d43b3bb, type: 3}
+  description: 以一滴蛟龙精血为主引、配以百草精华炼制的绝世丹药。服下后龙威附体，攻击力暴涨，寻常元婴修士也要暂避锋芒。
+  unlockedByDefault: 0
+  rarity: 4
+  attack: 100
+  defense: 20
+  movementSpeed: 15

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 025c29d5619685c4f84dfa859ade29fa, type: 3}
+  m_Name: ShopItem_fabao_jingleibian
+  m_EditorClassIdentifier: 
+  itemId: fabao_jingleibian
+  displayName: 惊雷鞭
+  price: 2000
+  icon: {fileID: 21300000, guid: e768add2492e6754e8e5cadec3b89b58, type: 3}
+  description: 以雷击木为主材炼制的灵鞭，挥动时电光四溅、霹雳作响。攻击范围极广，抽中敌人还能短暂麻痹。
+  unlockedByDefault: 0
+  rarity: 2
+  attack: 28
+  defense: 0
+  movementSpeed: 5

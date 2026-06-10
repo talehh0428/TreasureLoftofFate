@@ -19,7 +19,7 @@ public class ShopController : MonoBehaviour
     [SerializeField] private TMP_Text feedbackText;
 
     [Header("Shop Setup")]
-    [SerializeField] private List<ShopItemDefinition> itemCatalog = new List<ShopItemDefinition>();
+    [SerializeField] private string resourcesFolderName = "ShopItem";
     [SerializeField] [Min(1)] private int itemsToDisplay = 4;
     [SerializeField] private bool allowDuplicateStock = true;
     [SerializeField] [Min(0)] private int startingMoney = 1000;
@@ -35,6 +35,7 @@ public class ShopController : MonoBehaviour
     [SerializeField] private Color failureMessageColor = new Color(1f, 0.35f, 0.35f, 1f);
     [SerializeField] private Color neutralMessageColor = Color.white;
 
+    private List<ShopItemDefinition> itemCatalog = new List<ShopItemDefinition>();
     private readonly List<ShopItemSlotUI> slotPool = new List<ShopItemSlotUI>();
     private readonly List<IShopDiscountModifier> discountModifiers = new List<IShopDiscountModifier>();
     private readonly List<IShopRarityWeightModifier> rarityWeightModifiers = new List<IShopRarityWeightModifier>();
@@ -50,6 +51,16 @@ public class ShopController : MonoBehaviour
         AutoBindSceneReferences();
         PrepareFeedbackText();
         ConfigureScrollView();
+        LoadItemCatalog();
+    }
+
+    private void LoadItemCatalog()
+    {
+        ShopItemDefinition[] loadedItems = Resources.LoadAll<ShopItemDefinition>(resourcesFolderName);
+        itemCatalog = loadedItems
+            .Where(item => item != null)
+            .OrderBy(item => item.ItemId)
+            .ToList();
     }
 
     private void OnEnable()

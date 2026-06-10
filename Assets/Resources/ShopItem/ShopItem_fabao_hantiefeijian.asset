@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 025c29d5619685c4f84dfa859ade29fa, type: 3}
+  m_Name: ShopItem_fabao_hantiefeijian
+  m_EditorClassIdentifier: 
+  itemId: fabao_hantiefeijian
+  displayName: 寒铁飞剑
+  price: 180
+  icon: {fileID: 21300000, guid: b3d7b832a01f7774884463af19449ef3, type: 3}
+  description: 以北境寒铁锻造的飞剑，剑身冰冷刺骨，出鞘时隐有霜气弥漫。筑基期散修能拥有一柄寒铁飞剑，在同阶中便算得上体面。
+  unlockedByDefault: 0
+  rarity: 1
+  attack: 10
+  defense: 2
+  movementSpeed: 0
