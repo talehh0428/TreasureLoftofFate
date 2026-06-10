@@ -145,9 +145,10 @@ public class TradeSceneController : MonoBehaviour
         }
 
         int offeredCount = GetTotalOfferCount();
-        if (offeredCount >= maxTradeItemCount)
+        int currentMaxTradeItemCount = GetCurrentMaxTradeItemCount();
+        if (offeredCount >= currentMaxTradeItemCount)
         {
-            ShowFeedback($"最多交易 {maxTradeItemCount} 件物品。");
+            ShowFeedback($"最多交易 {currentMaxTradeItemCount} 件物品。");
             return;
         }
 
@@ -357,7 +358,7 @@ public class TradeSceneController : MonoBehaviour
 
         if (summaryText != null)
         {
-            summaryText.text = $"预交易 {itemCount}/{maxTradeItemCount} 件  可得 {earnings} 灵石";
+            summaryText.text = $"预交易 {itemCount}/{GetCurrentMaxTradeItemCount()} 件  可得 {earnings} 灵石";
         }
 
         ShopEvents.RaiseWalletPreviewChanged(earnings);
@@ -370,7 +371,12 @@ public class TradeSceneController : MonoBehaviour
 
     private int GetSellPrice(TradeOfferStack stack)
     {
-        return Mathf.RoundToInt(stack.Price * sellPriceMultiplier);
+        return Mathf.RoundToInt(stack.Price * EconomyBuffSystem.GetCurrentSellEfficiency(sellPriceMultiplier));
+    }
+
+    private int GetCurrentMaxTradeItemCount()
+    {
+        return EconomyBuffSystem.GetCurrentMaxTradeItemCount(maxTradeItemCount);
     }
 
     private int GetOfferQuantity(string itemId)
