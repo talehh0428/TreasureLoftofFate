@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 025c29d5619685c4f84dfa859ade29fa, type: 3}
+  m_Name: ShopItem_fabao_qingfengjian
+  m_EditorClassIdentifier: 
+  itemId: fabao_qingfengjian
+  displayName: 青锋剑
+  price: 9
+  icon: {fileID: 21300000, guid: dd4993c7673566b4aae1508c68bda627, type: 3}
+  description: 最普通的制式飞剑，铁匠铺量产之物。剑身泛着淡淡的青光，虽不锋利，但对付野兽绰绰有余。落仙城南坊的散修几乎人手一柄。
+  unlockedByDefault: 0
+  rarity: 0
+  attack: 3
+  defense: 0
+  movementSpeed: 0

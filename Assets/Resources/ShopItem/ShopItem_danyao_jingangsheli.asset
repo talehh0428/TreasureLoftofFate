@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 025c29d5619685c4f84dfa859ade29fa, type: 3}
+  m_Name: ShopItem_danyao_jingangsheli
+  m_EditorClassIdentifier: 
+  itemId: danyao_jingangsheli
+  displayName: 金刚舍利
+  price: 6600
+  icon: {fileID: 21300000, guid: 1948383804e6b9741b04c2ff7289917e, type: 3}
+  description: 佛门高僧圆寂后留下的舍利子，经千年香火供奉而成。含在口中可化出金刚法相护体，万法不侵、烈火不焚。
+  unlockedByDefault: 0
+  rarity: 4
+  attack: 20
+  defense: 90
+  movementSpeed: 10
