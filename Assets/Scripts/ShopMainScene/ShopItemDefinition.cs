@@ -25,6 +25,18 @@ public class ShopItemDefinition : ScriptableObject
     public int Defense => defense;
     public int MovementSpeed => movementSpeed;
 
+    // Setter methods for Editor script usage
+    public void SetItemId(string value) { itemId = value; }
+    public void SetDisplayName(string value) { displayName = value; }
+    public void SetPrice(int value) { price = Mathf.Max(0, value); }
+    public void SetIcon(Sprite value) { icon = value; }
+    public void SetDescription(string value) { description = value; }
+    public void SetUnlockedByDefault(bool value) { unlockedByDefault = value; }
+    public void SetRarity(ShopItemRarity value) { rarity = value; }
+    public void SetAttack(int value) { attack = value; }
+    public void SetDefense(int value) { defense = value; }
+    public void SetMovementSpeed(int value) { movementSpeed = value; }
+
     private void OnValidate()
     {
         if (string.IsNullOrWhiteSpace(itemId))

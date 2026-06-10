@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 025c29d5619685c4f84dfa859ade29fa, type: 3}
+  m_Name: ShopItem_fabao_tiemuzhang
+  m_EditorClassIdentifier: 
+  itemId: fabao_tiemuzhang
+  displayName: 铁木杖
+  price: 6
+  icon: {fileID: 21300000, guid: 6d726059bf854e644936b937ec733533, type: 3}
+  description: 百年铁木削制而成的短杖，顶端嵌了一颗劣质灵石碎片。敲人很疼，施展低阶术法也能凑合用。
+  unlockedByDefault: 0
+  rarity: 0
+  attack: 2
+  defense: 0
+  movementSpeed: 0

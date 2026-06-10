@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 025c29d5619685c4f84dfa859ade29fa, type: 3}
+  m_Name: ShopItem_danyao_hugudan
+  m_EditorClassIdentifier: 
+  itemId: danyao_hugudan
+  displayName: 虎骨丹
+  price: 120
+  icon: {fileID: 21300000, guid: 8a9134d53e1b2b149a81db413eb81840, type: 3}
+  description: 以妖兽虎骨研磨入药，辅以数味灵草炼成。服下后浑身筋骨噼啪作响，力气暴增，能生撕虎豹。
+  unlockedByDefault: 0
+  rarity: 1
+  attack: 8
+  defense: 0
+  movementSpeed: 0
