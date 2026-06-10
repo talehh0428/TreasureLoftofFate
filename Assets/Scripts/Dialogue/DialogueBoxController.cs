@@ -31,6 +31,7 @@ public class DialogueBoxController : MonoBehaviour
 
     private void Awake()
     {
+        TryAutoBindMissingReferences();
         HideChoices();
     }
 
@@ -59,6 +60,7 @@ public class DialogueBoxController : MonoBehaviour
             return;
         }
 
+        TryAutoBindMissingReferences();
         if (!HasRequiredReferences())
         {
             Debug.LogError("[DialogueBoxController] UI references are incomplete. Please assign CanvasGroup, name text, portrait image, dialogue text, three choice buttons, and their TMP labels.");
@@ -107,6 +109,7 @@ public class DialogueBoxController : MonoBehaviour
 
     public void ShowLoading(string npcName, Sprite portrait)
     {
+        TryAutoBindMissingReferences();
         if (!HasRequiredReferences())
         {
             Debug.LogError("[DialogueBoxController] UI references are incomplete. Please assign CanvasGroup, name text, portrait image, dialogue text, three choice buttons, and their TMP labels.");
@@ -282,6 +285,96 @@ public class DialogueBoxController : MonoBehaviour
 
         DialogueChoiceResult result = new DialogueChoiceResult(choice.id, choice.text, index);
         pendingChoiceCallback?.Invoke(result);
+    }
+
+    private void TryAutoBindMissingReferences()
+    {
+        if (rootCanvasGroup == null)
+        {
+            rootCanvasGroup = GetComponent<CanvasGroup>();
+        }
+
+        TMP_Text[] textComponents = GetComponentsInChildren<TMP_Text>(true);
+        if (npcNameText == null)
+        {
+            npcNameText = FindTextByName(textComponents, "NpcNameText", "NPCNameText");
+        }
+
+        if (dialogueText == null)
+        {
+            dialogueText = FindTextByName(textComponents, "DialogueText");
+        }
+
+        if (portraitImage == null)
+        {
+            Image[] images = GetComponentsInChildren<Image>(true);
+            for (int i = 0; i < images.Length; i++)
+            {
+                if (images[i].name == "PortraitImage")
+                {
+                    portraitImage = images[i];
+                    break;
+                }
+            }
+        }
+
+        Button[] buttons = GetComponentsInChildren<Button>(true);
+        if (choiceButtons == null || choiceButtons.Length < ChoiceButtonCount)
+        {
+            choiceButtons = new Button[ChoiceButtonCount];
+        }
+
+        for (int i = 0; i < ChoiceButtonCount; i++)
+        {
+            if (choiceButtons[i] == null)
+            {
+                choiceButtons[i] = FindButtonByName(buttons, $"ChoiceButton_{i + 1}");
+            }
+        }
+
+        if (choiceTexts == null || choiceTexts.Length < ChoiceButtonCount)
+        {
+            choiceTexts = new TMP_Text[ChoiceButtonCount];
+        }
+
+        for (int i = 0; i < ChoiceButtonCount; i++)
+        {
+            if (choiceTexts[i] != null || choiceButtons[i] == null)
+            {
+                continue;
+            }
+
+            choiceTexts[i] = choiceButtons[i].GetComponentInChildren<TMP_Text>(true);
+        }
+    }
+
+    private TMP_Text FindTextByName(TMP_Text[] textComponents, params string[] names)
+    {
+        for (int i = 0; i < textComponents.Length; i++)
+        {
+            for (int j = 0; j < names.Length; j++)
+            {
+                if (textComponents[i].name == names[j])
+                {
+                    return textComponents[i];
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private Button FindButtonByName(Button[] buttons, string buttonName)
+    {
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            if (buttons[i].name == buttonName)
+            {
+                return buttons[i];
+            }
+        }
+
+        return null;
     }
 
     private bool HasRequiredReferences()

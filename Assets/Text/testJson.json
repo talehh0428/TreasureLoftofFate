@@ -1,12 +1,9 @@
 {
   "initialStates": [
     {
-      "npcId": "P09",
-      "currentEventId": "AP09E001"
-    },
-    {
-      "npcId": "P10",
-      "currentEventId": "AP10E001"
+      "npcId": "P05",
+      "currentEventId": "AP05E001"
     }
+
   ]
 }
