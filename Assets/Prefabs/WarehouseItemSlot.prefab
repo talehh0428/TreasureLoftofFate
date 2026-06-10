@@ -193,7 +193,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9215687, g: 0.8980393, b: 0.85098046, a: 1}
+  m_Color: {r: 0.92, g: 0.9, b: 0.84, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -346,7 +346,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.55, g: 0.58, b: 0.62, a: 1}
+  m_Color: {r: 0.8, g: 0.8, b: 0.8, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -377,10 +377,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   backgroundImage: {fileID: 1612969440864782925}
   itemIcon: {fileID: 1710440112019706101}
+  quantityBarImage: {fileID: 3541493887252885029}
   quantityText: {fileID: 951188337904230759}
-  selectedOverlayColor: {r: 1, g: 0.98006797, b: 0.53396225, a: 1}
-  commonColor: {r: 0.55, g: 0.58, b: 0.62, a: 1}
-  fineColor: {r: 0.32, g: 0.62, b: 0.48, a: 1}
-  superiorColor: {r: 0.28, g: 0.52, b: 0.72, a: 1}
-  epicColor: {r: 0.8490566, g: 0.5398668, b: 0.24190104, a: 1}
-  immortalColor: {r: 0.8490566, g: 0.107333556, b: 0.13434348, a: 1}
+  quantityBarNormalColor: {r: 0.92, g: 0.9, b: 0.84, a: 1}
+  quantityBarSelectedColor: {r: 1, g: 0.98006797, b: 0.53396225, a: 1}
+  commonColor: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+  fineColor: {r: 0.29803923, g: 0.8509804, b: 0.34901962, a: 1}
+  superiorColor: {r: 0.61960787, g: 0.34901962, b: 0.9019608, a: 1}
+  epicColor: {r: 1, g: 0.81960785, b: 0.18039216, a: 1}
+  immortalColor: {r: 0.8784314, g: 0.18039216, b: 0.18039216, a: 1}

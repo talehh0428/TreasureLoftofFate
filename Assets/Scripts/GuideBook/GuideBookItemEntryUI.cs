@@ -10,6 +10,7 @@ public class GuideBookItemEntryUI : MonoBehaviour
     [SerializeField] private Button button;
     [SerializeField] private Image backgroundImage;
     [SerializeField] private Image iconImage;
+    [SerializeField] private Image iconFrameImage;
     [SerializeField] private TMP_Text nameText;
 
     [Header("Display")]
@@ -20,6 +21,13 @@ public class GuideBookItemEntryUI : MonoBehaviour
     [SerializeField] private Color selectedTextColor = new Color(0.17f, 0.12f, 0.05f, 1f);
     [SerializeField] private Color lockedTintColor = new Color(0.55f, 0.55f, 0.55f, 1f);
     [SerializeField] private Color unlockedTintColor = Color.white;
+
+    [Header("Rarity Colors")]
+    [SerializeField] private Color commonRarityColor = new Color(0.8f, 0.8f, 0.8f, 1f);
+    [SerializeField] private Color fineRarityColor = new Color(0.3f, 0.85f, 0.35f, 1f);
+    [SerializeField] private Color superiorRarityColor = new Color(0.62f, 0.35f, 0.9f, 1f);
+    [SerializeField] private Color epicRarityColor = new Color(1f, 0.82f, 0.18f, 1f);
+    [SerializeField] private Color immortalRarityColor = new Color(0.88f, 0.18f, 0.18f, 1f);
 
     private GuideBookEntryData currentEntry;
 
@@ -69,6 +77,11 @@ public class GuideBookItemEntryUI : MonoBehaviour
             nameText.text = isUnlocked ? entryData.DisplayName : lockedName;
         }
 
+        if (iconFrameImage != null)
+        {
+            iconFrameImage.color = GetRarityColor(entryData.Rarity);
+        }
+
         SetSelected(false);
     }
 
@@ -107,9 +120,33 @@ public class GuideBookItemEntryUI : MonoBehaviour
             iconImage = FindChildComponent<Image>("EntryIcon");
         }
 
+        if (iconFrameImage == null)
+        {
+            iconFrameImage = FindChildComponent<Image>("EntryIconFrame");
+        }
+
         if (nameText == null)
         {
             nameText = FindChildComponent<TMP_Text>("EntryName");
+        }
+    }
+
+    private Color GetRarityColor(ShopItemRarity rarity)
+    {
+        switch (rarity)
+        {
+            case ShopItemRarity.Common:
+                return commonRarityColor;
+            case ShopItemRarity.Fine:
+                return fineRarityColor;
+            case ShopItemRarity.Superior:
+                return superiorRarityColor;
+            case ShopItemRarity.Epic:
+                return epicRarityColor;
+            case ShopItemRarity.Immortal:
+                return immortalRarityColor;
+            default:
+                return commonRarityColor;
         }
     }
 

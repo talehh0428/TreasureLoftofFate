@@ -1689,7 +1689,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -1719,7 +1719,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 24.203997, z: 0, w: 0}
+  m_margin: {x: 0, y: 48.748547, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -2468,11 +2468,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01fa63a6a3d0d2d4cb77d7a5124505f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourcesFolderName: ShopItem
-  editorAssetFolder: Assets/ShopItem
+  resourcesFolderName: Resources/ShopItem
+  editorAssetFolder: Assets/Resources/ShopItem
   itemDefinitions:
-  - {fileID: 11400000, guid: 2eed01bc05b18d7449c7df9f421492c5, type: 2}
-  - {fileID: 11400000, guid: 24d81a64763b99b4a9d2c4f382cbcc58, type: 2}
+  - {fileID: 11400000, guid: bcff7d6017a66d74f8d88b4747603186, type: 2}
+  - {fileID: 11400000, guid: ff37fcd90465830408829783a787ca5b, type: 2}
+  - {fileID: 11400000, guid: ff302a8dab0939a44abad33888c052dd, type: 2}
+  - {fileID: 11400000, guid: e384ed507679d124898955884afbc735, type: 2}
+  - {fileID: 11400000, guid: e8d1a5b905cc1a54a848314406571a15, type: 2}
+  - {fileID: 11400000, guid: 2e0e241daf8e30e4ead22caba005f863, type: 2}
+  - {fileID: 11400000, guid: 03b42beecc78a5e4a9a9ea11ea96b6fb, type: 2}
+  - {fileID: 11400000, guid: 188f26d5bf978204994c900f6bae03c0, type: 2}
+  - {fileID: 11400000, guid: 6e0fc11948a82f449a27fcdd45275d0f, type: 2}
+  - {fileID: 11400000, guid: 8b29d24419cb8f84aafdc3df0aa748b8, type: 2}
+  - {fileID: 11400000, guid: 39e6d49fc3b0e8f49bceafd27311c24f, type: 2}
+  - {fileID: 11400000, guid: a2ac229d95a17644f852034aca56dd1a, type: 2}
+  - {fileID: 11400000, guid: bfd1a64e9eab8e64e9a282121365055b, type: 2}
+  - {fileID: 11400000, guid: 8980dd75c0ecb314f93bf061cdc70866, type: 2}
+  - {fileID: 11400000, guid: 8be2aba69f07f324092fed9dc63da9ad, type: 2}
+  - {fileID: 11400000, guid: 44fe5f5ef3563c142ae3474303190038, type: 2}
+  - {fileID: 11400000, guid: 5f9266b8c7300f343a2ba6560af7cdea, type: 2}
+  - {fileID: 11400000, guid: 144c19a0050312f4babe450bed16bb4e, type: 2}
+  - {fileID: 11400000, guid: 1bc7b3b419734474bb5e96e325ad75d9, type: 2}
+  - {fileID: 11400000, guid: a247ec416f426f14bbb3cfbc96ca5fde, type: 2}
+  - {fileID: 11400000, guid: e592da7f230d119488d94bbe7ac2273d, type: 2}
+  - {fileID: 11400000, guid: 37ca19cbd1830be4cb7941e049255230, type: 2}
+  - {fileID: 11400000, guid: 413db9a463a3f614ba3e4dd2880c3664, type: 2}
+  - {fileID: 11400000, guid: 062f7991680857444b288e6de13d0700, type: 2}
+  - {fileID: 11400000, guid: 6427f1cdb8c279e4c87c39ac9c44d59f, type: 2}
+  - {fileID: 11400000, guid: c0dbf2aeca42e9146aaf9480b47cd353, type: 2}
+  - {fileID: 11400000, guid: a9389043ab486ee4ab41de906c4f04a1, type: 2}
+  - {fileID: 11400000, guid: ac51640d7a9bb2d4f997c77b401414b8, type: 2}
+  - {fileID: 11400000, guid: 760c62dda9f83bd41b1667b32a586cf6, type: 2}
+  - {fileID: 11400000, guid: 2080995934dd81d4b8266a536c74f306, type: 2}
+  - {fileID: 11400000, guid: d660e304da6712f408a9961fd6f3342d, type: 2}
+  - {fileID: 11400000, guid: a7b5c1ed24a5119478411fbe552d7078, type: 2}
+  - {fileID: 11400000, guid: 9e00f89081194e04e99b4b203952eda1, type: 2}
+  - {fileID: 11400000, guid: 569e16889c43a4e45a2c48814821bef7, type: 2}
+  - {fileID: 11400000, guid: 2e91f9887b23aca4eada3269a3a72218, type: 2}
   defaultSelectedItemId: 0001
   npcDefinitions: []
   defaultSelectedNpcId: 
@@ -3525,7 +3558,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

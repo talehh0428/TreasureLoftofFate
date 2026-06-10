@@ -80,10 +80,6 @@ public class ShopController : MonoBehaviour
 
     private void Start()
     {
-        // 重置运行时的静态数据，避免编辑器反复 Play 时累积
-        WarehouseInventory.ResetRuntimeState();
-        ShopItemUnlockRegistry.ResetRuntimeState();
-
         ShopItemUnlockRegistry.RegisterDefaults(itemCatalog);
         ShopWallet.InitializeIfNeeded(startingMoney);
         RefreshMoneyText(ShopWallet.CurrentMoney);
