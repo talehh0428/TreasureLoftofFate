@@ -14,11 +14,18 @@ public class MainSceneHudController : MonoBehaviour
 
     private bool isSubscribedToScheduler;
     private int previewWalletDelta;
+    private static bool hasInitializedNewGameState;
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetNewGameStateInitializationFlag()
+    {
+        hasInitializedNewGameState = false;
+    }
 
     private void Awake()
     {
         AutoBind();
-        ShopWallet.InitializeIfNeeded(startingMoney);
+        InitializeNewGameStateIfNeeded();
         RefreshMoneyText(ShopWallet.CurrentMoney);
         RefreshRoundText(GetCurrentRoundValue());
     }
@@ -58,6 +65,20 @@ public class MainSceneHudController : MonoBehaviour
     private void HandleRoundChanged(int currentRound)
     {
         RefreshRoundText(currentRound);
+    }
+
+    private void InitializeNewGameStateIfNeeded()
+    {
+        if (hasInitializedNewGameState)
+        {
+            ShopWallet.InitializeIfNeeded(startingMoney);
+            return;
+        }
+
+        WarehouseInventory.ResetRuntimeState();
+        ShopItemUnlockRegistry.ResetRuntimeState();
+        ShopWallet.SetMoney(startingMoney);
+        hasInitializedNewGameState = true;
     }
 
     private void RefreshMoneyText(int currentMoney)
