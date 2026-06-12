@@ -29,6 +29,13 @@ public static class ShopWallet
         MoneyChanged?.Invoke(currentMoney);
     }
 
+    public static void Reset()
+    {
+        currentMoney = 0;
+        isInitialized = false;
+        MoneyChanged?.Invoke(currentMoney);
+    }
+
     public static void AddMoney(int amount)
     {
         if (amount <= 0)

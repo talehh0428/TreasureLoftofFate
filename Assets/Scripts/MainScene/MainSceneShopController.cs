@@ -190,6 +190,14 @@ public class MainSceneShopController : MonoBehaviour
         OpenMarketScene();
     }
 
+    public void ResetCurrentRunState()
+    {
+        nextRoundSpecialVisitors.Clear();
+        currentRoundVisitors.Clear();
+        selectedVisitor = null;
+        CloseShopScene();
+    }
+
     private void ApplyPendingRunSaveIfNeeded()
     {
         RunSaveData pendingRunSave = GameStartContext.ConsumePendingRunSave();

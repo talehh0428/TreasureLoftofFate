@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/SampleScene.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
   - enabled: 1
+    path: Assets/Scenes/MainScene.unity
+    guid: 52a66d7f0fcf789459f44c1747adaed0
+  - enabled: 1
     path: Assets/Scenes/shichang.unity
     guid: bc94466d94d3c6b49839ff5019bf18bc
   - enabled: 1
@@ -23,4 +26,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/TradeScene.unity
     guid: 30530d339954ca44c93dc5adf1e0f038
+  - enabled: 1
+    path: Assets/Scenes/Dialogue.unity
+    guid: 72bd2a621f6363e4e97990b616d3c511
+  - enabled: 1
+    path: Assets/Scenes/StartMenu.unity
+    guid: 261f3e21e0f19a647a0d179da1d62c8e
   m_configObjects: {}

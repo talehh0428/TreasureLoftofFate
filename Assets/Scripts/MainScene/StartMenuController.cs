@@ -15,11 +15,11 @@ public class StartMenuController : MonoBehaviour
     [Header("Panels")]
     [SerializeField] private GameObject endingsPanel;
     [SerializeField] private GameObject settingsPanel;
+    [SerializeField] private GameObject rootPanel;
     [SerializeField] private EndingsPanelController endingsPanelController;
     [SerializeField] private SettingsPanelController settingsPanelController;
 
     [Header("Start Flow")]
-    [SerializeField] private string mainSceneName = "MainScene";
     [SerializeField] private string prologueJsonPath = "Assets/Text/xuzhang.json";
     [SerializeField] private bool continueWhenPrologueFails = true;
 
@@ -31,6 +31,7 @@ public class StartMenuController : MonoBehaviour
     {
         AutoBind();
         GameSaveService.LoadArchiveIntoRuntime();
+        SetPanelActive(rootPanel, true);
         SetPanelActive(endingsPanel, false);
         SetPanelActive(settingsPanel, false);
     }
@@ -89,28 +90,14 @@ public class StartMenuController : MonoBehaviour
     {
         isStarting = true;
         SetMenuInteractable(false);
+        SetPanelActive(rootPanel, false);
 
         if (runSave != null)
         {
             GameStartContext.SetPendingRunSave(runSave);
         }
 
-        transform.SetParent(null);
-        DontDestroyOnLoad(gameObject);
-
-        AsyncOperation loadOperation = SceneManager.LoadSceneAsync(mainSceneName, LoadSceneMode.Single);
-        if (loadOperation == null)
-        {
-            Debug.LogError($"[StartMenuController] Failed to load scene: {mainSceneName}");
-            Destroy(gameObject);
-            yield break;
-        }
-
-        while (!loadOperation.isDone)
-        {
-            yield return null;
-        }
-
+        // MainScene 已经加载完毕，直接处理后续逻辑
         yield return null;
 
         if (runSave != null)
@@ -132,7 +119,8 @@ public class StartMenuController : MonoBehaviour
             OpenMarketScene();
         }
 
-        Destroy(gameObject);
+        // 卸载 StartMenu 场景，回到纯净的 MainScene
+        SceneManager.UnloadSceneAsync(gameObject.scene);
     }
 
     private IEnumerator PlayPrologueRoutine()

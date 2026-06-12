@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -132,23 +133,69 @@ public class SaveSlotPanelController : MonoBehaviour
             button.onClick.RemoveAllListeners();
             button.onClick.AddListener(() => HandleSlotClicked(slotIndex));
 
-            TMP_Text label = button.GetComponentInChildren<TMP_Text>(true);
-            if (label != null)
+            TMP_Text roundLabel = FindChildText(button, "RoundText");
+            TMP_Text moneyLabel = FindChildText(button, "MoneyText");
+            TMP_Text timeLabel  = FindChildText(button, "TimeText");
+
+            RunSaveSlotData slot = slotIndex < slots.Count ? slots[slotIndex] : null;
+
+            if (roundLabel != null)
             {
-                RunSaveSlotData slot = slotIndex < slots.Count ? slots[slotIndex] : null;
-                label.text = BuildSlotLabel(slotIndex, slot);
+                roundLabel.text = BuildRoundLabel(slotIndex, slot);
+            }
+
+            if (moneyLabel != null)
+            {
+                moneyLabel.text = BuildMoneyLabel(slotIndex, slot);
+            }
+
+            if (timeLabel != null)
+            {
+                timeLabel.text = BuildTimeLabel(slotIndex, slot);
             }
         }
     }
 
-    private static string BuildSlotLabel(int slotIndex, RunSaveSlotData slot)
+    private static TMP_Text FindChildText(Button button, string childName)
+    {
+        Transform child = button.transform.Find(childName);
+        return child == null ? null : child.GetComponent<TMP_Text>();
+    }
+
+    private static string BuildRoundLabel(int slotIndex, RunSaveSlotData slot)
     {
         if (slot == null || !slot.hasData || slot.run == null)
         {
-            return $"存档 {slotIndex + 1}\n空";
+            return "空";
         }
 
-        return $"存档 {slotIndex + 1}\n第{Mathf.Max(1, slot.run.currentRound)}回合  {slot.run.money}灵石";
+        return $"第{Mathf.Max(1, slot.run.currentRound)}回合";
+    }
+
+    private static string BuildMoneyLabel(int slotIndex, RunSaveSlotData slot)
+    {
+        if (slot == null || !slot.hasData || slot.run == null)
+        {
+            return string.Empty;
+        }
+
+        return $"{slot.run.money}灵石";
+    }
+
+    private static string BuildTimeLabel(int slotIndex, RunSaveSlotData slot)
+    {
+        if (slot == null || !slot.hasData || slot.run == null || string.IsNullOrWhiteSpace(slot.savedAt))
+        {
+            return string.Empty;
+        }
+
+        if (DateTime.TryParse(slot.savedAt, null, DateTimeStyles.RoundtripKind, out DateTime utcTime))
+        {
+            DateTime localTime = utcTime.ToLocalTime();
+            return localTime.ToString("yyyy/MM/dd HH:mm");
+        }
+
+        return string.Empty;
     }
 
     private void SetFeedback(string message)

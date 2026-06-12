@@ -29,7 +29,7 @@ public class DialogueSceneController : MonoBehaviour
 
         Instance = this;
 
-        if (dontDestroyOnLoad)
+        if (dontDestroyOnLoad && gameObject.scene == SceneManager.GetActiveScene())
         {
             DontDestroyOnLoad(transform.root.gameObject);
         }
