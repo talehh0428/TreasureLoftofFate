@@ -65,6 +65,24 @@ public class ScreenFadeTransition : MonoBehaviour
         SetVisible(false);
     }
 
+    public bool BlocksRaycasts
+    {
+        get
+        {
+            AutoBind();
+            return overlayGroup != null && overlayGroup.blocksRaycasts;
+        }
+        set
+        {
+            AutoBind();
+            if (overlayGroup != null)
+            {
+                overlayGroup.blocksRaycasts = value;
+                overlayGroup.interactable = value;
+            }
+        }
+    }
+
     private IEnumerator FadeTo(float targetAlpha)
     {
         if (overlayGroup == null)

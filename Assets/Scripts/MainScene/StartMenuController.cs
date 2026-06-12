@@ -15,6 +15,8 @@ public class StartMenuController : MonoBehaviour
     [Header("Panels")]
     [SerializeField] private GameObject endingsPanel;
     [SerializeField] private GameObject settingsPanel;
+    [SerializeField] private EndingsPanelController endingsPanelController;
+    [SerializeField] private SettingsPanelController settingsPanelController;
 
     [Header("Start Flow")]
     [SerializeField] private string mainSceneName = "MainScene";
@@ -28,6 +30,7 @@ public class StartMenuController : MonoBehaviour
     private void Awake()
     {
         AutoBind();
+        GameSaveService.LoadArchiveIntoRuntime();
         SetPanelActive(endingsPanel, false);
         SetPanelActive(settingsPanel, false);
     }
@@ -50,13 +53,47 @@ public class StartMenuController : MonoBehaviour
             return;
         }
 
-        StartCoroutine(StartGameRoutine());
+        StartCoroutine(StartGameRoutine(null));
     }
 
-    private IEnumerator StartGameRoutine()
+    public void LoadGame(int slotIndex)
+    {
+        GameSaveService.LogRunSlotState(slotIndex, "读取流程档");
+        if (isStarting || !GameSaveService.TryGetRunSlot(slotIndex, out RunSaveSlotData slot))
+        {
+            return;
+        }
+
+        StartCoroutine(StartGameRoutine(slot.run));
+    }
+
+    public void DeleteGame(int slotIndex)
+    {
+        if (isStarting || !GameSaveService.DeleteRunSlot(slotIndex))
+        {
+            return;
+        }
+
+        RefreshSaveSlotButtons();
+    }
+
+    public void RefreshSaveSlotButtons()
+    {
+        if (settingsPanelController != null)
+        {
+            settingsPanelController.RefreshSaveSlots();
+        }
+    }
+
+    private IEnumerator StartGameRoutine(RunSaveData runSave)
     {
         isStarting = true;
         SetMenuInteractable(false);
+
+        if (runSave != null)
+        {
+            GameStartContext.SetPendingRunSave(runSave);
+        }
 
         transform.SetParent(null);
         DontDestroyOnLoad(gameObject);
@@ -76,8 +113,24 @@ public class StartMenuController : MonoBehaviour
 
         yield return null;
 
-        yield return PlayPrologueRoutine();
-        OpenMarketScene();
+        if (runSave != null)
+        {
+            yield return null;
+            if (ApplyPendingRunSaveIfNeeded() || !GameStartContext.HasPendingRunSave)
+            {
+                GameStartContext.ClearPendingRunLoad();
+            }
+        }
+
+        if (runSave == null)
+        {
+            yield return PlayPrologueRoutine();
+            OpenMarketScene();
+        }
+        else
+        {
+            OpenMarketScene();
+        }
 
         Destroy(gameObject);
     }
@@ -121,6 +174,31 @@ public class StartMenuController : MonoBehaviour
         shopController.OpenMarketScene();
     }
 
+    private bool ApplyPendingRunSaveIfNeeded()
+    {
+        if (!GameStartContext.HasPendingRunSave)
+        {
+            return false;
+        }
+
+        MainSceneShopController shopController = FindObjectOfType<MainSceneShopController>(true);
+        if (shopController == null)
+        {
+            Debug.LogError("[StartMenuController] MainSceneShopController not found while applying pending run save.");
+            return false;
+        }
+
+        RunSaveData pendingRunSave = GameStartContext.ConsumePendingRunSave();
+        if (pendingRunSave == null)
+        {
+            return false;
+        }
+
+        Debug.Log($"[StartMenuController] 主场景初始化后补应用流程档 round={pendingRunSave.currentRound} money={pendingRunSave.money}");
+        shopController.RestoreFromRunSave(pendingRunSave);
+        return true;
+    }
+
     private void HandleStoryCompleted()
     {
         isWaitingForPrologue = false;
@@ -138,12 +216,22 @@ public class StartMenuController : MonoBehaviour
     private void ToggleEndingsPanel()
     {
         SetPanelActive(endingsPanel, endingsPanel == null || !endingsPanel.activeSelf);
+        if (endingsPanelController != null && endingsPanel != null && endingsPanel.activeSelf)
+        {
+            endingsPanelController.Rebuild();
+        }
+
         SetPanelActive(settingsPanel, false);
     }
 
     private void ToggleSettingsPanel()
     {
         SetPanelActive(settingsPanel, settingsPanel == null || !settingsPanel.activeSelf);
+        if (settingsPanelController != null && settingsPanel != null && settingsPanel.activeSelf)
+        {
+            settingsPanelController.RefreshSaveSlots();
+        }
+
         SetPanelActive(endingsPanel, false);
     }
 

@@ -7,6 +7,7 @@ public class MainSceneHudController : MonoBehaviour
     [Header("State")]
     [SerializeField] [Min(0)] private int startingMoney = 1000;
     [SerializeField] private NPCEventScheduler roundScheduler;
+    [SerializeField] private EconomyBuffSystem economyBuffSystem;
 
     [Header("UI References")]
     [SerializeField] private TMP_Text roundText;
@@ -25,7 +26,16 @@ public class MainSceneHudController : MonoBehaviour
     private void Awake()
     {
         AutoBind();
-        InitializeNewGameStateIfNeeded();
+        GameSaveService.LoadArchiveIntoRuntime();
+        if (GameStartContext.IsLoadingRunSave)
+        {
+            Debug.Log("[MainSceneHudController] 检测到读档流程，跳过新游戏状态初始化。");
+        }
+        else
+        {
+            InitializeNewGameStateIfNeeded();
+        }
+
         RefreshMoneyText(ShopWallet.CurrentMoney);
         RefreshRoundText(GetCurrentRoundValue());
     }
@@ -75,9 +85,7 @@ public class MainSceneHudController : MonoBehaviour
             return;
         }
 
-        WarehouseInventory.ResetRuntimeState();
-        ShopItemUnlockRegistry.ResetRuntimeState();
-        ShopWallet.SetMoney(startingMoney);
+        GameSaveService.ResetRunStateForNewGame(startingMoney, roundScheduler, economyBuffSystem);
         hasInitializedNewGameState = true;
     }
 
@@ -140,6 +148,11 @@ public class MainSceneHudController : MonoBehaviour
         if (roundScheduler == null)
         {
             roundScheduler = FindObjectOfType<NPCEventScheduler>(true);
+        }
+
+        if (economyBuffSystem == null)
+        {
+            economyBuffSystem = FindObjectOfType<EconomyBuffSystem>(true);
         }
     }
 }
