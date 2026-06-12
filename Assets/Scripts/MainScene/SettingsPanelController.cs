@@ -1,3 +1,5 @@
+using System;
+using System.Globalization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,19 +16,26 @@ public class SettingsPanelController : MonoBehaviour
     [SerializeField] private TMP_Text masterVolumeText;
 
     [Header("Save Slots")]
-    [SerializeField] private Button[] loadSlotButtons = new Button[GameSaveService.RunSlotCount];
-    [SerializeField] private Button[] deleteSlotButtons = new Button[GameSaveService.RunSlotCount];
-    [SerializeField] private TMP_Text[] slotLabels = new TMP_Text[GameSaveService.RunSlotCount];
+    [SerializeField] private Transform[] saveSlotRoots = new Transform[GameSaveService.RunSlotCount];
+    private Button[] loadSlotButtons = new Button[GameSaveService.RunSlotCount];
+    private Button[] deleteSlotButtons = new Button[GameSaveService.RunSlotCount];
 
     [Header("Danger Zone")]
     [SerializeField] private Button clearAllPersistentDataButton;
     [SerializeField] private TMP_Text feedbackText;
+
+    private Coroutine feedbackHideCoroutine;
 
     private void Awake()
     {
         AutoBind();
         ApplySavedVolume();
         RefreshSaveSlots();
+
+        if (feedbackText != null)
+        {
+            feedbackText.gameObject.SetActive(false);
+        }
     }
 
     private void OnEnable()
@@ -49,19 +58,42 @@ public class SettingsPanelController : MonoBehaviour
         {
             bool hasSlot = GameSaveService.TryGetRunSlot(index, out RunSaveSlotData slot);
 
-            if (loadSlotButtons[index] != null)
+            Button loadButton = loadSlotButtons[index];
+            Button deleteButton = deleteSlotButtons[index];
+            Transform root = saveSlotRoots[index];
+
+            if (loadButton != null)
             {
-                loadSlotButtons[index].interactable = hasSlot;
+                loadButton.interactable = hasSlot;
             }
 
-            if (deleteSlotButtons[index] != null)
+            if (deleteButton != null)
             {
-                deleteSlotButtons[index].interactable = hasSlot;
+                deleteButton.interactable = hasSlot;
             }
 
-            if (slotLabels[index] != null)
+            if (root != null)
             {
-                slotLabels[index].text = BuildSlotLabel(index, hasSlot ? slot : null);
+                TMP_Text roundLabel = FindChildText(root, "RoundText");
+                TMP_Text moneyLabel = FindChildText(root, "MoneyText");
+                TMP_Text timeLabel  = FindChildText(root, "TimeText");
+
+                RunSaveSlotData slotData = hasSlot ? slot : null;
+
+                if (roundLabel != null)
+                {
+                    roundLabel.text = BuildRoundLabel(index, slotData);
+                }
+
+                if (moneyLabel != null)
+                {
+                    moneyLabel.text = BuildMoneyLabel(index, slotData);
+                }
+
+                if (timeLabel != null)
+                {
+                    timeLabel.text = BuildTimeLabel(index, slotData);
+                }
             }
         }
     }
@@ -138,22 +170,76 @@ public class SettingsPanelController : MonoBehaviour
         }
     }
 
-    private static string BuildSlotLabel(int slotIndex, RunSaveSlotData slot)
+    private static TMP_Text FindChildText(Transform parent, string childName)
+    {
+        Transform child = parent.Find(childName);
+        return child == null ? null : child.GetComponent<TMP_Text>();
+    }
+
+    private static string BuildRoundLabel(int slotIndex, RunSaveSlotData slot)
     {
         if (slot == null || !slot.hasData || slot.run == null)
         {
-            return $"存档 {slotIndex + 1}\n空";
+            return "空";
         }
 
-        return $"存档 {slotIndex + 1}\n第{Mathf.Max(1, slot.run.currentRound)}回合  {slot.run.money}灵石";
+        return $"第{Mathf.Max(1, slot.run.currentRound)}回合";
+    }
+
+    private static string BuildMoneyLabel(int slotIndex, RunSaveSlotData slot)
+    {
+        if (slot == null || !slot.hasData || slot.run == null)
+        {
+            return string.Empty;
+        }
+
+        return $"{slot.run.money}灵石";
+    }
+
+    private static string BuildTimeLabel(int slotIndex, RunSaveSlotData slot)
+    {
+        if (slot == null || !slot.hasData || slot.run == null || string.IsNullOrWhiteSpace(slot.savedAt))
+        {
+            return string.Empty;
+        }
+
+        if (DateTime.TryParse(slot.savedAt, null, DateTimeStyles.RoundtripKind, out DateTime utcTime))
+        {
+            DateTime localTime = utcTime.ToLocalTime();
+            return localTime.ToString("yyyy/MM/dd HH:mm");
+        }
+
+        return string.Empty;
     }
 
     private void SetFeedback(string message)
     {
+        if (feedbackText == null)
+        {
+            return;
+        }
+
+        feedbackText.gameObject.SetActive(true);
+        feedbackText.text = message;
+
+        if (feedbackHideCoroutine != null)
+        {
+            StopCoroutine(feedbackHideCoroutine);
+        }
+
+        feedbackHideCoroutine = StartCoroutine(HideFeedbackAfterDelay(2f));
+    }
+
+    private System.Collections.IEnumerator HideFeedbackAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
         if (feedbackText != null)
         {
-            feedbackText.text = message;
+            feedbackText.gameObject.SetActive(false);
         }
+
+        feedbackHideCoroutine = null;
     }
 
     private void AddListeners()
@@ -229,19 +315,28 @@ public class SettingsPanelController : MonoBehaviour
         for (int index = 0; index < GameSaveService.RunSlotCount; index++)
         {
             int displayIndex = index + 1;
+
+            if (saveSlotRoots[index] == null)
+            {
+                saveSlotRoots[index] = FindChildComponent<Transform>($"SaveSlot_{displayIndex}", $"SaveSlot{displayIndex}");
+            }
+
+            Transform root = saveSlotRoots[index];
+            if (root == null)
+            {
+                continue;
+            }
+
             if (loadSlotButtons[index] == null)
             {
-                loadSlotButtons[index] = FindChildComponent<Button>($"LoadSlotButton_{displayIndex}", $"LoadSlot{displayIndex}Button");
+                Transform btn = root.Find("LoadButton");
+                loadSlotButtons[index] = btn == null ? null : btn.GetComponent<Button>();
             }
 
             if (deleteSlotButtons[index] == null)
             {
-                deleteSlotButtons[index] = FindChildComponent<Button>($"DeleteSlotButton_{displayIndex}", $"DeleteSlot{displayIndex}Button");
-            }
-
-            if (slotLabels[index] == null)
-            {
-                slotLabels[index] = FindChildComponent<TMP_Text>($"SlotLabel_{displayIndex}", $"Slot{displayIndex}Label");
+                Transform btn = root.Find("DeleteButton");
+                deleteSlotButtons[index] = btn == null ? null : btn.GetComponent<Button>();
             }
         }
 
