@@ -89,9 +89,50 @@ public static class WarehouseInventory
             .ToList();
     }
 
+    public static IReadOnlyList<WarehouseItemSaveData> CaptureSaveData()
+    {
+        return GetStacks()
+            .Select(stack => new WarehouseItemSaveData
+            {
+                itemId = stack.ItemId,
+                quantity = stack.Quantity,
+            })
+            .ToList();
+    }
+
+    public static void RestoreSaveData(IEnumerable<WarehouseItemSaveData> items)
+    {
+        ItemsById.Clear();
+
+        if (items != null)
+        {
+            foreach (WarehouseItemSaveData item in items)
+            {
+                if (item == null || string.IsNullOrWhiteSpace(item.itemId) || item.quantity <= 0)
+                {
+                    continue;
+                }
+
+                ShopItemDefinition definition = FindItemDefinition(item.itemId);
+                if (definition != null)
+                {
+                    ItemsById[item.itemId] = new WarehouseItemStack(definition, item.quantity);
+                }
+            }
+        }
+
+        Changed?.Invoke();
+    }
+
     public static void ResetRuntimeState()
     {
         ItemsById.Clear();
         Changed?.Invoke();
+    }
+
+    private static ShopItemDefinition FindItemDefinition(string itemId)
+    {
+        return Resources.LoadAll<ShopItemDefinition>("ShopItem")
+            .FirstOrDefault(definition => definition != null && definition.ItemId == itemId);
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -89,6 +90,46 @@ public class EconomyBuffSystem : MonoBehaviour, IShopDiscountModifier, IShopRari
         }
 
         Instance = this;
+        ResetLevels();
+        HideUpgradePanel();
+        RefreshAllUi();
+    }
+
+    public EconomyBuffSaveData CaptureSaveData()
+    {
+        EconomyBuffSaveData data = new EconomyBuffSaveData
+        {
+            levels = levels.ToList(),
+            nextThresholdIndex = nextThresholdIndex,
+            lastProcessedIncomeRound = lastProcessedIncomeRound,
+            lastTriggeredUpgradeRound = lastTriggeredUpgradeRound,
+        };
+
+        return data;
+    }
+
+    public void RestoreSaveData(EconomyBuffSaveData data)
+    {
+        ResetLevels();
+
+        if (data != null && data.levels != null)
+        {
+            for (int index = 0; index < Mathf.Min(levels.Length, data.levels.Count); index++)
+            {
+                levels[index] = Mathf.Clamp(data.levels[index], MinimumLevel, MaximumLevel);
+            }
+
+            nextThresholdIndex = Mathf.Max(0, data.nextThresholdIndex);
+            lastProcessedIncomeRound = data.lastProcessedIncomeRound;
+            lastTriggeredUpgradeRound = data.lastTriggeredUpgradeRound;
+        }
+
+        HideUpgradePanel();
+        RefreshAllUi();
+    }
+
+    public void ResetRuntimeState()
+    {
         ResetLevels();
         HideUpgradePanel();
         RefreshAllUi();

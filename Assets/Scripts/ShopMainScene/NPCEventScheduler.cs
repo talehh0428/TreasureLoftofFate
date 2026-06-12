@@ -26,6 +26,8 @@ public class NPCEventScheduler : MonoBehaviour
 
     public bool CanAdvanceRound => currentRound < maxRound;
 
+    public IReadOnlyList<NPCDefinition> Npcs => npcs;
+
     public bool TryProcessNextRound()
     {
         if (!CanAdvanceRound)
@@ -75,6 +77,57 @@ public class NPCEventScheduler : MonoBehaviour
         AdvanceNpcEvents();
         PublishUpdatedNpcs(npcById, beforeStates);
         Debug.Log($"NPCEventScheduler: 第 {currentRound} 回合事件调度结束。");
+    }
+
+    public IReadOnlyList<NpcSaveData> CaptureNpcSaveData()
+    {
+        EnsureNpcInitialStatesInitialized();
+        return npcs
+            .Where(npc => npc != null)
+            .Select(npc => new NpcSaveData
+            {
+                npcId = npc.NpcId,
+                currentEventId = npc.CurrentEventID,
+                nextEventId = npc.NextEventID,
+                attack = npc.RawAttack,
+                defense = npc.RawDefense,
+                movementSpeed = npc.RawMovementSpeed,
+                prompt = npc.Prompt,
+            })
+            .ToList();
+    }
+
+    public void RestoreRunState(int restoredRound, IEnumerable<NpcSaveData> npcStates)
+    {
+        database ??= jsonLoader != null ? jsonLoader.Load() : new NPCEventDatabase();
+        hasInitializedNpcStates = true;
+        SetCurrentRound(restoredRound);
+
+        Dictionary<string, NPCDefinition> npcById = BuildNpcLookup();
+        if (npcStates != null)
+        {
+            foreach (NpcSaveData state in npcStates)
+            {
+                if (state == null || string.IsNullOrWhiteSpace(state.npcId))
+                {
+                    continue;
+                }
+
+                if (npcById.TryGetValue(state.npcId, out NPCDefinition npc))
+                {
+                    npc.RestoreRuntimeState(state);
+                }
+            }
+        }
+    }
+
+    public void ResetRuntimeState()
+    {
+        currentRound = 1;
+        triggeredOnceEventIds.Clear();
+        hasInitializedNpcStates = false;
+        EnsureNpcInitialStatesInitialized();
+        RoundChanged?.Invoke(currentRound);
     }
 
     private void SetCurrentRound(int round)
@@ -310,6 +363,8 @@ public class NPCEventScheduler : MonoBehaviour
         IReadOnlyDictionary<string, NPCDefinition> npcById,
         Dictionary<string, List<string>> promptTextsByNpcId)
     {
+        RegisterEndingIfNeeded(eventConfig, outcome, npcById);
+
         if (!string.IsNullOrWhiteSpace(outcome.text))
         {
             foreach (string participantId in eventConfig.participants)
@@ -342,6 +397,34 @@ public class NPCEventScheduler : MonoBehaviour
         if (eventConfig.once)
         {
             triggeredOnceEventIds.Add(eventConfig.id);
+        }
+    }
+
+    private void RegisterEndingIfNeeded(
+        NPCEventConfig eventConfig,
+        NPCEventOutcome outcome,
+        IReadOnlyDictionary<string, NPCDefinition> npcById)
+    {
+        if (eventConfig == null ||
+            string.IsNullOrWhiteSpace(eventConfig.id) ||
+            !eventConfig.id.StartsWith("E", StringComparison.OrdinalIgnoreCase) ||
+            eventConfig.participants == null)
+        {
+            return;
+        }
+
+        foreach (string participantId in eventConfig.participants)
+        {
+            if (string.IsNullOrWhiteSpace(participantId) ||
+                !npcById.TryGetValue(participantId, out NPCDefinition npc))
+            {
+                continue;
+            }
+
+            if (NPCEventEndingRegistry.RegisterEnding(npc, eventConfig, outcome))
+            {
+                Debug.Log($"NPCEventScheduler: 解锁人物结局 -> {npc.NpcId} {npc.DisplayName}: {eventConfig.title}");
+            }
         }
     }
 

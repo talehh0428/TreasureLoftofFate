@@ -53,6 +53,12 @@ public class NPCDefinition : ScriptableObject
 
     public string Prompt => prompt;
 
+    public int RawAttack => attack;
+
+    public int RawDefense => defense;
+
+    public int RawMovementSpeed => movementSpeed;
+
     public string CurrentEventID
     {
         get => currentEventID;
@@ -94,6 +100,21 @@ public class NPCDefinition : ScriptableObject
         attack = Mathf.Max(0, attack + Mathf.Max(0, attackBonus));
         defense = Mathf.Max(0, defense + Mathf.Max(0, defenseBonus));
         movementSpeed = Mathf.Max(0, movementSpeed + Mathf.Max(0, movementSpeedBonus));
+    }
+
+    public void RestoreRuntimeState(NpcSaveData data)
+    {
+        if (data == null)
+        {
+            return;
+        }
+
+        currentEventID = data.currentEventId ?? string.Empty;
+        nextEventID = data.nextEventId ?? string.Empty;
+        attack = Mathf.Max(0, data.attack);
+        defense = Mathf.Max(0, data.defense);
+        movementSpeed = Mathf.Max(0, data.movementSpeed);
+        prompt = data.prompt ?? string.Empty;
     }
 
     private int GetNextPromptEntryIndex()

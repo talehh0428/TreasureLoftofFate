@@ -17,6 +17,7 @@ public class MainSceneShopController : MonoBehaviour
     [Header("Round Flow")]
     [SerializeField] private NPCEventScheduler roundScheduler;
     [SerializeField] private EconomyBuffSystem economyBuffSystem;
+    [SerializeField] private SaveSlotPanelController saveSlotPanel;
     [SerializeField] private ScreenFadeTransition transition;
     [SerializeField] private string marketToNpcMessage = "坊市结束";
     [SerializeField] private string nextRoundMessage = "新一回合";
@@ -51,6 +52,7 @@ public class MainSceneShopController : MonoBehaviour
     private void Awake()
     {
         AutoBind();
+        ApplyPendingRunSaveIfNeeded();
     }
 
     private void OnEnable()
@@ -160,6 +162,42 @@ public class MainSceneShopController : MonoBehaviour
     public void CompleteTradeForSelectedNpc()
     {
         CompleteTradeForVisitor(selectedVisitor);
+    }
+
+    public IReadOnlyList<string> CapturePendingSpecialVisitorNpcIds()
+    {
+        return nextRoundSpecialVisitors
+            .Where(npc => npc != null)
+            .Select(npc => npc.NpcId)
+            .Where(id => !string.IsNullOrWhiteSpace(id))
+            .Distinct()
+            .ToList();
+    }
+
+    public void RestoreFromRunSave(RunSaveData runData)
+    {
+        if (runData == null)
+        {
+            return;
+        }
+
+        GameSaveService.ApplyRun(runData, roundScheduler, economyBuffSystem);
+        nextRoundSpecialVisitors.Clear();
+        currentRoundVisitors.Clear();
+        selectedVisitor = null;
+        RestorePendingSpecialVisitors(runData.pendingSpecialVisitorNpcIds);
+        CloseShopScene();
+        OpenMarketScene();
+    }
+
+    private void ApplyPendingRunSaveIfNeeded()
+    {
+        RunSaveData pendingRunSave = GameStartContext.ConsumePendingRunSave();
+        if (pendingRunSave != null)
+        {
+            GameSaveService.ApplyRun(pendingRunSave, roundScheduler, economyBuffSystem);
+            RestorePendingSpecialVisitors(pendingRunSave.pendingSpecialVisitorNpcIds);
+        }
     }
 
     private IEnumerator OpenShopSceneRoutine()
@@ -443,9 +481,7 @@ public class MainSceneShopController : MonoBehaviour
             return;
         }
 
-        StartCoroutine(PlayTransitionRoutine(
-            nextRoundMessage,
-            ShopSceneToNextMarketRoutine()));
+        StartCoroutine(ShopSceneToNextMarketRoutine());
     }
 
     private void HandleNpcEventUpdated(NPCDefinition npc)
@@ -466,19 +502,67 @@ public class MainSceneShopController : MonoBehaviour
 
     private IEnumerator ShopSceneToNextMarketRoutine()
     {
-        if (economyBuffSystem != null)
-        {
-            int endingRound = roundScheduler == null ? 1 : roundScheduler.CurrentRound;
-            yield return economyBuffSystem.ProcessEndRoundRoutine(endingRound);
-        }
+        bool advancedRound = false;
+        yield return PlayTransitionRoutine(nextRoundMessage, ProcessEndRoundAndAdvanceRoutine());
 
-        if (!roundScheduler.TryProcessNextRound())
+        if (!advancedRound)
         {
             yield break;
         }
 
-        yield return UnloadShopSceneRoutine();
-        yield return OpenMarketSceneRoutine();
+        IEnumerator ProcessEndRoundAndAdvanceRoutine()
+        {
+            if (economyBuffSystem != null)
+            {
+                int endingRound = roundScheduler == null ? 1 : roundScheduler.CurrentRound;
+                yield return economyBuffSystem.ProcessEndRoundRoutine(endingRound);
+            }
+
+            if (roundScheduler != null)
+            {
+                advancedRound = roundScheduler.TryProcessNextRound();
+            }
+
+            if (advancedRound)
+            {
+                yield return ShowEndRoundSaveChoiceRoutine();
+                yield return UnloadShopSceneRoutine();
+                yield return OpenMarketSceneRoutine();
+            }
+        }
+    }
+
+    private IEnumerator ShowEndRoundSaveChoiceRoutine()
+    {
+        if (saveSlotPanel == null)
+        {
+            saveSlotPanel = FindObjectOfType<SaveSlotPanelController>(true);
+        }
+
+        if (saveSlotPanel == null)
+        {
+            Debug.LogWarning("[MainSceneShopController] SaveSlotPanelController is not assigned. End round save choice skipped.");
+            yield break;
+        }
+
+        bool panelClosed = false;
+        bool transitionBlockedRaycasts = transition != null && transition.BlocksRaycasts;
+        if (transition != null)
+        {
+            transition.BlocksRaycasts = false;
+        }
+
+        yield return saveSlotPanel.ShowSaveChoiceRoutine(() => panelClosed = true);
+
+        while (!panelClosed)
+        {
+            yield return null;
+        }
+
+        if (transition != null)
+        {
+            transition.BlocksRaycasts = transitionBlockedRaycasts;
+        }
     }
 
     private IEnumerator UnloadMarketSceneRoutine()
@@ -597,6 +681,30 @@ public class MainSceneShopController : MonoBehaviour
         return currentRoundVisitors.FirstOrDefault(visitor => visitor != null && visitor.Definition == definition);
     }
 
+    private void RestorePendingSpecialVisitors(IEnumerable<string> npcIds)
+    {
+        nextRoundSpecialVisitors.Clear();
+        if (npcIds == null || roundScheduler == null)
+        {
+            return;
+        }
+
+        IReadOnlyList<NPCDefinition> npcs = roundScheduler.Npcs;
+        foreach (string npcId in npcIds)
+        {
+            if (string.IsNullOrWhiteSpace(npcId))
+            {
+                continue;
+            }
+
+            NPCDefinition npc = npcs.FirstOrDefault(candidate => candidate != null && candidate.NpcId == npcId);
+            if (npc != null && !nextRoundSpecialVisitors.Contains(npc))
+            {
+                nextRoundSpecialVisitors.Add(npc);
+            }
+        }
+    }
+
     private IEnumerator OpenTradeSceneRoutine()
     {
         isLoadingTradeScene = true;
@@ -709,6 +817,11 @@ public class MainSceneShopController : MonoBehaviour
         if (economyBuffSystem == null)
         {
             economyBuffSystem = FindObjectOfType<EconomyBuffSystem>(true);
+        }
+
+        if (saveSlotPanel == null)
+        {
+            saveSlotPanel = FindObjectOfType<SaveSlotPanelController>(true);
         }
 
         if (transition == null)

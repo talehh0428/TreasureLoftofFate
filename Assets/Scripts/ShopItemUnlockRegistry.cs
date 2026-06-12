@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public static class ShopItemUnlockRegistry
 {
@@ -9,6 +10,7 @@ public static class ShopItemUnlockRegistry
 
     private static readonly HashSet<string> UnlockedItemIds = new HashSet<string>();
     private static readonly HashSet<string> RegisteredDefaultItemIds = new HashSet<string>();
+    private static bool isRestoring;
 
     public static bool IsUnlocked(ShopItemDefinition definition)
     {
@@ -75,7 +77,36 @@ public static class ShopItemUnlockRegistry
         }
 
         ItemUnlocked?.Invoke(itemId);
+        if (!isRestoring)
+        {
+            GameSaveService.SaveArchiveFromRuntime();
+        }
         return true;
+    }
+
+    public static IReadOnlyCollection<string> GetExplicitUnlockedItemIds()
+    {
+        return UnlockedItemIds.ToList();
+    }
+
+    public static void RestoreUnlockedItems(IEnumerable<string> itemIds)
+    {
+        isRestoring = true;
+        UnlockedItemIds.Clear();
+
+        if (itemIds != null)
+        {
+            foreach (string itemId in itemIds)
+            {
+                if (!string.IsNullOrWhiteSpace(itemId))
+                {
+                    UnlockedItemIds.Add(itemId);
+                }
+            }
+        }
+
+        isRestoring = false;
+        ItemUnlocked?.Invoke(string.Empty);
     }
 
     public static void ResetRuntimeState()
