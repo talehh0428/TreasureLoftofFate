@@ -46,8 +46,7 @@ public class ShopMainSceneController : MonoBehaviour
 
     private void OnEnable()
     {
-        // 确保进入场景时播放主场景背景音乐
-        BgmManager.Instance.PlayMainSceneBGM();
+        BgmManager.Instance.PlayGlobalBGM();
     }
 
     private void Start()

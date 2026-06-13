@@ -1,16 +1,15 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 /// <summary>
-/// 单例 BGM 管理器，负责跨场景播放背景音乐。
-/// 不随场景销毁，保证音乐在场景切换时不中断。
+/// 单例 BGM 管理器，负责跨场景播放一首全局背景音乐。
 /// </summary>
 [RequireComponent(typeof(AudioSource))]
 public class BgmManager : MonoBehaviour
 {
-    [Header("BGM Clips")]
-    [SerializeField] private AudioClip mainSceneBgm;
-    [SerializeField] private AudioClip marketBgm;
+    [Header("Global BGM")]
+    [FormerlySerializedAs("mainSceneBgm")]
+    [SerializeField] private AudioClip globalBgm;
 
     private static BgmManager instance;
     private AudioSource audioSource;
@@ -45,27 +44,19 @@ public class BgmManager : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         audioSource.loop = true;
         audioSource.playOnAwake = false;
+        transform.SetParent(null);
         DontDestroyOnLoad(gameObject);
+        PlayGlobalBGM();
     }
 
-    public void PlayMainSceneBGM()
+    public void PlayGlobalBGM()
     {
-        if (mainSceneBgm == null)
+        if (globalBgm == null)
         {
-            Debug.LogWarning("[BgmManager] mainSceneBgm 未赋值！");
+            Debug.LogWarning("[BgmManager] globalBgm 未赋值！");
             return;
         }
-        PlayClip(mainSceneBgm);
-    }
-
-    public void PlayMarketBGM()
-    {
-        if (marketBgm == null)
-        {
-            Debug.LogWarning("[BgmManager] marketBgm 未赋值！");
-            return;
-        }
-        PlayClip(marketBgm);
+        PlayClip(globalBgm);
     }
 
     private void PlayClip(AudioClip clip)

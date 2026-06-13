@@ -210,6 +210,7 @@ public class MainSceneShopController : MonoBehaviour
         nextRoundSpecialVisitors.Clear();
         currentRoundVisitors.Clear();
         selectedVisitor = null;
+        CloseMarketScene();
         CloseShopScene();
     }
 
@@ -248,7 +249,7 @@ public class MainSceneShopController : MonoBehaviour
         isStartFlowRunning = true;
         if (startMenuController != null)
         {
-            startMenuController.SetStartFlowInProgress(true);
+            startMenuController.SetStartFlowInProgress(true, true);
         }
 
         if (runSave != null)
@@ -271,12 +272,13 @@ public class MainSceneShopController : MonoBehaviour
 
         if (runSave == null)
         {
-            yield return PlayPrologueRoutine();
-            OpenMarketScene();
+            yield return PlayPrologueRoutine(startMenuController);
+            yield return OpenMarketSceneWhenNeededRoutine();
+            UnloadStoryDialogue();
         }
-        else if (!restoredFromRunSave)
+        else
         {
-            OpenMarketScene();
+            yield return OpenMarketSceneWhenNeededRoutine();
         }
 
         if (startMenuController != null)
@@ -309,7 +311,7 @@ public class MainSceneShopController : MonoBehaviour
         return true;
     }
 
-    private IEnumerator PlayPrologueRoutine()
+    private IEnumerator PlayPrologueRoutine(StartMenuController startMenuController)
     {
         if (string.IsNullOrWhiteSpace(prologueJsonPath))
         {
@@ -328,6 +330,24 @@ public class MainSceneShopController : MonoBehaviour
         }
 
         isWaitingForPrologueStory = true;
+        bool hasHiddenStartMenu = false;
+        bool unloadDialogueWhenFinished = storyPlayer.UnloadDialogueWhenFinished;
+        storyPlayer.UnloadDialogueWhenFinished = false;
+        void HideStartMenuWhenDialogueShown()
+        {
+            if (hasHiddenStartMenu)
+            {
+                return;
+            }
+
+            hasHiddenStartMenu = true;
+            if (startMenuController != null)
+            {
+                startMenuController.SetStartFlowInProgress(true);
+            }
+        }
+
+        storyPlayer.DialogueShown += HideStartMenuWhenDialogueShown;
         storyPlayer.StoryCompleted += HandlePrologueStoryCompleted;
         storyPlayer.StoryFailed += HandlePrologueStoryFailed;
         storyPlayer.StartDialogueFromJsonPath(prologueJsonPath, showDialogueBackgroundForPrologue);
@@ -337,8 +357,10 @@ public class MainSceneShopController : MonoBehaviour
             yield return null;
         }
 
+        storyPlayer.DialogueShown -= HideStartMenuWhenDialogueShown;
         storyPlayer.StoryCompleted -= HandlePrologueStoryCompleted;
         storyPlayer.StoryFailed -= HandlePrologueStoryFailed;
+        storyPlayer.UnloadDialogueWhenFinished = unloadDialogueWhenFinished;
     }
 
     private void HandlePrologueStoryCompleted()
@@ -393,6 +415,42 @@ public class MainSceneShopController : MonoBehaviour
 
         isLoadingMarketScene = false;
         BindLoadedMarketScene();
+    }
+
+    private IEnumerator OpenMarketSceneWhenNeededRoutine()
+    {
+        if (string.IsNullOrWhiteSpace(marketSceneName))
+        {
+            yield break;
+        }
+
+        Scene loadedScene = SceneManager.GetSceneByName(marketSceneName);
+        if (loadedScene.isLoaded)
+        {
+            BindLoadedMarketScene();
+            yield break;
+        }
+
+        if (isLoadingMarketScene)
+        {
+            while (isLoadingMarketScene)
+            {
+                yield return null;
+            }
+
+            BindLoadedMarketScene();
+            yield break;
+        }
+
+        yield return OpenMarketSceneRoutine();
+    }
+
+    private void UnloadStoryDialogue()
+    {
+        if (storyPlayer != null)
+        {
+            storyPlayer.UnloadDialogue();
+        }
     }
 
     private void BindLoadedMarketScene()

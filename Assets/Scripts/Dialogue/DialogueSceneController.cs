@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class DialogueSceneController : MonoBehaviour
 {
     public static DialogueSceneController Instance { get; private set; }
+    public event Action DialogueShown;
 
     [Header("Scene Loading")]
     [SerializeField] private string dialogueSceneName = string.Empty;
@@ -198,6 +199,7 @@ public class DialogueSceneController : MonoBehaviour
         DialogueBody body = pendingBody;
         pendingBody = null;
         dialogueBox.Show(body, HandleChoiceSelected);
+        DialogueShown?.Invoke();
     }
 
     private void HandleChoiceSelected(DialogueChoiceResult result)
