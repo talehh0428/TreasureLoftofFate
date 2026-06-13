@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 33881988}
   - component: {fileID: 33881987}
   - component: {fileID: 33881986}
+  - component: {fileID: 33881989}
   m_Layer: 5
   m_Name: TradeButton
   m_TagString: Untagged
@@ -244,6 +245,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 33881984}
   m_CullTransparentMesh: 1
+--- !u!114 &33881989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 33881984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 546e0c06c57224c46b9437db6935701f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  overrideClip: {fileID: 8300000, guid: df723cb6bc7b26e41b937ead67ebe044, type: 3}
+  startTime: 0
+  endTime: 0
 --- !u!1 &74699929
 GameObject:
   m_ObjectHideFlags: 0
