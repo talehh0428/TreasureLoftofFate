@@ -82,8 +82,7 @@ public class ShopController : MonoBehaviour
         RefreshMoneyText(ShopWallet.CurrentMoney);
         PopulateShelf();
 
-        // 播放市场背景音乐
-        BgmManager.Instance.PlayMarketBGM();
+        BgmManager.Instance.PlayGlobalBGM();
     }
 
     private void OnDisable()

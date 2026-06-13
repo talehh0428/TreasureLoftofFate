@@ -9,6 +9,15 @@
 - **[NPCEventScheduler]**: 本轮事件 text 写入 NPC prompt 时改为覆盖旧 prompt，而不是追加历史条目 — by beihaihaihai
   - 类型: 快速修改（无方案包）
   - 文件: Assets/Scripts/ShopMainScene/NPCEventScheduler.cs:76
+- **[MainScene]**: 新游戏序章和读档进入坊市时等待 `shichang` 加载完成后再卸载覆盖场景，避免露出 MainScene 空背景 — by beihaihaihai
+  - 类型: 快速修改（无方案包）
+  - 文件: Assets/Scripts/MainScene/MainSceneShopController.cs:274
+- **[MainScene]**: 返回主菜单重置流程时同步卸载 `shichang`，避免坊市场景残留 — by beihaihaihai
+  - 类型: 快速修改（无方案包）
+  - 文件: Assets/Scripts/MainScene/MainSceneShopController.cs:211
+- **[MainScene]**: 开始游戏进入序章时等待 Dialogue 首帧显示后再隐藏 StartMenu，避免点击开始后的空帧闪屏 — by beihaihaihai
+  - 类型: 快速修改（无方案包）
+  - 文件: Assets/Scripts/MainScene/MainSceneShopController.cs:249
 
 ## 2026-06-11
 

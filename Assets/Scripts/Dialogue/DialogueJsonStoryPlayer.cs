@@ -25,6 +25,39 @@ public class DialogueJsonStoryPlayer : MonoBehaviour
     public event Action StoryCompleted;
     public event Action<string> StoryFailed;
 
+    public bool UnloadDialogueWhenFinished
+    {
+        get => unloadDialogueWhenFinished;
+        set => unloadDialogueWhenFinished = value;
+    }
+
+    public event Action DialogueShown
+    {
+        add
+        {
+            AutoBind();
+            if (dialogueController != null)
+            {
+                dialogueController.DialogueShown += value;
+            }
+        }
+        remove
+        {
+            if (dialogueController != null)
+            {
+                dialogueController.DialogueShown -= value;
+            }
+        }
+    }
+
+    public void UnloadDialogue()
+    {
+        if (dialogueController != null)
+        {
+            dialogueController.UnloadDialogue();
+        }
+    }
+
     private void Awake()
     {
         AutoBind();

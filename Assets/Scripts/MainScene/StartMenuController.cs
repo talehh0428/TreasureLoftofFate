@@ -28,8 +28,7 @@ public class StartMenuController : MonoBehaviour
         SetPanelActive(endingsPanel, false);
         SetPanelActive(settingsPanel, false);
 
-        // 播放主场景背景音乐
-        BgmManager.Instance.PlayMainSceneBGM();
+        BgmManager.Instance.PlayGlobalBGM();
     }
 
     private void OnEnable()
@@ -93,11 +92,11 @@ public class StartMenuController : MonoBehaviour
         }
     }
 
-    public void SetStartFlowInProgress(bool inProgress)
+    public void SetStartFlowInProgress(bool inProgress, bool keepRootPanelVisible = false)
     {
         isStarting = inProgress;
         SetMenuInteractable(!inProgress);
-        SetPanelActive(rootPanel, !inProgress);
+        SetPanelActive(rootPanel, !inProgress || keepRootPanelVisible);
     }
 
     private void ToggleEndingsPanel()

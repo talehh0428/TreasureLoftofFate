@@ -35,6 +35,7 @@ public class GlobalButtonClickSound : MonoBehaviour
         }
 
         instance = this;
+        transform.SetParent(null);
         DontDestroyOnLoad(gameObject);
 
         // 创建独立的 AudioSource
