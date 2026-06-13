@@ -27,6 +27,9 @@ public class StartMenuController : MonoBehaviour
         SetPanelActive(rootPanel, true);
         SetPanelActive(endingsPanel, false);
         SetPanelActive(settingsPanel, false);
+
+        // 播放主场景背景音乐
+        BgmManager.Instance.PlayMainSceneBGM();
     }
 
     private void OnEnable()
