@@ -13,6 +13,7 @@ public class NPCDialogueBackendConnector : MonoBehaviour
     [SerializeField] [Min(1)] private int maxRounds = 3;
     [SerializeField] private string closingChoiceText = "我了解了，先聊到这里吧";
     [SerializeField] private string timeoutDialogueText = "连接后端超时，请尝试重新连接。";
+    [SerializeField] private string backendErrorDialoguePrefix = "后端对话服务异常";
     [SerializeField] private string retryChoiceText = "尝试重连";
 
     [Header("Backend")]
@@ -131,7 +132,7 @@ public class NPCDialogueBackendConnector : MonoBehaviour
                     "[NPCDialogueBackendConnector] Unity blocked this request before sending it.\n" +
                     $"Url: {url}\nError: {exception.Message}");
                 isRequesting = false;
-                DialogueFailed?.Invoke(activeNpc);
+                ShowRetryDialogue(BuildRequestErrorText(0, exception.Message, string.Empty));
                 yield break;
             }
 
@@ -154,17 +155,29 @@ public class NPCDialogueBackendConnector : MonoBehaviour
                     yield break;
                 }
 
-                DialogueFailed?.Invoke(activeNpc);
+                ShowRetryDialogue(BuildRequestErrorText(request.responseCode, request.error, responseText));
                 yield break;
             }
 
-            NPCDialogueResponse response = JsonUtility.FromJson<NPCDialogueResponse>(responseText);
+            NPCDialogueResponse response = null;
+            try
+            {
+                response = JsonUtility.FromJson<NPCDialogueResponse>(responseText);
+            }
+            catch (ArgumentException exception)
+            {
+                Debug.LogError($"[NPCDialogueBackendConnector] Failed to parse response JSON: {exception.Message}\n{responseText}");
+                isRequesting = false;
+                ShowRetryDialogue($"{backendErrorDialoguePrefix}：返回内容格式异常。");
+                yield break;
+            }
+
             if (response == null || !response.ok || response.data == null)
             {
                 string message = response != null ? response.message : "Invalid response JSON.";
                 Debug.LogError($"[NPCDialogueBackendConnector] Backend returned failure: {message}\n{responseText}");
                 isRequesting = false;
-                DialogueFailed?.Invoke(activeNpc);
+                ShowRetryDialogue(BuildBackendFailureText(message));
                 yield break;
             }
 
@@ -327,11 +340,16 @@ public class NPCDialogueBackendConnector : MonoBehaviour
 
     private void ShowTimeoutRetryDialogue()
     {
+        ShowRetryDialogue(timeoutDialogueText);
+    }
+
+    private void ShowRetryDialogue(string text)
+    {
         DialogueBody body = new DialogueBody
         {
             npcName = npc != null ? npc.DisplayName : string.Empty,
             portrait = npc != null ? npc.Portrait : null,
-            text = timeoutDialogueText,
+            text = string.IsNullOrWhiteSpace(text) ? $"{backendErrorDialoguePrefix}，请尝试重新连接。" : text,
             choices = new[]
             {
                 new DialogueChoice { id = "retry", text = retryChoiceText }
@@ -367,6 +385,87 @@ public class NPCDialogueBackendConnector : MonoBehaviour
         string error = request.error ?? string.Empty;
         return error.IndexOf("timeout", StringComparison.OrdinalIgnoreCase) >= 0
             || error.IndexOf("timed out", StringComparison.OrdinalIgnoreCase) >= 0;
+    }
+
+    private string BuildRequestErrorText(long statusCode, string requestError, string responseText)
+    {
+        string detail = ExtractBackendMessage(responseText);
+        if (string.IsNullOrWhiteSpace(detail))
+        {
+            detail = requestError;
+        }
+
+        if (statusCode >= 500)
+        {
+            return BuildErrorText($"{backendErrorDialoguePrefix}（{statusCode}）", detail);
+        }
+
+        if (statusCode >= 400)
+        {
+            return BuildErrorText($"后端拒绝了本次对话请求（{statusCode}）", detail);
+        }
+
+        return BuildErrorText("无法连接后端对话服务", detail);
+    }
+
+    private string BuildBackendFailureText(string message)
+    {
+        return BuildErrorText(backendErrorDialoguePrefix, message);
+    }
+
+    private string BuildErrorText(string title, string detail)
+    {
+        string safeTitle = string.IsNullOrWhiteSpace(title) ? backendErrorDialoguePrefix : title.Trim();
+        string safeDetail = ToBriefErrorDetail(detail);
+        if (string.IsNullOrWhiteSpace(safeDetail))
+        {
+            return $"{safeTitle}，请尝试重新连接。";
+        }
+
+        return $"{safeTitle}：{safeDetail}\n请尝试重新连接。";
+    }
+
+    private string ExtractBackendMessage(string responseText)
+    {
+        if (string.IsNullOrWhiteSpace(responseText))
+        {
+            return string.Empty;
+        }
+
+        try
+        {
+            NPCDialogueResponse response = JsonUtility.FromJson<NPCDialogueResponse>(responseText);
+            if (response != null && !string.IsNullOrWhiteSpace(response.message))
+            {
+                return response.message;
+            }
+        }
+        catch (ArgumentException)
+        {
+        }
+
+        return responseText;
+    }
+
+    private string ToBriefErrorDetail(string detail)
+    {
+        if (string.IsNullOrWhiteSpace(detail))
+        {
+            return string.Empty;
+        }
+
+        string trimmed = detail.Trim()
+            .Replace('\r', ' ')
+            .Replace('\n', ' ')
+            .Replace('\t', ' ');
+
+        const int maxLength = 80;
+        if (trimmed.Length <= maxLength)
+        {
+            return trimmed;
+        }
+
+        return trimmed.Substring(0, maxLength) + "...";
     }
 
     private bool ValidateSetup()

@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: ShopItem_fabao_tianganbaojia
   m_EditorClassIdentifier: 
   itemId: fabao_tianganbaojia
-  displayName: 天罡宝甲
-  price: 7400
+  displayName: "\u5929\u7F61\u5B9D\u7532"
+  price: 2144
   icon: {fileID: 21300000, guid: 9e53c66df8a16a7419871d46b4bca8d6, type: 3}
-  description: 以天外陨铁混合星辰砂铸造的重甲，甲面刻有三十六道天罡符纹。穿上之后浑身笼罩金光，元婴以下难以撼动分毫。
+  description: "\u4EE5\u5929\u5916\u9668\u94C1\u6DF7\u5408\u661F\u8FB0\u7802\u94F8\u9020\u7684\u91CD\u7532\uFF0C\u7532\u9762\u523B\u6709\u4E09\u5341\u516D\u9053\u5929\u7F61\u7B26\u7EB9\u3002\u7A7F\u4E0A\u4E4B\u540E\u6D51\u8EAB\u7B3C\u7F69\u91D1\u5149\uFF0C\u5143\u5A74\u4EE5\u4E0B\u96BE\u4EE5\u64BC\u52A8\u5206\u6BEB\u3002"
   unlockedByDefault: 0
-  rarity: 4
+  rarity: 3
   attack: 20
   defense: 110
   movementSpeed: 5

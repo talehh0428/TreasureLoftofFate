@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: ShopItem_danyao_juqidan
   m_EditorClassIdentifier: 
   itemId: danyao_juqidan
-  displayName: 聚气丹
-  price: 135
+  displayName: "\u805A\u6C14\u4E39"
+  price: 53
   icon: {fileID: 21300000, guid: 5a2afdfd6684a2547b5dd1c10b9b924c, type: 3}
-  description: 筑基期修士常用的辅助丹药，以聚灵草为主材炼制。服下后短期内灵气运转更加顺畅，战斗修炼皆有益处。
+  description: "\u7B51\u57FA\u671F\u4FEE\u58EB\u5E38\u7528\u7684\u8F85\u52A9\u4E39\u836F\uFF0C\u4EE5\u805A\u7075\u8349\u4E3A\u4E3B\u6750\u70BC\u5236\u3002\u670D\u4E0B\u540E\u77ED\u671F\u5185\u7075\u6C14\u8FD0\u8F6C\u66F4\u52A0\u987A\u7545\uFF0C\u6218\u6597\u4FEE\u70BC\u7686\u6709\u76CA\u5904\u3002"
   unlockedByDefault: 0
   rarity: 1
   attack: 3

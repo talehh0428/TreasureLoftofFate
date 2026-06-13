@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: ShopItem_fabao_jingtiehujia
   m_EditorClassIdentifier: 
   itemId: fabao_jingtiehujia
-  displayName: 精铁护甲
-  price: 6
+  displayName: "\u7CBE\u94C1\u62A4\u7532"
+  price: 8
   icon: {fileID: 21300000, guid: da57e90a7abc44c48979259441dd67ec, type: 3}
-  description: 粗铁锻打而成的护心镜，仅能护住胸口要害。穿上后沉甸甸的，行动略为不便，但总比没有强。
+  description: "\u7C97\u94C1\u953B\u6253\u800C\u6210\u7684\u62A4\u5FC3\u955C\uFF0C\u4EC5\u80FD\u62A4\u4F4F\u80F8\u53E3\u8981\u5BB3\u3002\u7A7F\u4E0A\u540E\u6C89\u7538\u7538\u7684\uFF0C\u884C\u52A8\u7565\u4E3A\u4E0D\u4FBF\uFF0C\u4F46\u603B\u6BD4\u6CA1\u6709\u5F3A\u3002"
   unlockedByDefault: 0
   rarity: 0
   attack: 0

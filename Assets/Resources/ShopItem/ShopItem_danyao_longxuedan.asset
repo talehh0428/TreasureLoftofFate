@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: ShopItem_danyao_longxuedan
   m_EditorClassIdentifier: 
   itemId: danyao_longxuedan
-  displayName: 龙血丹
-  price: 7400
+  displayName: "\u9F99\u8840\u4E39"
+  price: 2112
   icon: {fileID: 21300000, guid: dd7547cd6fd68794ab6161565d43b3bb, type: 3}
-  description: 以一滴蛟龙精血为主引、配以百草精华炼制的绝世丹药。服下后龙威附体，攻击力暴涨，寻常元婴修士也要暂避锋芒。
+  description: "\u4EE5\u4E00\u6EF4\u86DF\u9F99\u7CBE\u8840\u4E3A\u4E3B\u5F15\u3001\u914D\u4EE5\u767E\u8349\u7CBE\u534E\u70BC\u5236\u7684\u7EDD\u4E16\u4E39\u836F\u3002\u670D\u4E0B\u540E\u9F99\u5A01\u9644\u4F53\uFF0C\u653B\u51FB\u529B\u66B4\u6DA8\uFF0C\u5BFB\u5E38\u5143\u5A74\u4FEE\u58EB\u4E5F\u8981\u6682\u907F\u950B\u8292\u3002"
   unlockedByDefault: 0
-  rarity: 4
+  rarity: 3
   attack: 100
   defense: 20
   movementSpeed: 15

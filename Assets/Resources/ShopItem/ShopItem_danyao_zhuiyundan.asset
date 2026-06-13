@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: ShopItem_danyao_zhuiyundan
   m_EditorClassIdentifier: 
   itemId: danyao_zhuiyundan
-  displayName: 追云丹
-  price: 2600
+  displayName: "\u8FFD\u4E91\u4E39"
+  price: 378
   icon: {fileID: 21300000, guid: c603ccb41f75fb4498609031f646ae2b, type: 3}
-  description: 取云中鹤的妖丹与风属性灵草合炼，服下后周身环绕清风，飞遁之速陡增。金丹修士用此丹可追上寻常飞剑。
+  description: "\u53D6\u4E91\u4E2D\u9E64\u7684\u5996\u4E39\u4E0E\u98CE\u5C5E\u6027\u7075\u8349\u5408\u70BC\uFF0C\u670D\u4E0B\u540E\u5468\u8EAB\u73AF\u7ED5\u6E05\u98CE\uFF0C\u98DE\u9041\u4E4B\u901F\u9661\u589E\u3002\u91D1\u4E39\u4FEE\u58EB\u7528\u6B64\u4E39\u53EF\u8FFD\u4E0A\u5BFB\u5E38\u98DE\u5251\u3002"
   unlockedByDefault: 0
   rarity: 2
   attack: 2

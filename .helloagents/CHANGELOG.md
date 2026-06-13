@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## [0.1.1] - 2026-06-13
+
+### 快速修改
+- **[ShopItem]**: 新增临时 Editor 导入工具，从 `Assets/Text/商品数据.json` 导入并覆盖/新建 `Assets/Resources/ShopItem` 商品资源 — by beihaihaihai
+  - 类型: 快速修改（无方案包）
+  - 文件: Assets/Scripts/Editor/ImportShopItemsFromJson.cs:1
+- **[NPCEventScheduler]**: 本轮事件 text 写入 NPC prompt 时改为覆盖旧 prompt，而不是追加历史条目 — by beihaihaihai
+  - 类型: 快速修改（无方案包）
+  - 文件: Assets/Scripts/ShopMainScene/NPCEventScheduler.cs:76
+
 ## 2026-06-11
 
 ### 存档系统

@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: ShopItem_fabao_jingleibian
   m_EditorClassIdentifier: 
   itemId: fabao_jingleibian
-  displayName: 惊雷鞭
-  price: 2000
+  displayName: "\u60CA\u96F7\u97AD"
+  price: 336
   icon: {fileID: 21300000, guid: e768add2492e6754e8e5cadec3b89b58, type: 3}
-  description: 以雷击木为主材炼制的灵鞭，挥动时电光四溅、霹雳作响。攻击范围极广，抽中敌人还能短暂麻痹。
+  description: "\u4EE5\u96F7\u51FB\u6728\u4E3A\u4E3B\u6750\u70BC\u5236\u7684\u7075\u97AD\uFF0C\u6325\u52A8\u65F6\u7535\u5149\u56DB\u6E85\u3001\u9739\u96F3\u4F5C\u54CD\u3002\u653B\u51FB\u8303\u56F4\u6781\u5E7F\uFF0C\u62BD\u4E2D\u654C\u4EBA\u8FD8\u80FD\u77ED\u6682\u9EBB\u75F9\u3002"
   unlockedByDefault: 0
   rarity: 2
   attack: 28

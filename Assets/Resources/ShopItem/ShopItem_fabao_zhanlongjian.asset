@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: ShopItem_fabao_zhanlongjian
   m_EditorClassIdentifier: 
   itemId: fabao_zhanlongjian
-  displayName: 斩龙剑
-  price: 9000
+  displayName: "\u65A9\u9F99\u5251"
+  price: 2582
   icon: {fileID: 21300000, guid: f1471d80079df3046a566805526cc2bc, type: 3}
-  description: 剑身暗红如凝固的血，传说曾斩过一头作恶的恶蛟。剑气凌厉无匹，元婴修士持之可一剑开山。在崔氏兵库中也是镇店之宝的级别。
+  description: "\u5251\u8EAB\u6697\u7EA2\u5982\u51DD\u56FA\u7684\u8840\uFF0C\u4F20\u8BF4\u66FE\u65A9\u8FC7\u4E00\u5934\u4F5C\u6076\u7684\u6076\u86DF\u3002\u5251\u6C14\u51CC\u5389\u65E0\u5339\uFF0C\u5143\u5A74\u4FEE\u58EB\u6301\u4E4B\u53EF\u4E00\u5251\u5F00\u5C71\u3002\u5728\u5D14\u6C0F\u5175\u5E93\u4E2D\u4E5F\u662F\u9547\u5E97\u4E4B\u5B9D\u7684\u7EA7\u522B\u3002"
   unlockedByDefault: 0
-  rarity: 4
+  rarity: 3
   attack: 130
   defense: 25
   movementSpeed: 8

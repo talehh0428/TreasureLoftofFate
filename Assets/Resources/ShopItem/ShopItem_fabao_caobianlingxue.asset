@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: ShopItem_fabao_caobianlingxue
   m_EditorClassIdentifier: 
   itemId: fabao_caobianlingxue
-  displayName: 草编灵靴
-  price: 12
+  displayName: "\u8349\u7F16\u7075\u9774"
+  price: 13
   icon: {fileID: 21300000, guid: f9e2e4984d9bdff4ab61ee3e88273085, type: 3}
-  description: 以灵草编织而成的靴子，注入了一丝微薄灵气。穿上后脚下生风，逃命时比光脚快上几分。南坊商贩走街串巷的标配。
+  description: "\u4EE5\u7075\u8349\u7F16\u7EC7\u800C\u6210\u7684\u9774\u5B50\uFF0C\u6CE8\u5165\u4E86\u4E00\u4E1D\u5FAE\u8584\u7075\u6C14\u3002\u7A7F\u4E0A\u540E\u811A\u4E0B\u751F\u98CE\uFF0C\u9003\u547D\u65F6\u6BD4\u5149\u811A\u5FEB\u4E0A\u51E0\u5206\u3002\u5357\u574A\u5546\u8D29\u8D70\u8857\u4E32\u5DF7\u7684\u6807\u914D\u3002"
   unlockedByDefault: 0
   rarity: 0
   attack: 0

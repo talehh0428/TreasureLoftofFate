@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: ShopItem_danyao_hugudan
   m_EditorClassIdentifier: 
   itemId: danyao_hugudan
-  displayName: 虎骨丹
-  price: 120
+  displayName: "\u864E\u9AA8\u4E39"
+  price: 52
   icon: {fileID: 21300000, guid: 8a9134d53e1b2b149a81db413eb81840, type: 3}
-  description: 以妖兽虎骨研磨入药，辅以数味灵草炼成。服下后浑身筋骨噼啪作响，力气暴增，能生撕虎豹。
+  description: "\u4EE5\u5996\u517D\u864E\u9AA8\u7814\u78E8\u5165\u836F\uFF0C\u8F85\u4EE5\u6570\u5473\u7075\u8349\u70BC\u6210\u3002\u670D\u4E0B\u540E\u6D51\u8EAB\u7B4B\u9AA8\u567C\u556A\u4F5C\u54CD\uFF0C\u529B\u6C14\u66B4\u589E\uFF0C\u80FD\u751F\u6495\u864E\u8C79\u3002"
   unlockedByDefault: 0
   rarity: 1
   attack: 8

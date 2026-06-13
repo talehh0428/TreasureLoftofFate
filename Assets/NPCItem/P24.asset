@@ -10,15 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ac7df6887f1ad4f459c35eabd95620c7, type: 3}
-  m_Name: P02
+  m_Name: P24
   m_EditorClassIdentifier: 
-  npcId: P02
-  displayName: "\u6D4B\u8BD5\u89D2\u82722"
-  avatar: {fileID: 0}
-  description: 
-  attack: 20
-  defense: 40
-  movementSpeed: 80
+  npcId: P24
+  displayName: "\u5D14\u8FDC"
+  avatar: {fileID: 21300000, guid: 3cc5705cb11f08849b9d9dbc197ad4a0, type: 3}
+  portrait: {fileID: 21300000, guid: d7547af352e03fa48a46223441cdea35, type: 3}
+  description: "\u6E05\u6CB3\u5D14\u6C0F\u65C1\u652F\u5B50\u5F1F"
+  attack: 4
+  defense: 3
+  movementSpeed: 4
   prompt: 
-  currentEventID: AP02E001
+  currentEventID: 
   nextEventID: 

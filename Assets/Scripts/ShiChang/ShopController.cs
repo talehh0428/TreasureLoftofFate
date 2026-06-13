@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ShopController : MonoBehaviour
@@ -22,8 +21,6 @@ public class ShopController : MonoBehaviour
     [SerializeField] private string resourcesFolderName = "ShopItem";
     [SerializeField] [Min(1)] private int itemsToDisplay = 4;
     [SerializeField] private bool allowDuplicateStock = true;
-    [SerializeField] [Min(0)] private int startingMoney = 1000;
-    [SerializeField] private string exitSceneName = "ShopMainScene";
 
     [Header("Discount Settings")]
     [SerializeField] private ShopDiscountSettings discountSettings = new ShopDiscountSettings();
@@ -82,7 +79,6 @@ public class ShopController : MonoBehaviour
     private void Start()
     {
         ShopItemUnlockRegistry.RegisterDefaults(itemCatalog);
-        ShopWallet.InitializeIfNeeded(startingMoney);
         RefreshMoneyText(ShopWallet.CurrentMoney);
         PopulateShelf();
     }
@@ -190,16 +186,7 @@ public class ShopController : MonoBehaviour
         if (LeaveRequested != null)
         {
             LeaveRequested.Invoke();
-            return;
         }
-
-        if (string.IsNullOrWhiteSpace(exitSceneName))
-        {
-            ShowFeedback("\u79bb\u5f00\u573a\u666f\u5c1a\u672a\u914d\u7f6e\u3002", neutralMessageColor);
-            return;
-        }
-
-        SceneManager.LoadScene(exitSceneName);
     }
 
     private void HandleSlotClicked(ShopItemSlotUI clickedSlot)

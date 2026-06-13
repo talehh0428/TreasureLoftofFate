@@ -1,0 +1,32 @@
+{
+  "initialStates": [
+    {
+      "npcId": "P21",
+      "currentEventId": "AP21E001"
+    },
+    {
+      "npcId": "P22",
+      "currentEventId": "AP22E001"
+    },
+    {
+      "npcId": "P23",
+      "currentEventId": "AP23E001"
+    },
+    {
+      "npcId": "P24",
+      "currentEventId": "AP24E001"
+    },
+    {
+      "npcId": "P25",
+      "currentEventId": "AP25E001"
+    },
+    {
+      "npcId": "P26",
+      "currentEventId": "AP26E001"
+    },
+    {
+      "npcId": "P27",
+      "currentEventId": "AP27E001"
+    }
+  ]
+}

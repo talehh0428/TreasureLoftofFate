@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: ShopItem_danyao_zengyuandan
   m_EditorClassIdentifier: 
   itemId: danyao_zengyuandan
-  displayName: 增元丹
-  price: 2100
+  displayName: "\u589E\u5143\u4E39"
+  price: 336
   icon: {fileID: 21300000, guid: ca21b05d3f07541419d74b997bf901cf, type: 3}
-  description: 以数十味灵药熬炼七天七夜而成的综合丹药。药性温和绵长，各项能力均有可观增幅，李氏丹房的招牌货。
+  description: "\u4EE5\u6570\u5341\u5473\u7075\u836F\u71AC\u70BC\u4E03\u5929\u4E03\u591C\u800C\u6210\u7684\u7EFC\u5408\u4E39\u836F\u3002\u836F\u6027\u6E29\u548C\u7EF5\u957F\uFF0C\u5404\u9879\u80FD\u529B\u5747\u6709\u53EF\u89C2\u589E\u5E45\uFF0C\u674E\u6C0F\u4E39\u623F\u7684\u62DB\u724C\u8D27\u3002"
   unlockedByDefault: 0
   rarity: 2
   attack: 12

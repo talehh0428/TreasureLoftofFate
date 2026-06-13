@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: ShopItem_fabao_jiuxiaohuanpei
   m_EditorClassIdentifier: 
   itemId: fabao_jiuxiaohuanpei
-  displayName: 九霄环佩
-  price: 11000
+  displayName: "\u4E5D\u9704\u73AF\u4F69"
+  price: 2720
   icon: {fileID: 21300000, guid: 387f591437a0a4d4781a2e1dc1d34d5f, type: 3}
-  description: 一套九枚古玉环佩，每枚刻有不同的仙禽之形。佩戴全套可召九禽虚影护体飞遁，进退从容。据说是上古仙人的随身之物。
+  description: "\u4E00\u5957\u4E5D\u679A\u53E4\u7389\u73AF\u4F69\uFF0C\u6BCF\u679A\u523B\u6709\u4E0D\u540C\u7684\u4ED9\u79BD\u4E4B\u5F62\u3002\u4F69\u6234\u5168\u5957\u53EF\u53EC\u4E5D\u79BD\u865A\u5F71\u62A4\u4F53\u98DE\u9041\uFF0C\u8FDB\u9000\u4ECE\u5BB9\u3002\u636E\u8BF4\u662F\u4E0A\u53E4\u4ED9\u4EBA\u7684\u968F\u8EAB\u4E4B\u7269\u3002"
   unlockedByDefault: 0
-  rarity: 4
+  rarity: 3
   attack: 20
   defense: 30
   movementSpeed: 150

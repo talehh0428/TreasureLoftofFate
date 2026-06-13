@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: ShopItem_fabao_hantiefeijian
   m_EditorClassIdentifier: 
   itemId: fabao_hantiefeijian
-  displayName: 寒铁飞剑
-  price: 180
+  displayName: "\u5BD2\u94C1\u98DE\u5251"
+  price: 78
   icon: {fileID: 21300000, guid: b3d7b832a01f7774884463af19449ef3, type: 3}
-  description: 以北境寒铁锻造的飞剑，剑身冰冷刺骨，出鞘时隐有霜气弥漫。筑基期散修能拥有一柄寒铁飞剑，在同阶中便算得上体面。
+  description: "\u4EE5\u5317\u5883\u5BD2\u94C1\u953B\u9020\u7684\u98DE\u5251\uFF0C\u5251\u8EAB\u51B0\u51B7\u523A\u9AA8\uFF0C\u51FA\u9798\u65F6\u9690\u6709\u971C\u6C14\u5F25\u6F2B\u3002\u7B51\u57FA\u671F\u6563\u4FEE\u80FD\u62E5\u6709\u4E00\u67C4\u5BD2\u94C1\u98DE\u5251\uFF0C\u5728\u540C\u9636\u4E2D\u4FBF\u7B97\u5F97\u4E0A\u4F53\u9762\u3002"
   unlockedByDefault: 0
   rarity: 1
   attack: 10

@@ -13,11 +13,14 @@ public class DialogueSceneController : MonoBehaviour
 
     [Header("Manual UI")]
     [SerializeField] private DialogueBoxController dialogueBox;
+    [SerializeField] private GameObject background;
+    [SerializeField] private string backgroundObjectName = "Background";
 
     private Action<DialogueChoiceResult> currentChoiceCallback;
     private DialogueBody pendingBody;
     private bool isLoaded;
     private bool isLoadingScene;
+    private bool shouldShowBackground;
 
     private void Awake()
     {
@@ -38,6 +41,8 @@ public class DialogueSceneController : MonoBehaviour
         {
             dialogueBox.Hide();
         }
+
+        ApplyBackgroundVisibility();
     }
 
     private void OnDestroy()
@@ -57,12 +62,15 @@ public class DialogueSceneController : MonoBehaviour
         }
 
         EnsureDialogueBox(true);
+        EnsureBackground();
         isLoaded = true;
 
         if (dialogueBox != null)
         {
             dialogueBox.gameObject.SetActive(true);
         }
+
+        ApplyBackgroundVisibility();
     }
 
     public void UnloadDialogue()
@@ -74,6 +82,8 @@ public class DialogueSceneController : MonoBehaviour
         {
             dialogueBox.Hide();
         }
+
+        SetBackgroundVisible(false);
 
         if (!string.IsNullOrWhiteSpace(dialogueSceneName) && IsSceneLoaded(dialogueSceneName) && CanUnloadDialogueScene())
         {
@@ -113,6 +123,16 @@ public class DialogueSceneController : MonoBehaviour
         dialogueBox.ShowLoading(npcName, portrait);
     }
 
+    public void SetBackgroundVisible(bool visible)
+    {
+        shouldShowBackground = visible;
+        if (!isLoadingScene)
+        {
+            EnsureBackground();
+            ApplyBackgroundVisibility();
+        }
+    }
+
     private IEnumerator LoadDialogueSceneRoutine()
     {
         if (isLoadingScene)
@@ -134,6 +154,7 @@ public class DialogueSceneController : MonoBehaviour
 
         isLoadingScene = false;
         EnsureDialogueBox(false);
+        EnsureBackground();
         isLoaded = true;
 
         if (dialogueBox != null)
@@ -141,6 +162,7 @@ public class DialogueSceneController : MonoBehaviour
             dialogueBox.gameObject.SetActive(true);
         }
 
+        ApplyBackgroundVisibility();
         TryShowPendingDialogue();
     }
 
@@ -197,6 +219,79 @@ public class DialogueSceneController : MonoBehaviour
         {
             Debug.LogWarning("[DialogueSceneController] DialogueBoxController is not assigned.");
         }
+    }
+
+    private void EnsureBackground()
+    {
+        if (background != null)
+        {
+            return;
+        }
+
+        if (!string.IsNullOrWhiteSpace(backgroundObjectName))
+        {
+            background = FindBackgroundByName(backgroundObjectName);
+        }
+    }
+
+    private void ApplyBackgroundVisibility()
+    {
+        if (background != null)
+        {
+            background.SetActive(shouldShowBackground);
+        }
+    }
+
+    private GameObject FindBackgroundByName(string objectName)
+    {
+        if (string.IsNullOrWhiteSpace(objectName))
+        {
+            return null;
+        }
+
+        if (!string.IsNullOrWhiteSpace(dialogueSceneName))
+        {
+            Scene dialogueScene = SceneManager.GetSceneByName(dialogueSceneName);
+            GameObject foundInDialogueScene = FindObjectInScene(dialogueScene, objectName);
+            if (foundInDialogueScene != null)
+            {
+                return foundInDialogueScene;
+            }
+        }
+
+        for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount; sceneIndex++)
+        {
+            GameObject found = FindObjectInScene(SceneManager.GetSceneAt(sceneIndex), objectName);
+            if (found != null)
+            {
+                return found;
+            }
+        }
+
+        return null;
+    }
+
+    private static GameObject FindObjectInScene(Scene scene, string objectName)
+    {
+        if (!scene.IsValid() || !scene.isLoaded)
+        {
+            return null;
+        }
+
+        GameObject[] roots = scene.GetRootGameObjects();
+        for (int rootIndex = 0; rootIndex < roots.Length; rootIndex++)
+        {
+            Transform[] transforms = roots[rootIndex].GetComponentsInChildren<Transform>(true);
+            for (int transformIndex = 0; transformIndex < transforms.Length; transformIndex++)
+            {
+                if (transforms[transformIndex].name == objectName)
+                {
+                    return transforms[transformIndex].gameObject;
+                }
+            }
+        }
+
+        return null;
     }
 
     private bool IsSceneLoaded(string sceneName)

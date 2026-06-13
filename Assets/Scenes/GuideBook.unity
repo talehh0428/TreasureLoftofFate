@@ -2507,8 +2507,15 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 569e16889c43a4e45a2c48814821bef7, type: 2}
   - {fileID: 11400000, guid: 2e91f9887b23aca4eada3269a3a72218, type: 2}
   defaultSelectedItemId: 0001
-  npcDefinitions: []
-  defaultSelectedNpcId: 
+  npcDefinitions:
+  - {fileID: 11400000, guid: f0ff63c321aaf53408f707bd697f18a4, type: 2}
+  - {fileID: 11400000, guid: 0f940188cfcfb384ebcd8d0b49a1a4dc, type: 2}
+  - {fileID: 11400000, guid: 2004f4e28c459ee4597837046f931312, type: 2}
+  - {fileID: 11400000, guid: 42e2a824d163548458261090362ea82a, type: 2}
+  - {fileID: 11400000, guid: de6fc6f959131fd408aad733518199f6, type: 2}
+  - {fileID: 11400000, guid: f83881f38ee90af4aac524011ae1dad2, type: 2}
+  - {fileID: 11400000, guid: 75f03db8b85778c4a9edd392e2955e96, type: 2}
+  defaultSelectedNpcId: P21
   contentRoot: {fileID: 2068238010}
   entryPrefab: {fileID: 582883283799792569, guid: b08d2843bafb7b74a9ff1e5e3407196c, type: 3}
   lockedIcon: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}

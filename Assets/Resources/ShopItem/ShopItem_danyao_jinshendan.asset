@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: ShopItem_danyao_jinshendan
   m_EditorClassIdentifier: 
   itemId: danyao_jinshendan
-  displayName: 金身丹
-  price: 90
+  displayName: "\u91D1\u8EAB\u4E39"
+  price: 39
   icon: {fileID: 21300000, guid: ec3f014b5d8957a40ae18e119cd2406f, type: 3}
-  description: 色泽金黄的丹丸，由金精石粉末炼化而成。服下后皮肤泛起淡金色光泽，短时间内刀剑难伤。
+  description: "\u8272\u6CFD\u91D1\u9EC4\u7684\u4E39\u4E38\uFF0C\u7531\u91D1\u7CBE\u77F3\u7C89\u672B\u70BC\u5316\u800C\u6210\u3002\u670D\u4E0B\u540E\u76AE\u80A4\u6CDB\u8D77\u6DE1\u91D1\u8272\u5149\u6CFD\uFF0C\u77ED\u65F6\u95F4\u5185\u5200\u5251\u96BE\u4F24\u3002"
   unlockedByDefault: 0
   rarity: 1
   attack: 0

@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: ShopItem_danyao_baoxuedan
   m_EditorClassIdentifier: 
   itemId: danyao_baoxuedan
-  displayName: 暴血丹
-  price: 2000
+  displayName: "\u66B4\u8840\u4E39"
+  price: 340
   icon: {fileID: 21300000, guid: 9fa171e939eea514fbb2a5191a308135, type: 3}
-  description: 以妖兽精血为主材的霸道丹药，服下后血脉沸腾、战力猛增。但药效过后会虚弱半日，非紧要关头不可轻用。
+  description: "\u4EE5\u5996\u517D\u7CBE\u8840\u4E3A\u4E3B\u6750\u7684\u9738\u9053\u4E39\u836F\uFF0C\u670D\u4E0B\u540E\u8840\u8109\u6CB8\u817E\u3001\u6218\u529B\u731B\u589E\u3002\u4F46\u836F\u6548\u8FC7\u540E\u4F1A\u865A\u5F31\u534A\u65E5\uFF0C\u975E\u7D27\u8981\u5173\u5934\u4E0D\u53EF\u8F7B\u7528\u3002"
   unlockedByDefault: 0
   rarity: 2
   attack: 25

@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class StartMenuController : MonoBehaviour
@@ -19,13 +18,7 @@ public class StartMenuController : MonoBehaviour
     [SerializeField] private EndingsPanelController endingsPanelController;
     [SerializeField] private SettingsPanelController settingsPanelController;
 
-    [Header("Start Flow")]
-    [SerializeField] private string prologueJsonPath = "Assets/Text/xuzhang.json";
-    [SerializeField] private bool continueWhenPrologueFails = true;
-
     private bool isStarting;
-    private bool isWaitingForPrologue;
-    private DialogueJsonStoryPlayer activeStoryPlayer;
 
     private void Awake()
     {
@@ -44,7 +37,6 @@ public class StartMenuController : MonoBehaviour
     private void OnDisable()
     {
         RemoveListeners();
-        UnsubscribeStoryPlayer();
     }
 
     public void StartGame()
@@ -54,7 +46,13 @@ public class StartMenuController : MonoBehaviour
             return;
         }
 
-        StartCoroutine(StartGameRoutine(null));
+        MainSceneShopController shopController = FindShopController();
+        if (shopController == null)
+        {
+            return;
+        }
+
+        shopController.StartNewGameFromMenu(this);
     }
 
     public void LoadGame(int slotIndex)
@@ -65,7 +63,13 @@ public class StartMenuController : MonoBehaviour
             return;
         }
 
-        StartCoroutine(StartGameRoutine(slot.run));
+        MainSceneShopController shopController = FindShopController();
+        if (shopController == null)
+        {
+            return;
+        }
+
+        shopController.LoadGameFromMenu(slot.run, this);
     }
 
     public void DeleteGame(int slotIndex)
@@ -86,119 +90,11 @@ public class StartMenuController : MonoBehaviour
         }
     }
 
-    private IEnumerator StartGameRoutine(RunSaveData runSave)
+    public void SetStartFlowInProgress(bool inProgress)
     {
-        isStarting = true;
-        SetMenuInteractable(false);
-        SetPanelActive(rootPanel, false);
-
-        if (runSave != null)
-        {
-            GameStartContext.SetPendingRunSave(runSave);
-        }
-
-        // MainScene 已经加载完毕，直接处理后续逻辑
-        yield return null;
-
-        if (runSave != null)
-        {
-            yield return null;
-            if (ApplyPendingRunSaveIfNeeded() || !GameStartContext.HasPendingRunSave)
-            {
-                GameStartContext.ClearPendingRunLoad();
-            }
-        }
-
-        if (runSave == null)
-        {
-            yield return PlayPrologueRoutine();
-            OpenMarketScene();
-        }
-        else
-        {
-            OpenMarketScene();
-        }
-
-        // 卸载 StartMenu 场景，回到纯净的 MainScene
-        SceneManager.UnloadSceneAsync(gameObject.scene);
-    }
-
-    private IEnumerator PlayPrologueRoutine()
-    {
-        if (string.IsNullOrWhiteSpace(prologueJsonPath))
-        {
-            yield break;
-        }
-
-        activeStoryPlayer = FindObjectOfType<DialogueJsonStoryPlayer>(true);
-        if (activeStoryPlayer == null)
-        {
-            Debug.LogError("[StartMenuController] DialogueJsonStoryPlayer not found in MainScene.");
-            yield break;
-        }
-
-        isWaitingForPrologue = true;
-        activeStoryPlayer.StoryCompleted += HandleStoryCompleted;
-        activeStoryPlayer.StoryFailed += HandleStoryFailed;
-        activeStoryPlayer.StartDialogueFromJsonPath(prologueJsonPath);
-
-        while (isWaitingForPrologue)
-        {
-            yield return null;
-        }
-
-        UnsubscribeStoryPlayer();
-    }
-
-    private void OpenMarketScene()
-    {
-        MainSceneShopController shopController = FindObjectOfType<MainSceneShopController>(true);
-        if (shopController == null)
-        {
-            Debug.LogError("[StartMenuController] MainSceneShopController not found in MainScene.");
-            return;
-        }
-
-        shopController.OpenMarketScene();
-    }
-
-    private bool ApplyPendingRunSaveIfNeeded()
-    {
-        if (!GameStartContext.HasPendingRunSave)
-        {
-            return false;
-        }
-
-        MainSceneShopController shopController = FindObjectOfType<MainSceneShopController>(true);
-        if (shopController == null)
-        {
-            Debug.LogError("[StartMenuController] MainSceneShopController not found while applying pending run save.");
-            return false;
-        }
-
-        RunSaveData pendingRunSave = GameStartContext.ConsumePendingRunSave();
-        if (pendingRunSave == null)
-        {
-            return false;
-        }
-
-        Debug.Log($"[StartMenuController] 主场景初始化后补应用流程档 round={pendingRunSave.currentRound} money={pendingRunSave.money}");
-        shopController.RestoreFromRunSave(pendingRunSave);
-        return true;
-    }
-
-    private void HandleStoryCompleted()
-    {
-        isWaitingForPrologue = false;
-    }
-
-    private void HandleStoryFailed(string message)
-    {
-        Debug.LogWarning($"[StartMenuController] Prologue dialogue failed: {message}");
-        if (continueWhenPrologueFails)
-        {
-            isWaitingForPrologue = false;
-        }
+        isStarting = inProgress;
+        SetMenuInteractable(!inProgress);
+        SetPanelActive(rootPanel, !inProgress);
     }
 
     private void ToggleEndingsPanel()
@@ -289,18 +185,6 @@ public class StartMenuController : MonoBehaviour
         }
     }
 
-    private void UnsubscribeStoryPlayer()
-    {
-        if (activeStoryPlayer == null)
-        {
-            return;
-        }
-
-        activeStoryPlayer.StoryCompleted -= HandleStoryCompleted;
-        activeStoryPlayer.StoryFailed -= HandleStoryFailed;
-        activeStoryPlayer = null;
-    }
-
     private void SetMenuInteractable(bool interactable)
     {
         if (startGameButton != null)
@@ -370,5 +254,16 @@ public class StartMenuController : MonoBehaviour
         }
 
         return null;
+    }
+
+    private MainSceneShopController FindShopController()
+    {
+        MainSceneShopController shopController = FindObjectOfType<MainSceneShopController>(true);
+        if (shopController == null)
+        {
+            Debug.LogError("[StartMenuController] MainSceneShopController not found in MainScene.");
+        }
+
+        return shopController;
     }
 }
