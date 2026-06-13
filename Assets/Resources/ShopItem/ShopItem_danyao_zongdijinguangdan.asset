@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: ShopItem_danyao_zongdijinguangdan
   m_EditorClassIdentifier: 
   itemId: danyao_zongdijinguangdan
-  displayName: 纵地金光丹
-  price: 8800
+  displayName: "\u7EB5\u5730\u91D1\u5149\u4E39"
+  price: 2144
   icon: {fileID: 21300000, guid: b18d9a698612fb54cbbc995cd36adbb7, type: 3}
-  description: 取材于一道上古遗留的纵地金光术残卷，以金光石粉炼成。服下后身化金光遁出百里，是逃命的终极手段。
+  description: "\u53D6\u6750\u4E8E\u4E00\u9053\u4E0A\u53E4\u9057\u7559\u7684\u7EB5\u5730\u91D1\u5149\u672F\u6B8B\u5377\uFF0C\u4EE5\u91D1\u5149\u77F3\u7C89\u70BC\u6210\u3002\u670D\u4E0B\u540E\u8EAB\u5316\u91D1\u5149\u9041\u51FA\u767E\u91CC\uFF0C\u662F\u9003\u547D\u7684\u7EC8\u6781\u624B\u6BB5\u3002"
   unlockedByDefault: 0
-  rarity: 4
+  rarity: 3
   attack: 12
   defense: 18
   movementSpeed: 130

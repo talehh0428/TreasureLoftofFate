@@ -2294,11 +2294,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   npcContentRoot: {fileID: 1575168273}
   npcItemPrefab: {fileID: 5180773909831003301, guid: f58e27b33f8896045b8c982cecb9fb5c, type: 3}
-  npcCatalog: []
+  npcCatalog:
+  - {fileID: 11400000, guid: f0ff63c321aaf53408f707bd697f18a4, type: 2}
+  - {fileID: 11400000, guid: 0f940188cfcfb384ebcd8d0b49a1a4dc, type: 2}
+  - {fileID: 11400000, guid: 2004f4e28c459ee4597837046f931312, type: 2}
+  - {fileID: 11400000, guid: 42e2a824d163548458261090362ea82a, type: 2}
+  - {fileID: 11400000, guid: de6fc6f959131fd408aad733518199f6, type: 2}
+  - {fileID: 11400000, guid: f83881f38ee90af4aac524011ae1dad2, type: 2}
+  - {fileID: 11400000, guid: 75f03db8b85778c4a9edd392e2955e96, type: 2}
   talkButton: {fileID: 310467057}
-  tradeButton: {fileID: 0}
+  tradeButton: {fileID: 887811103}
   viewButton: {fileID: 0}
-  leaveButton: {fileID: 0}
+  leaveButton: {fileID: 834442303}
 --- !u!4 &1403364217
 Transform:
   m_ObjectHideFlags: 0

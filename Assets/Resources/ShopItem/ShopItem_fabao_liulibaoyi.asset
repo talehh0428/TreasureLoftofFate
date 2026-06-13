@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: ShopItem_fabao_liulibaoyi
   m_EditorClassIdentifier: 
   itemId: fabao_liulibaoyi
-  displayName: 琉璃宝衣
-  price: 1800
+  displayName: "\u7409\u7483\u5B9D\u8863"
+  price: 315
   icon: {fileID: 21300000, guid: 49e7bc2ec4130c946bff238a0b6ea07e, type: 3}
-  description: 七色琉璃光泽流转的华美宝衣，传闻以灵晶熔炼抽丝织成。不仅防护惊人，穿在身上还极为体面，世家女修趋之若鹜。
+  description: "\u4E03\u8272\u7409\u7483\u5149\u6CFD\u6D41\u8F6C\u7684\u534E\u7F8E\u5B9D\u8863\uFF0C\u4F20\u95FB\u4EE5\u7075\u6676\u7194\u70BC\u62BD\u4E1D\u7EC7\u6210\u3002\u4E0D\u4EC5\u9632\u62A4\u60CA\u4EBA\uFF0C\u7A7F\u5728\u8EAB\u4E0A\u8FD8\u6781\u4E3A\u4F53\u9762\uFF0C\u4E16\u5BB6\u5973\u4FEE\u8D8B\u4E4B\u82E5\u9E5C\u3002"
   unlockedByDefault: 0
   rarity: 2
   attack: 5

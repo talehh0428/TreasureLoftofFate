@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: ShopItem_fabao_yufengpifeng
   m_EditorClassIdentifier: 
   itemId: fabao_yufengpifeng
-  displayName: 御风披风
-  price: 255
+  displayName: "\u5FA1\u98CE\u62AB\u98CE"
+  price: 91
   icon: {fileID: 21300000, guid: b3d613a2621b68b4585df262c7549f00, type: 3}
-  description: 绣有御风符文的青色披风，灵力灌注后可短暂乘风而行。翻山越岭如履平地，远行修士的好帮手。
+  description: "\u7EE3\u6709\u5FA1\u98CE\u7B26\u6587\u7684\u9752\u8272\u62AB\u98CE\uFF0C\u7075\u529B\u704C\u6CE8\u540E\u53EF\u77ED\u6682\u4E58\u98CE\u800C\u884C\u3002\u7FFB\u5C71\u8D8A\u5CAD\u5982\u5C65\u5E73\u5730\uFF0C\u8FDC\u884C\u4FEE\u58EB\u7684\u597D\u5E2E\u624B\u3002"
   unlockedByDefault: 0
   rarity: 1
   attack: 0

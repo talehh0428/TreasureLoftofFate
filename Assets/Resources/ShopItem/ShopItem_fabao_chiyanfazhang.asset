@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: ShopItem_fabao_chiyanfazhang
   m_EditorClassIdentifier: 
   itemId: fabao_chiyanfazhang
-  displayName: 赤焰法杖
-  price: 2600
+  displayName: "\u8D64\u7130\u6CD5\u6756"
+  price: 452
   icon: {fileID: 21300000, guid: 09dec01324484a442922ecb893d4d757, type: 3}
-  description: 以赤焰晶为杖心的法杖，挥动间火蛇飞舞。金丹修士持之可施展焚天烈焰，在西坊崔氏兵库中也算拿得出手的好东西。
+  description: "\u4EE5\u8D64\u7130\u6676\u4E3A\u6756\u5FC3\u7684\u6CD5\u6756\uFF0C\u6325\u52A8\u95F4\u706B\u86C7\u98DE\u821E\u3002\u91D1\u4E39\u4FEE\u58EB\u6301\u4E4B\u53EF\u65BD\u5C55\u711A\u5929\u70C8\u7130\uFF0C\u5728\u897F\u574A\u5D14\u6C0F\u5175\u5E93\u4E2D\u4E5F\u7B97\u62FF\u5F97\u51FA\u624B\u7684\u597D\u4E1C\u897F\u3002"
   unlockedByDefault: 0
   rarity: 2
   attack: 35

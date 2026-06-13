@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: ShopItem_danyao_lingyandan
   m_EditorClassIdentifier: 
   itemId: danyao_lingyandan
-  displayName: 灵燕丹
-  price: 150
+  displayName: "\u7075\u71D5\u4E39"
+  price: 52
   icon: {fileID: 21300000, guid: cd7c50be434fbff439702edba5a7ea85, type: 3}
-  description: 以灵燕翎羽上的粉末入丹，服后身法灵动如燕。翻墙越脊不在话下，是探秘境、逃追杀的首选。
+  description: "\u4EE5\u7075\u71D5\u7FCE\u7FBD\u4E0A\u7684\u7C89\u672B\u5165\u4E39\uFF0C\u670D\u540E\u8EAB\u6CD5\u7075\u52A8\u5982\u71D5\u3002\u7FFB\u5899\u8D8A\u810A\u4E0D\u5728\u8BDD\u4E0B\uFF0C\u662F\u63A2\u79D8\u5883\u3001\u9003\u8FFD\u6740\u7684\u9996\u9009\u3002"
   unlockedByDefault: 0
   rarity: 1
   attack: 0

@@ -95,6 +95,11 @@ public class NPCDefinition : ScriptableObject
         prompt = string.Empty;
     }
 
+    public void SetPrompt(string promptText)
+    {
+        prompt = promptText ?? string.Empty;
+    }
+
     public void ApplyStatBonus(int attackBonus, int defenseBonus, int movementSpeedBonus)
     {
         attack = Mathf.Max(0, attack + Mathf.Max(0, attackBonus));

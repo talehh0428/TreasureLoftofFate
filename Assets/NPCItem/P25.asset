@@ -10,13 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ac7df6887f1ad4f459c35eabd95620c7, type: 3}
-  m_Name: "NPC_\u4E91\u9038\u771F\u4EBA"
+  m_Name: P25
   m_EditorClassIdentifier: 
-  npcId: 5001
-  displayName: "\u4E91\u9038\u771F\u4EBA"
-  avatar: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  description: "\u6563\u4ED9"
-  attack: 3
-  defense: 2
-  movementSpeed: 4
+  npcId: P25
+  displayName: "\u6C88\u4E03"
+  avatar: {fileID: 21300000, guid: 183cf088cfb3e1e4ea467e2ddae29251, type: 3}
+  portrait: {fileID: 21300000, guid: ec92ccb7ce483a14ca7e0a7525d0cbf7, type: 3}
+  description: "\u5357\u574A\u8336\u9986\u8DD1\u5802"
+  attack: 50
+  defense: 8
+  movementSpeed: 15
   prompt: 
+  currentEventID: 
+  nextEventID: 

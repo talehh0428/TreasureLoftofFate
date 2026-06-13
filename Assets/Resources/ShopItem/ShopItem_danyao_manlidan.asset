@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: ShopItem_danyao_manlidan
   m_EditorClassIdentifier: 
   itemId: danyao_manlidan
-  displayName: 蛮力丹
-  price: 6
+  displayName: "\u86EE\u529B\u4E39"
+  price: 8
   icon: {fileID: 21300000, guid: d0374d4bc8f27b04e878d0728c346694, type: 3}
-  description: 用蛮牛血混合几种烈性药草搓成的丹丸，服下后气血翻涌、力气大涨。药效一过浑身酸软，但打架时够用了。
+  description: "\u7528\u86EE\u725B\u8840\u6DF7\u5408\u51E0\u79CD\u70C8\u6027\u836F\u8349\u6413\u6210\u7684\u4E39\u4E38\uFF0C\u670D\u4E0B\u540E\u6C14\u8840\u7FFB\u6D8C\u3001\u529B\u6C14\u5927\u6DA8\u3002\u836F\u6548\u4E00\u8FC7\u6D51\u8EAB\u9178\u8F6F\uFF0C\u4F46\u6253\u67B6\u65F6\u591F\u7528\u4E86\u3002"
   unlockedByDefault: 0
   rarity: 0
   attack: 2

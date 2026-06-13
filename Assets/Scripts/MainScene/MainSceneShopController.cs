@@ -24,6 +24,17 @@ public class MainSceneShopController : MonoBehaviour
 
     [Header("Dialogue")]
     [SerializeField] private NPCDialogueBackendConnector dialogueConnector;
+    [SerializeField] private DialogueJsonStoryPlayer storyPlayer;
+
+    [Header("Start Flow")]
+    [SerializeField] private string prologueJsonPath = "Assets/Text/xuzhang.json";
+    [SerializeField] private bool showDialogueBackgroundForPrologue = true;
+    [SerializeField] private bool continueWhenPrologueFails = true;
+
+    [Header("Ending Flow")]
+    [SerializeField] private string endingJsonPath = "Assets/Text/zhongzhang.json";
+    [SerializeField] private bool showDialogueBackgroundForEnding = true;
+    [SerializeField] private bool returnToStartMenuWhenEndingFails = true;
 
     [Header("Common Visitors")]
     [SerializeField] private Sprite commonVisitorAvatar;
@@ -48,6 +59,10 @@ public class MainSceneShopController : MonoBehaviour
     private bool isLoadingShopScene;
     private bool isLoadingTradeScene;
     private bool isDialogueRunning;
+    private bool isStartFlowRunning;
+    private bool isWaitingForPrologueStory;
+    private bool isEndingRunning;
+    private bool isWaitingForEndingStory;
 
     private void Awake()
     {
@@ -198,6 +213,26 @@ public class MainSceneShopController : MonoBehaviour
         CloseShopScene();
     }
 
+    public void StartNewGameFromMenu(StartMenuController startMenuController)
+    {
+        if (isStartFlowRunning)
+        {
+            return;
+        }
+
+        StartCoroutine(StartGameFromMenuRoutine(null, startMenuController));
+    }
+
+    public void LoadGameFromMenu(RunSaveData runSave, StartMenuController startMenuController)
+    {
+        if (isStartFlowRunning || runSave == null)
+        {
+            return;
+        }
+
+        StartCoroutine(StartGameFromMenuRoutine(runSave, startMenuController));
+    }
+
     private void ApplyPendingRunSaveIfNeeded()
     {
         RunSaveData pendingRunSave = GameStartContext.ConsumePendingRunSave();
@@ -205,6 +240,118 @@ public class MainSceneShopController : MonoBehaviour
         {
             GameSaveService.ApplyRun(pendingRunSave, roundScheduler, economyBuffSystem);
             RestorePendingSpecialVisitors(pendingRunSave.pendingSpecialVisitorNpcIds);
+        }
+    }
+
+    private IEnumerator StartGameFromMenuRoutine(RunSaveData runSave, StartMenuController startMenuController)
+    {
+        isStartFlowRunning = true;
+        if (startMenuController != null)
+        {
+            startMenuController.SetStartFlowInProgress(true);
+        }
+
+        if (runSave != null)
+        {
+            GameStartContext.SetPendingRunSave(runSave);
+        }
+
+        yield return null;
+
+        bool restoredFromRunSave = false;
+        if (runSave != null)
+        {
+            yield return null;
+            restoredFromRunSave = ApplyPendingRunSaveFromStartFlowIfNeeded();
+            if (restoredFromRunSave || !GameStartContext.HasPendingRunSave)
+            {
+                GameStartContext.ClearPendingRunLoad();
+            }
+        }
+
+        if (runSave == null)
+        {
+            yield return PlayPrologueRoutine();
+            OpenMarketScene();
+        }
+        else if (!restoredFromRunSave)
+        {
+            OpenMarketScene();
+        }
+
+        if (startMenuController != null)
+        {
+            Scene startMenuScene = startMenuController.gameObject.scene;
+            if (startMenuScene.IsValid() && startMenuScene.isLoaded)
+            {
+                SceneManager.UnloadSceneAsync(startMenuScene);
+            }
+        }
+
+        isStartFlowRunning = false;
+    }
+
+    private bool ApplyPendingRunSaveFromStartFlowIfNeeded()
+    {
+        if (!GameStartContext.HasPendingRunSave)
+        {
+            return false;
+        }
+
+        RunSaveData pendingRunSave = GameStartContext.ConsumePendingRunSave();
+        if (pendingRunSave == null)
+        {
+            return false;
+        }
+
+        Debug.Log($"[MainSceneShopController] 主场景初始化后补应用流程档 round={pendingRunSave.currentRound} money={pendingRunSave.money}");
+        RestoreFromRunSave(pendingRunSave);
+        return true;
+    }
+
+    private IEnumerator PlayPrologueRoutine()
+    {
+        if (string.IsNullOrWhiteSpace(prologueJsonPath))
+        {
+            yield break;
+        }
+
+        if (storyPlayer == null)
+        {
+            storyPlayer = FindObjectOfType<DialogueJsonStoryPlayer>(true);
+        }
+
+        if (storyPlayer == null)
+        {
+            Debug.LogError("[MainSceneShopController] DialogueJsonStoryPlayer not found in MainScene.");
+            yield break;
+        }
+
+        isWaitingForPrologueStory = true;
+        storyPlayer.StoryCompleted += HandlePrologueStoryCompleted;
+        storyPlayer.StoryFailed += HandlePrologueStoryFailed;
+        storyPlayer.StartDialogueFromJsonPath(prologueJsonPath, showDialogueBackgroundForPrologue);
+
+        while (isWaitingForPrologueStory)
+        {
+            yield return null;
+        }
+
+        storyPlayer.StoryCompleted -= HandlePrologueStoryCompleted;
+        storyPlayer.StoryFailed -= HandlePrologueStoryFailed;
+    }
+
+    private void HandlePrologueStoryCompleted()
+    {
+        isWaitingForPrologueStory = false;
+    }
+
+    private void HandlePrologueStoryFailed(string message)
+    {
+        Debug.LogWarning($"[MainSceneShopController] Prologue dialogue failed: {message}");
+        if (continueWhenPrologueFails)
+        {
+            isWaitingForPrologueStory = false;
         }
     }
 
@@ -485,11 +632,83 @@ public class MainSceneShopController : MonoBehaviour
 
         if (!roundScheduler.CanAdvanceRound)
         {
-            Debug.Log($"[MainSceneShopController] 已达到最大回合 {roundScheduler.MaxRound}，后续结算逻辑待补充。");
+            if (!isEndingRunning)
+            {
+                StartCoroutine(PlayEndingAndReturnToMenuRoutine());
+            }
+
             return;
         }
 
         StartCoroutine(ShopSceneToNextMarketRoutine());
+    }
+
+    private IEnumerator PlayEndingAndReturnToMenuRoutine()
+    {
+        isEndingRunning = true;
+        yield return UnloadShopSceneRoutine();
+
+        if (string.IsNullOrWhiteSpace(endingJsonPath))
+        {
+            Debug.LogWarning("[MainSceneShopController] Ending JSON path is empty. Returning to start menu.");
+            ReturnToStartMenu();
+            isEndingRunning = false;
+            yield break;
+        }
+
+        if (storyPlayer == null)
+        {
+            storyPlayer = FindObjectOfType<DialogueJsonStoryPlayer>(true);
+        }
+
+        if (storyPlayer == null)
+        {
+            Debug.LogError("[MainSceneShopController] DialogueJsonStoryPlayer is not assigned.");
+            ReturnToStartMenu();
+            isEndingRunning = false;
+            yield break;
+        }
+
+        isWaitingForEndingStory = true;
+        storyPlayer.StoryCompleted += HandleEndingStoryCompleted;
+        storyPlayer.StoryFailed += HandleEndingStoryFailed;
+        storyPlayer.StartDialogueFromJsonPath(endingJsonPath, showDialogueBackgroundForEnding);
+
+        while (isWaitingForEndingStory)
+        {
+            yield return null;
+        }
+
+        storyPlayer.StoryCompleted -= HandleEndingStoryCompleted;
+        storyPlayer.StoryFailed -= HandleEndingStoryFailed;
+        ReturnToStartMenu();
+        isEndingRunning = false;
+    }
+
+    private void HandleEndingStoryCompleted()
+    {
+        isWaitingForEndingStory = false;
+    }
+
+    private void HandleEndingStoryFailed(string message)
+    {
+        Debug.LogWarning($"[MainSceneShopController] Ending dialogue failed: {message}");
+        if (returnToStartMenuWhenEndingFails)
+        {
+            isWaitingForEndingStory = false;
+        }
+    }
+
+    private void ReturnToStartMenu()
+    {
+        MainSceneHudController hudController = FindObjectOfType<MainSceneHudController>(true);
+        if (hudController == null)
+        {
+            Debug.LogError("[MainSceneShopController] MainSceneHudController not found. Cannot return to StartMenu.");
+            return;
+        }
+
+        hudController.GoBackToMenu();
     }
 
     private void HandleNpcEventUpdated(NPCDefinition npc)
@@ -815,6 +1034,11 @@ public class MainSceneShopController : MonoBehaviour
         if (dialogueConnector == null)
         {
             dialogueConnector = FindObjectOfType<NPCDialogueBackendConnector>(true);
+        }
+
+        if (storyPlayer == null)
+        {
+            storyPlayer = FindObjectOfType<DialogueJsonStoryPlayer>(true);
         }
 
         if (roundScheduler == null)

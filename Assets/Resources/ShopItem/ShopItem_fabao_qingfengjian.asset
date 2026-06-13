@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: ShopItem_fabao_qingfengjian
   m_EditorClassIdentifier: 
   itemId: fabao_qingfengjian
-  displayName: 青锋剑
-  price: 9
+  displayName: "\u9752\u950B\u5251"
+  price: 12
   icon: {fileID: 21300000, guid: dd4993c7673566b4aae1508c68bda627, type: 3}
-  description: 最普通的制式飞剑，铁匠铺量产之物。剑身泛着淡淡的青光，虽不锋利，但对付野兽绰绰有余。落仙城南坊的散修几乎人手一柄。
+  description: "\u6700\u666E\u901A\u7684\u5236\u5F0F\u98DE\u5251\uFF0C\u94C1\u5320\u94FA\u91CF\u4EA7\u4E4B\u7269\u3002\u5251\u8EAB\u6CDB\u7740\u6DE1\u6DE1\u7684\u9752\u5149\uFF0C\u867D\u4E0D\u950B\u5229\uFF0C\u4F46\u5BF9\u4ED8\u91CE\u517D\u7EF0\u7EF0\u6709\u4F59\u3002\u843D\u4ED9\u57CE\u5357\u574A\u7684\u6563\u4FEE\u51E0\u4E4E\u4EBA\u624B\u4E00\u67C4\u3002"
   unlockedByDefault: 0
   rarity: 0
   attack: 3

@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: ShopItem_fabao_lieshifu
   m_EditorClassIdentifier: 
   itemId: fabao_lieshifu
-  displayName: 裂石斧
-  price: 120
+  displayName: "\u88C2\u77F3\u65A7"
+  price: 52
   icon: {fileID: 21300000, guid: c262543fe2b4c314d84d3ab85ef22435, type: 3}
-  description: 重达百斤的巨斧，斧刃以金刚砂淬炼，一击之下碎石如泥。不适合御使，但握在手里抡起来，筑基期妖兽也要避其锋芒。
+  description: "\u91CD\u8FBE\u767E\u65A4\u7684\u5DE8\u65A7\uFF0C\u65A7\u5203\u4EE5\u91D1\u521A\u7802\u6DEC\u70BC\uFF0C\u4E00\u51FB\u4E4B\u4E0B\u788E\u77F3\u5982\u6CE5\u3002\u4E0D\u9002\u5408\u5FA1\u4F7F\uFF0C\u4F46\u63E1\u5728\u624B\u91CC\u62A1\u8D77\u6765\uFF0C\u7B51\u57FA\u671F\u5996\u517D\u4E5F\u8981\u907F\u5176\u950B\u8292\u3002"
   unlockedByDefault: 0
   rarity: 1
   attack: 8

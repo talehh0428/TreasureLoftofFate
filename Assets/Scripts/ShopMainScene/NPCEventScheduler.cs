@@ -73,7 +73,7 @@ public class NPCEventScheduler : MonoBehaviour
         ProcessWorldEvents(evaluator, npcById, promptTextsByNpcId);
         ProcessCommonEvents(evaluator, npcById, occupiedNpcIds, promptTextsByNpcId);
         ProcessPersonalEvents(evaluator, npcById, occupiedNpcIds, promptTextsByNpcId);
-        AppendRoundPromptEntries(npcById, promptTextsByNpcId);
+        ReplaceRoundPrompts(npcById, promptTextsByNpcId);
         AdvanceNpcEvents();
         PublishUpdatedNpcs(npcById, beforeStates);
         Debug.Log($"NPCEventScheduler: 第 {currentRound} 回合事件调度结束。");
@@ -484,7 +484,7 @@ public class NPCEventScheduler : MonoBehaviour
         texts.Add(text);
     }
 
-    private static void AppendRoundPromptEntries(
+    private static void ReplaceRoundPrompts(
         IReadOnlyDictionary<string, NPCDefinition> npcById,
         Dictionary<string, List<string>> promptTextsByNpcId)
     {
@@ -497,7 +497,7 @@ public class NPCEventScheduler : MonoBehaviour
 
             string promptEntry = string.Join("&&", pair.Value);
             Debug.Log($"NPCEventScheduler: Prompt更改 -> {npc.NpcId} {npc.DisplayName}: {promptEntry}");
-            npc.AppendPromptEntry(promptEntry);
+            npc.SetPrompt(promptEntry);
         }
     }
 

@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: ShopItem_fabao_lingsiruanjia
   m_EditorClassIdentifier: 
   itemId: fabao_lingsiruanjia
-  displayName: 灵丝软甲
-  price: 150
+  displayName: "\u7075\u4E1D\u8F6F\u7532"
+  price: 65
   icon: {fileID: 21300000, guid: 4cf916b27d00f70478e253517ee317b8, type: 3}
-  description: 以灵蚕丝编织而成的贴身软甲，轻薄如蝉翼，却能卸去三分力道。穿在道袍之内无人能察觉，是行走江湖的上选。
+  description: "\u4EE5\u7075\u8695\u4E1D\u7F16\u7EC7\u800C\u6210\u7684\u8D34\u8EAB\u8F6F\u7532\uFF0C\u8F7B\u8584\u5982\u8749\u7FFC\uFF0C\u5374\u80FD\u5378\u53BB\u4E09\u5206\u529B\u9053\u3002\u7A7F\u5728\u9053\u888D\u4E4B\u5185\u65E0\u4EBA\u80FD\u5BDF\u89C9\uFF0C\u662F\u884C\u8D70\u6C5F\u6E56\u7684\u4E0A\u9009\u3002"
   unlockedByDefault: 0
   rarity: 1
   attack: 2

@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: ShopItem_danyao_tieyisan
   m_EditorClassIdentifier: 
   itemId: danyao_tieyisan
-  displayName: 铁衣散
-  price: 3
+  displayName: "\u94C1\u8863\u6563"
+  price: 4
   icon: {fileID: 21300000, guid: 718a3dadf6a5f0e4ea56fdac1b9f603f, type: 3}
-  description: 以铁线草的汁液熬制成的药膏，涂抹后皮肤表面凝出一层淡灰色薄膜。聊胜于无，挡挡凡人的拳脚还行。
+  description: "\u4EE5\u94C1\u7EBF\u8349\u7684\u6C41\u6DB2\u71AC\u5236\u6210\u7684\u836F\u818F\uFF0C\u6D82\u62B9\u540E\u76AE\u80A4\u8868\u9762\u51DD\u51FA\u4E00\u5C42\u6DE1\u7070\u8272\u8584\u819C\u3002\u804A\u80DC\u4E8E\u65E0\uFF0C\u6321\u6321\u51E1\u4EBA\u7684\u62F3\u811A\u8FD8\u884C\u3002"
   unlockedByDefault: 0
   rarity: 0
   attack: 0

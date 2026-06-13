@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: ShopItem_danyao_jiuzhuanglingdan
   m_EditorClassIdentifier: 
   itemId: danyao_jiuzhuanglingdan
-  displayName: 九转灵丹
-  price: 8200
+  displayName: "\u4E5D\u8F6C\u7075\u4E39"
+  price: 2192
   icon: {fileID: 21300000, guid: 304368358c9b12e43869d8eb1fed2e26, type: 3}
-  description: 需九次转炉方可成丹的稀世灵药，每转一次药力翻倍。服下后浑身经脉贯通，攻防遁速全面飞跃，元婴修士也愿倾家荡产求购一粒。
+  description: "\u9700\u4E5D\u6B21\u8F6C\u7089\u65B9\u53EF\u6210\u4E39\u7684\u7A00\u4E16\u7075\u836F\uFF0C\u6BCF\u8F6C\u4E00\u6B21\u836F\u529B\u7FFB\u500D\u3002\u670D\u4E0B\u540E\u6D51\u8EAB\u7ECF\u8109\u8D2F\u901A\uFF0C\u653B\u9632\u9041\u901F\u5168\u9762\u98DE\u8DC3\uFF0C\u5143\u5A74\u4FEE\u58EB\u4E5F\u613F\u503E\u5BB6\u8361\u4EA7\u6C42\u8D2D\u4E00\u7C92\u3002"
   unlockedByDefault: 0
-  rarity: 4
+  rarity: 3
   attack: 50
   defense: 35
   movementSpeed: 65

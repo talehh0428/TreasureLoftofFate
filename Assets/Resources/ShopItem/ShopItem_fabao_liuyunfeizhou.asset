@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: ShopItem_fabao_liuyunfeizhou
   m_EditorClassIdentifier: 
   itemId: fabao_liuyunfeizhou
-  displayName: 流云飞舟
-  price: 3700
+  displayName: "\u6D41\u4E91\u98DE\u821F"
+  price: 536
   icon: {fileID: 21300000, guid: 3267c8cd63803134fa7a6e0875b9cd8a, type: 3}
-  description: 一艘三丈长的流线型飞舟，以浮空石为龙骨，日行千里不在话下。船舱可容纳三五人，是金丹修士远游访友的体面座驾。
+  description: "\u4E00\u8258\u4E09\u4E08\u957F\u7684\u6D41\u7EBF\u578B\u98DE\u821F\uFF0C\u4EE5\u6D6E\u7A7A\u77F3\u4E3A\u9F99\u9AA8\uFF0C\u65E5\u884C\u5343\u91CC\u4E0D\u5728\u8BDD\u4E0B\u3002\u8239\u8231\u53EF\u5BB9\u7EB3\u4E09\u4E94\u4EBA\uFF0C\u662F\u91D1\u4E39\u4FEE\u58EB\u8FDC\u6E38\u8BBF\u53CB\u7684\u4F53\u9762\u5EA7\u9A7E\u3002"
   unlockedByDefault: 0
   rarity: 2
   attack: 3

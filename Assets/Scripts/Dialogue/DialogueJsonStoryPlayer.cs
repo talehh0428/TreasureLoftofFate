@@ -15,6 +15,7 @@ public class DialogueJsonStoryPlayer : MonoBehaviour
     [SerializeField] private string continueChoiceText = "继续";
     [SerializeField] private string finishChoiceText = "结束";
     [SerializeField] private bool unloadDialogueWhenFinished = true;
+    [SerializeField] private bool showBackgroundForStory;
 
     private readonly Dictionary<string, NPCDefinition> npcById = new Dictionary<string, NPCDefinition>();
     private StoryDialogueLine[] activeLines;
@@ -38,6 +39,11 @@ public class DialogueJsonStoryPlayer : MonoBehaviour
 
     public void StartDialogueFromJsonPath(string jsonPath)
     {
+        StartDialogueFromJsonPath(jsonPath, showBackgroundForStory);
+    }
+
+    public void StartDialogueFromJsonPath(string jsonPath, bool showBackground)
+    {
         if (isPlaying)
         {
             Debug.LogWarning("[DialogueJsonStoryPlayer] A JSON dialogue is already playing.");
@@ -52,6 +58,8 @@ public class DialogueJsonStoryPlayer : MonoBehaviour
             Fail("DialogueSceneController is missing.");
             return;
         }
+
+        dialogueController.SetBackgroundVisible(showBackground);
 
         if (!TryLoadJson(jsonPath, out string jsonText))
         {
@@ -81,6 +89,10 @@ public class DialogueJsonStoryPlayer : MonoBehaviour
         if (dialogueController != null && unloadDialogueWhenFinished)
         {
             dialogueController.UnloadDialogue();
+        }
+        else if (dialogueController != null)
+        {
+            dialogueController.SetBackgroundVisible(false);
         }
     }
 
@@ -325,6 +337,11 @@ public class DialogueJsonStoryPlayer : MonoBehaviour
         isPlaying = false;
         activeLines = null;
         activeLineIndex = 0;
+        if (dialogueController != null)
+        {
+            dialogueController.SetBackgroundVisible(false);
+        }
+
         StoryFailed?.Invoke(message);
     }
 }
