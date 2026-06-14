@@ -364,11 +364,11 @@ Transform:
   m_GameObject: {fileID: 99494671}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 10}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1541841232}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &99494674
 MonoBehaviour:
@@ -406,10 +406,11 @@ MonoBehaviour:
     toBackendNpcId: fei-ren
   - fromNpcId: P27
     toBackendNpcId: chen-jie
-  model: deepseek-ai/DeepSeek-V4-Pro
-  temperature: 0.7
-  maxTokens: 512
-  debug: 0
+  model: Qwen/Qwen3.6-35B-A3B
+  compareModel: 
+  temperature: 0.5
+  maxTokens: 320
+  debug: 1
 --- !u!114 &99494675
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -431,12 +432,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: de6fc6f959131fd408aad733518199f6, type: 2}
   - {fileID: 11400000, guid: f83881f38ee90af4aac524011ae1dad2, type: 2}
   - {fileID: 11400000, guid: 75f03db8b85778c4a9edd392e2955e96, type: 2}
+  - {fileID: 11400000, guid: 4f56833f7bb475f429acfd11fb25075c, type: 2}
   defaultJsonPath: 
   fallbackSpeakerName: "\u65C1\u767D"
   continueChoiceText: "\u7EE7\u7EED"
   finishChoiceText: "\u7ED3\u675F"
-  unloadDialogueWhenFinished: 1
-  showBackgroundForStory: 0
+  unloadDialogueWhenFinished: 0
+  showBackgroundForStory: 1
 --- !u!1 &112374736
 GameObject:
   m_ObjectHideFlags: 0
@@ -675,7 +677,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bce87b0444f75b4e88393c486161111, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  storyJson: {fileID: 4900000, guid: 5a6ece6d5c8981644b30b86e4f6fe2d3, type: 3}
+  storyJson: {fileID: 4900000, guid: 6058ccb595636ae4fb6141d86499a079, type: 3}
 --- !u!4 &164089787
 Transform:
   m_ObjectHideFlags: 0
@@ -685,11 +687,11 @@ Transform:
   m_GameObject: {fileID: 164089783}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 10}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1541841232}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &206350005
 GameObject:
@@ -900,7 +902,7 @@ MonoBehaviour:
     m_Top: -30
     m_Bottom: 0
   m_ChildAlignment: 0
-  m_Spacing: -50
+  m_Spacing: -62.17
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
@@ -1116,7 +1118,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -0.00012207031, y: -9.104702}
-  m_SizeDelta: {x: 187.8, y: -25.1046}
+  m_SizeDelta: {x: 204.8, y: -25.1046}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &239313481
 MonoBehaviour:
@@ -1138,7 +1140,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 100000
+  m_text: 10000000000000
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ded9b449f00c5054b8f97f59796a394f, type: 2}
   m_sharedMaterial: {fileID: 5618616920204111152, guid: ded9b449f00c5054b8f97f59796a394f, type: 2}
@@ -2350,7 +2352,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 38
+  m_text: 20
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ded9b449f00c5054b8f97f59796a394f, type: 2}
   m_sharedMaterial: {fileID: 5618616920204111152, guid: ded9b449f00c5054b8f97f59796a394f, type: 2}
@@ -4882,12 +4884,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1109551582}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1541841232}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1109551584
 MonoBehaviour:
@@ -5072,11 +5074,11 @@ Transform:
   m_GameObject: {fileID: 1193694159}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 10}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1541841232}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1216254909
 GameObject:
@@ -5719,7 +5721,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: d0dfca78d10bd144c9523aa740c3384f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: bca9108a57d0ebf4482d0d16a6b657ab, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -6535,13 +6537,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 2101537472}
-  - {fileID: 164089787}
-  - {fileID: 99494673}
-  - {fileID: 1811037544}
-  - {fileID: 1193694162}
-  - {fileID: 1109551583}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1541841233
@@ -6697,7 +6693,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -108.3, y: 0.000061035156}
+  m_AnchoredPosition: {x: -117.4, y: 0.000061035156}
   m_SizeDelta: {x: 40.8202, y: 40.895}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1585477718
@@ -7665,12 +7661,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1811037543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1541841232}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1811037545
 MonoBehaviour:
@@ -7703,15 +7699,16 @@ MonoBehaviour:
   endingJsonPath: Assets/Text/zhongzhang.json
   showDialogueBackgroundForEnding: 1
   returnToStartMenuWhenEndingFails: 1
-  commonVisitorAvatar: {fileID: 21300000, guid: e1f656a51e28e6849b9e3c3e167c5e13, type: 3}
-  minCommonVisitorsPerRound: 2
-  maxCommonVisitorsPerRound: 5
+  commonVisitorAvatar: {fileID: 21300000, guid: 54575e164d1050b418aa18315fb44e55, type: 3}
+  minCommonVisitorsPerRound: 3
+  maxCommonVisitorsPerRound: 6
   commonVisitorNames:
   - "\u9752\u8863\u6563\u4FEE"
   - "\u4E91\u6E38\u9053\u4EBA"
   - "\u8D76\u8DEF\u5251\u5BA2"
   - "\u5916\u95E8\u5F1F\u5B50"
   - "\u91C7\u836F\u4FEE\u58EB"
+  - "\u4E00\u822C\u8DEF\u8FC7\u7684\u70ED\u5FC3\u4FEE\u58EB"
 --- !u!114 &1811037546
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7735,7 +7732,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f83881f38ee90af4aac524011ae1dad2, type: 2}
   - {fileID: 11400000, guid: 75f03db8b85778c4a9edd392e2955e96, type: 2}
   currentRound: 1
-  maxRound: 3
+  maxRound: 50
   finishedEventID: EVENT_FINISHED
   inactiveEventID: EVENT_INACTIVE
 --- !u!114 &1811037547
@@ -8910,7 +8907,7 @@ RectTransform:
   - {fileID: 1411638179}
   - {fileID: 415530725}
   - {fileID: 1466624303}
-  m_Father: {fileID: 1541841232}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -9330,3 +9327,9 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1541841232}
+  - {fileID: 2101537472}
+  - {fileID: 164089787}
+  - {fileID: 99494673}
+  - {fileID: 1811037544}
+  - {fileID: 1193694162}
+  - {fileID: 1109551583}

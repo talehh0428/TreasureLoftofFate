@@ -93,6 +93,7 @@ public class DialogueJsonStoryPlayer : MonoBehaviour
         }
 
         dialogueController.SetBackgroundVisible(showBackground);
+        dialogueController.SetCloseEndingButtonEnabled(false);
 
         if (!TryLoadJson(jsonPath, out string jsonText))
         {
@@ -121,10 +122,12 @@ public class DialogueJsonStoryPlayer : MonoBehaviour
 
         if (dialogueController != null && unloadDialogueWhenFinished)
         {
+            dialogueController.SetCloseEndingButtonEnabled(true);
             dialogueController.UnloadDialogue();
         }
         else if (dialogueController != null)
         {
+            dialogueController.SetCloseEndingButtonEnabled(true);
             dialogueController.SetBackgroundVisible(false);
         }
     }
@@ -181,7 +184,12 @@ public class DialogueJsonStoryPlayer : MonoBehaviour
 
         if (dialogueController != null && unloadDialogueWhenFinished)
         {
+            dialogueController.SetCloseEndingButtonEnabled(true);
             dialogueController.UnloadDialogue();
+        }
+        else if (dialogueController != null)
+        {
+            dialogueController.SetCloseEndingButtonEnabled(true);
         }
 
         StoryCompleted?.Invoke();
@@ -372,6 +380,7 @@ public class DialogueJsonStoryPlayer : MonoBehaviour
         activeLineIndex = 0;
         if (dialogueController != null)
         {
+            dialogueController.SetCloseEndingButtonEnabled(true);
             dialogueController.SetBackgroundVisible(false);
         }
 
