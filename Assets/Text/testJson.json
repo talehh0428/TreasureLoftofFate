@@ -1,9 +1,0 @@
-{
-  "initialStates": [
-    {
-      "npcId": "P05",
-      "currentEventId": "AP05E001"
-    }
-
-  ]
-}

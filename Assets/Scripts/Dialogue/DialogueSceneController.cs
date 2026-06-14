@@ -7,6 +7,7 @@ public class DialogueSceneController : MonoBehaviour
 {
     public static DialogueSceneController Instance { get; private set; }
     public event Action DialogueShown;
+    public event Action CloseEndingRequested;
 
     [Header("Scene Loading")]
     [SerializeField] private string dialogueSceneName = string.Empty;
@@ -52,6 +53,8 @@ public class DialogueSceneController : MonoBehaviour
         {
             Instance = null;
         }
+
+        UnbindDialogueBoxEvents();
     }
 
     public void LoadDialogue()
@@ -134,6 +137,15 @@ public class DialogueSceneController : MonoBehaviour
         }
     }
 
+    public void SetCloseEndingButtonEnabled(bool isEnabled)
+    {
+        EnsureDialogueBox(false);
+        if (dialogueBox != null)
+        {
+            dialogueBox.SetCloseEndingButtonEnabled(isEnabled);
+        }
+    }
+
     private IEnumerator LoadDialogueSceneRoutine()
     {
         if (isLoadingScene)
@@ -209,18 +221,50 @@ public class DialogueSceneController : MonoBehaviour
         callback?.Invoke(result);
     }
 
+    private void HandleCloseEndingRequested()
+    {
+        CloseEndingRequested?.Invoke();
+    }
+
     private void EnsureDialogueBox(bool warnIfMissing)
     {
         if (dialogueBox != null)
         {
+            BindDialogueBoxEvents();
             return;
         }
 
         dialogueBox = FindObjectOfType<DialogueBoxController>(true);
+        if (dialogueBox != null)
+        {
+            BindDialogueBoxEvents();
+        }
+
         if (dialogueBox == null && warnIfMissing)
         {
             Debug.LogWarning("[DialogueSceneController] DialogueBoxController is not assigned.");
         }
+    }
+
+    private void BindDialogueBoxEvents()
+    {
+        if (dialogueBox == null)
+        {
+            return;
+        }
+
+        dialogueBox.CloseEndingRequested -= HandleCloseEndingRequested;
+        dialogueBox.CloseEndingRequested += HandleCloseEndingRequested;
+    }
+
+    private void UnbindDialogueBoxEvents()
+    {
+        if (dialogueBox == null)
+        {
+            return;
+        }
+
+        dialogueBox.CloseEndingRequested -= HandleCloseEndingRequested;
     }
 
     private void EnsureBackground()

@@ -15,6 +15,7 @@ public class DialogueBoxController : MonoBehaviour
     [SerializeField] private TMP_Text dialogueText;
     [SerializeField] private Button[] choiceButtons = new Button[ChoiceButtonCount];
     [SerializeField] private TMP_Text[] choiceTexts = new TMP_Text[ChoiceButtonCount];
+    [SerializeField] private Button closeEndingButton;
 
     [Header("Typing")]
     [SerializeField] private float charactersPerSecond = 35f;
@@ -28,11 +29,17 @@ public class DialogueBoxController : MonoBehaviour
     private Action<DialogueChoiceResult> pendingChoiceCallback;
     private string activeFullText = string.Empty;
     private DialogueChoice[] activeChoices;
+    private bool closeEndingButtonEnabled = true;
+    private bool isVisible;
+
+    public event Action CloseEndingRequested;
 
     private void Awake()
     {
         TryAutoBindMissingReferences();
+        ConfigureCloseEndingButton();
         HideChoices();
+        SetCloseEndingButtonAvailable(false);
     }
 
     public void Bind(
@@ -67,11 +74,13 @@ public class DialogueBoxController : MonoBehaviour
             return;
         }
 
+        ConfigureCloseEndingButton();
         pendingChoiceCallback = onChoiceSelected;
         StopLoading();
         activeFullText = body.text ?? string.Empty;
         activeChoices = body.choices;
         SetVisible(true);
+        SetCloseEndingButtonAvailable(closeEndingButtonEnabled);
         HideChoices();
 
         if (npcNameText != null)
@@ -104,6 +113,7 @@ public class DialogueBoxController : MonoBehaviour
         StopLoading();
         pendingChoiceCallback = null;
         HideChoices();
+        SetCloseEndingButtonAvailable(false);
         SetVisible(false);
     }
 
@@ -116,7 +126,9 @@ public class DialogueBoxController : MonoBehaviour
             return;
         }
 
+        ConfigureCloseEndingButton();
         SetVisible(true);
+        SetCloseEndingButtonAvailable(closeEndingButtonEnabled);
         HideChoices();
 
         if (typingCoroutine != null)
@@ -160,6 +172,12 @@ public class DialogueBoxController : MonoBehaviour
         }
 
         ShowChoices(activeChoices);
+    }
+
+    public void SetCloseEndingButtonEnabled(bool isEnabled)
+    {
+        closeEndingButtonEnabled = isEnabled;
+        SetCloseEndingButtonAvailable(isEnabled && isVisible);
     }
 
     private IEnumerator TypeText(string text, DialogueChoice[] choices)
@@ -319,6 +337,11 @@ public class DialogueBoxController : MonoBehaviour
         }
 
         Button[] buttons = GetComponentsInChildren<Button>(true);
+        if (closeEndingButton == null)
+        {
+            closeEndingButton = FindButtonByName(buttons, "CloseEndingButton");
+        }
+
         if (choiceButtons == null || choiceButtons.Length < ChoiceButtonCount)
         {
             choiceButtons = new Button[ChoiceButtonCount];
@@ -377,6 +400,32 @@ public class DialogueBoxController : MonoBehaviour
         return null;
     }
 
+    private void ConfigureCloseEndingButton()
+    {
+        if (closeEndingButton == null)
+        {
+            return;
+        }
+
+        closeEndingButton.onClick.RemoveListener(HandleCloseEndingClicked);
+        closeEndingButton.onClick.AddListener(HandleCloseEndingClicked);
+    }
+
+    private void HandleCloseEndingClicked()
+    {
+        CloseEndingRequested?.Invoke();
+    }
+
+    private void SetCloseEndingButtonAvailable(bool isAvailable)
+    {
+        if (closeEndingButton == null)
+        {
+            return;
+        }
+
+        closeEndingButton.interactable = isAvailable;
+    }
+
     private bool HasRequiredReferences()
     {
         if (npcNameText == null || portraitImage == null || dialogueText == null)
@@ -402,6 +451,7 @@ public class DialogueBoxController : MonoBehaviour
 
     private void SetVisible(bool isVisible)
     {
+        this.isVisible = isVisible;
         if (rootCanvasGroup == null)
         {
             gameObject.SetActive(isVisible);

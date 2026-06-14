@@ -23,6 +23,7 @@ public class NPCDialogueBackendConnector : MonoBehaviour
 
     [Header("Generation")]
     [SerializeField] private string model = string.Empty;
+    [SerializeField] private string compareModel = string.Empty;
     [SerializeField] private float temperature = 0.7f;
     [SerializeField] private int maxTokens = 512;
     [SerializeField] private bool debug;
@@ -30,6 +31,7 @@ public class NPCDialogueBackendConnector : MonoBehaviour
     private readonly List<DialogueHistoryEntry> history = new List<DialogueHistoryEntry>();
     private int currentRound;
     private bool isRequesting;
+    private bool isEndingRequested;
     private string lastNpcDialogue = string.Empty;
     private NPCDefinition activeNpc;
 
@@ -42,6 +44,13 @@ public class NPCDialogueBackendConnector : MonoBehaviour
         {
             dialogueController = FindObjectOfType<DialogueSceneController>(true);
         }
+
+        SubscribeDialogueController();
+    }
+
+    private void OnDestroy()
+    {
+        UnsubscribeDialogueController();
     }
 
     [ContextMenu("Start Backend Dialogue")]
@@ -63,6 +72,7 @@ public class NPCDialogueBackendConnector : MonoBehaviour
         }
 
         currentRound = 0;
+        isEndingRequested = false;
         lastNpcDialogue = string.Empty;
         history.Clear();
         RequestNextDialogue();
@@ -79,6 +89,7 @@ public class NPCDialogueBackendConnector : MonoBehaviour
         NPCDefinition completedNpc = activeNpc != null ? activeNpc : npc;
 
         isRequesting = false;
+        isEndingRequested = true;
         currentRound = 0;
         lastNpcDialogue = string.Empty;
         activeNpc = null;
@@ -122,6 +133,7 @@ public class NPCDialogueBackendConnector : MonoBehaviour
             request.timeout = Mathf.Max(1, timeoutSeconds);
 
             UnityWebRequestAsyncOperation operation;
+            float requestStartTime = Time.realtimeSinceStartup;
             try
             {
                 operation = request.SendWebRequest();
@@ -137,6 +149,15 @@ public class NPCDialogueBackendConnector : MonoBehaviour
             }
 
             yield return operation;
+
+            float requestDurationMs = (Time.realtimeSinceStartup - requestStartTime) * 1000f;
+            Debug.Log($"[NPCDialogueBackendConnector] UnityWebRequest total duration = {requestDurationMs:F0} ms");
+
+            if (isEndingRequested)
+            {
+                StopRequestAfterManualEnd();
+                yield break;
+            }
 
             string responseText = request.downloadHandler != null
                 ? request.downloadHandler.text
@@ -172,6 +193,12 @@ public class NPCDialogueBackendConnector : MonoBehaviour
                 yield break;
             }
 
+            if (isEndingRequested)
+            {
+                StopRequestAfterManualEnd();
+                yield break;
+            }
+
             if (response == null || !response.ok || response.data == null)
             {
                 string message = response != null ? response.message : "Invalid response JSON.";
@@ -181,7 +208,14 @@ public class NPCDialogueBackendConnector : MonoBehaviour
                 yield break;
             }
 
+            if (isEndingRequested)
+            {
+                StopRequestAfterManualEnd();
+                yield break;
+            }
+
             currentRound++;
+            LogPrimaryModelDuration(response);
             ShowBackendDialogue(response.data);
         }
 
@@ -194,7 +228,9 @@ public class NPCDialogueBackendConnector : MonoBehaviour
         builder.Append('{');
         AppendJsonString(builder, "npcId", GetMappedNpcId(npc.NpcId));
         builder.Append(',');
-        AppendJsonString(builder, "eventSummary", BuildEventSummary());
+        builder.Append("\"messages\":[");
+        AppendMessageJson(builder, "user", BuildUserMessageContent());
+        builder.Append(']');
         builder.Append(',');
         builder.Append("\"temperature\":");
         builder.Append(temperature.ToString(System.Globalization.CultureInfo.InvariantCulture));
@@ -209,6 +245,12 @@ public class NPCDialogueBackendConnector : MonoBehaviour
         {
             builder.Append(',');
             AppendJsonString(builder, "model", model);
+        }
+
+        if (!string.IsNullOrWhiteSpace(compareModel))
+        {
+            builder.Append(',');
+            AppendJsonString(builder, "compare_model", compareModel);
         }
 
         builder.Append('}');
@@ -241,7 +283,7 @@ public class NPCDialogueBackendConnector : MonoBehaviour
         return sourceNpcId;
     }
 
-    private string BuildEventSummary()
+    private string BuildUserMessageContent()
     {
         StringBuilder builder = new StringBuilder();
         builder.Append('（');
@@ -269,6 +311,15 @@ public class NPCDialogueBackendConnector : MonoBehaviour
         return builder.ToString().Trim();
     }
 
+    private void AppendMessageJson(StringBuilder builder, string role, string content)
+    {
+        builder.Append('{');
+        AppendJsonString(builder, "role", role);
+        builder.Append(',');
+        AppendJsonString(builder, "content", content);
+        builder.Append('}');
+    }
+
     private void ShowBackendDialogue(NPCDialogueData data)
     {
         lastNpcDialogue = data.npcDialogue ?? string.Empty;
@@ -285,6 +336,28 @@ public class NPCDialogueBackendConnector : MonoBehaviour
         };
 
         dialogueController.ShowDialogue(body, HandlePlayerChoice);
+    }
+
+    private void LogPrimaryModelDuration(NPCDialogueResponse response)
+    {
+        if (response == null || response.debug == null || response.debug.abTest == null || response.debug.abTest.primary == null)
+        {
+            LogCompareModelDuration(response);
+            return;
+        }
+
+        Debug.Log($"[NPCDialogueBackendConnector] debug.abTest.primary.durationMs = {response.debug.abTest.primary.durationMs} ms");
+        LogCompareModelDuration(response);
+    }
+
+    private void LogCompareModelDuration(NPCDialogueResponse response)
+    {
+        if (response == null || response.debug == null || response.debug.abTest == null || response.debug.abTest.compare == null)
+        {
+            return;
+        }
+
+        Debug.Log($"[NPCDialogueBackendConnector] debug.abTest.compare.durationMs = {response.debug.abTest.compare.durationMs} ms");
     }
 
     private DialogueChoice[] ConvertOptions(NPCDialogueOption[] options)
@@ -323,6 +396,21 @@ public class NPCDialogueBackendConnector : MonoBehaviour
         history.Add(new DialogueHistoryEntry(lastNpcDialogue, result.Text));
 
         RequestNextDialogue();
+    }
+
+    private void HandleCloseEndingRequested()
+    {
+        if (activeNpc == null && npc == null)
+        {
+            return;
+        }
+
+        EndBackendDialogue();
+    }
+
+    private void StopRequestAfterManualEnd()
+    {
+        isRequesting = false;
     }
 
     private void ShowClosingDialogue()
@@ -472,6 +560,12 @@ public class NPCDialogueBackendConnector : MonoBehaviour
     {
         if (dialogueController == null)
         {
+            dialogueController = FindObjectOfType<DialogueSceneController>(true);
+            SubscribeDialogueController();
+        }
+
+        if (dialogueController == null)
+        {
             Debug.LogError("[NPCDialogueBackendConnector] DialogueSceneController is missing.");
             return false;
         }
@@ -496,10 +590,31 @@ public class NPCDialogueBackendConnector : MonoBehaviour
 
         if (string.IsNullOrWhiteSpace(npc.Prompt))
         {
-            Debug.LogWarning("[NPCDialogueBackendConnector] NPC prompt is empty. Backend may receive a weak eventSummary.");
+            Debug.LogWarning("[NPCDialogueBackendConnector] NPC prompt is empty. Backend may receive a weak messages[0].content.");
         }
 
         return true;
+    }
+
+    private void SubscribeDialogueController()
+    {
+        if (dialogueController == null)
+        {
+            return;
+        }
+
+        dialogueController.CloseEndingRequested -= HandleCloseEndingRequested;
+        dialogueController.CloseEndingRequested += HandleCloseEndingRequested;
+    }
+
+    private void UnsubscribeDialogueController()
+    {
+        if (dialogueController == null)
+        {
+            return;
+        }
+
+        dialogueController.CloseEndingRequested -= HandleCloseEndingRequested;
     }
 
     private string CombineUrl(string root, string path)
@@ -592,6 +707,7 @@ public class NPCDialogueResponse
     public string message;
     public string npcId;
     public NPCDialogueData data;
+    public NPCDialogueDebug debug;
 }
 
 [Serializable]
@@ -606,4 +722,25 @@ public class NPCDialogueOption
 {
     public string id;
     public string text;
+}
+
+[Serializable]
+public class NPCDialogueDebug
+{
+    public NPCDialogueAbTest abTest;
+}
+
+[Serializable]
+public class NPCDialogueAbTest
+{
+    public NPCDialogueModelTiming primary;
+    public NPCDialogueModelTiming compare;
+}
+
+[Serializable]
+public class NPCDialogueModelTiming
+{
+    public string model;
+    public int durationMs;
+    public string finishReason;
 }
