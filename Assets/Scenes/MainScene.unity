@@ -2352,7 +2352,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 20
+  m_text: 100
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ded9b449f00c5054b8f97f59796a394f, type: 2}
   m_sharedMaterial: {fileID: 5618616920204111152, guid: ded9b449f00c5054b8f97f59796a394f, type: 2}
@@ -7693,10 +7693,10 @@ MonoBehaviour:
   nextRoundMessage: "\u65B0\u4E00\u56DE\u5408"
   dialogueConnector: {fileID: 99494674}
   storyPlayer: {fileID: 0}
-  prologueJsonPath: Assets/Text/xuzhang.json
+  prologueJson: {fileID: 4900000, guid: 2c2c3204f5fc47349beec2d9f8b70a18, type: 3}
   showDialogueBackgroundForPrologue: 1
   continueWhenPrologueFails: 1
-  endingJsonPath: Assets/Text/zhongzhang.json
+  endingJson: {fileID: 4900000, guid: 0c8c0891391905147a9a9b2ffb0b9d19, type: 3}
   showDialogueBackgroundForEnding: 1
   returnToStartMenuWhenEndingFails: 1
   commonVisitorAvatar: {fileID: 21300000, guid: 54575e164d1050b418aa18315fb44e55, type: 3}
@@ -8948,7 +8948,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96

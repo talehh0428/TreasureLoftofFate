@@ -70,6 +70,18 @@ public class DialogueJsonStoryPlayer : MonoBehaviour
         StartDialogueFromJsonPath(defaultJsonPath);
     }
 
+    public void StartDialogueFromJsonAsset(TextAsset jsonAsset)
+    {
+        StartDialogueFromJsonAsset(jsonAsset, showBackgroundForStory);
+    }
+
+    public void StartDialogueFromJsonAsset(TextAsset jsonAsset, bool showBackground)
+    {
+        string sourceName = jsonAsset == null ? string.Empty : jsonAsset.name;
+        string jsonText = jsonAsset == null ? string.Empty : jsonAsset.text;
+        StartDialogueFromJsonText(jsonText, sourceName, showBackground);
+    }
+
     public void StartDialogueFromJsonPath(string jsonPath)
     {
         StartDialogueFromJsonPath(jsonPath, showBackgroundForStory);
@@ -101,11 +113,45 @@ public class DialogueJsonStoryPlayer : MonoBehaviour
             return;
         }
 
+        StartLoadedJsonDialogue(jsonText, jsonPath);
+    }
+
+    private void StartDialogueFromJsonText(string jsonText, string sourceName, bool showBackground)
+    {
+        if (isPlaying)
+        {
+            Debug.LogWarning("[DialogueJsonStoryPlayer] A JSON dialogue is already playing.");
+            return;
+        }
+
+        AutoBind();
+        BuildNpcLookup();
+
+        if (dialogueController == null)
+        {
+            Fail("DialogueSceneController is missing.");
+            return;
+        }
+
+        dialogueController.SetBackgroundVisible(showBackground);
+        dialogueController.SetCloseEndingButtonEnabled(false);
+
+        if (string.IsNullOrWhiteSpace(jsonText))
+        {
+            Fail($"Dialogue JSON asset is empty: {sourceName}");
+            return;
+        }
+
+        StartLoadedJsonDialogue(jsonText, sourceName);
+    }
+
+    private void StartLoadedJsonDialogue(string jsonText, string sourceName)
+    {
         StoryDialogueJson story = JsonUtility.FromJson<StoryDialogueJson>(jsonText);
         activeLines = GetLines(story);
         if (activeLines == null || activeLines.Length == 0)
         {
-            Fail($"Dialogue JSON has no lines: {jsonPath}");
+            Fail($"Dialogue JSON has no lines: {sourceName}");
             return;
         }
 
