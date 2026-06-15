@@ -23,6 +23,7 @@ public class DialogueSceneController : MonoBehaviour
     private bool isLoaded;
     private bool isLoadingScene;
     private bool shouldShowBackground;
+    private bool closeEndingButtonEnabled = true;
 
     private void Awake()
     {
@@ -139,6 +140,7 @@ public class DialogueSceneController : MonoBehaviour
 
     public void SetCloseEndingButtonEnabled(bool isEnabled)
     {
+        closeEndingButtonEnabled = isEnabled;
         EnsureDialogueBox(false);
         if (dialogueBox != null)
         {
@@ -230,6 +232,7 @@ public class DialogueSceneController : MonoBehaviour
     {
         if (dialogueBox != null)
         {
+            dialogueBox.SetCloseEndingButtonEnabled(closeEndingButtonEnabled);
             BindDialogueBoxEvents();
             return;
         }
@@ -237,6 +240,7 @@ public class DialogueSceneController : MonoBehaviour
         dialogueBox = FindObjectOfType<DialogueBoxController>(true);
         if (dialogueBox != null)
         {
+            dialogueBox.SetCloseEndingButtonEnabled(closeEndingButtonEnabled);
             BindDialogueBoxEvents();
         }
 

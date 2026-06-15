@@ -418,5 +418,17 @@
     "rarity": "Epic",
     "description": "需九次转炉方可成丹的稀世灵药，每转一次药力翻倍。服下后浑身经脉贯通，攻防遁速全面飞跃，元婴修士也愿倾家荡产求购一粒。",
     "price": 2192
+  },
+  {
+    "itemId": "fabao_weishuxieyi",
+    "displayName": "位数协议",
+    "Unlocked By Default": false,
+    "value": 999,
+    "attack": 999,
+    "defense": 0,
+    "movementSpeed": 0,
+    "rarity": "Immortal",
+    "description": "仙人们一同护卫仙界的一份武装协议，出示可以召唤仙人的全力一击。不知为何，仙人们都很怀念那段时光",
+    "price": 32500
   }
 ]

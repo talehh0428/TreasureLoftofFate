@@ -42,8 +42,6 @@ public class EndingEntryUI : MonoBehaviour
             }
 
             builder.Append(ending.Title);
-            builder.Append("——");
-            builder.Append(ending.Text);
         }
 
         return builder.ToString();

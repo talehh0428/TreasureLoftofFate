@@ -384,7 +384,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogueController: {fileID: 99494672}
   npc: {fileID: 0}
-  maxRounds: 3
+  maxRounds: 99
   closingChoiceText: "\u6211\u4E86\u89E3\u4E86\uFF0C\u5148\u804A\u5230\u8FD9\u91CC\u5427"
   timeoutDialogueText: "\u8FDE\u63A5\u540E\u7AEF\u8D85\u65F6\uFF0C\u8BF7\u5C1D\u8BD5\u91CD\u65B0\u8FDE\u63A5\u3002"
   backendErrorDialoguePrefix: "\u540E\u7AEF\u5BF9\u8BDD\u670D\u52A1\u5F02\u5E38"
@@ -2352,7 +2352,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 100
+  m_text: 50
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ded9b449f00c5054b8f97f59796a394f, type: 2}
   m_sharedMaterial: {fileID: 5618616920204111152, guid: ded9b449f00c5054b8f97f59796a394f, type: 2}
@@ -3160,7 +3160,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u53EF\u4EE5\u4EA4\u6613\u66F4\u591A\u7684\u7269\u54C1"
+  m_text: "\u4EA4\u6613\u66F4\u591A\u7684\u7269\u54C1\uFF08\u6BCF2\u7EA7+1\uFF09"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ded9b449f00c5054b8f97f59796a394f, type: 2}
   m_sharedMaterial: {fileID: 5618616920204111152, guid: ded9b449f00c5054b8f97f59796a394f, type: 2}
@@ -3409,7 +3409,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 648.182, y: -605.07355}
+  m_AnchoredPosition: {x: 648.01587, y: -605.2417}
   m_SizeDelta: {x: 400, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &811448685
@@ -3607,7 +3607,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 648.182, y: -67.23039}
+  m_AnchoredPosition: {x: 648.01587, y: -67.24908}
   m_SizeDelta: {x: 400, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &846797489
@@ -4903,7 +4903,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a82c95217b714a569a0223982ac68e36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spiritStoneThresholds: 64000000c8000000f4010000e8030000c4090000a00f00007017000028230000c832000050460000606d0000409c0000d8d60000f8240100a0860100d0fb010000710200400d030090d00300e0930400
+  spiritStoneThresholds: 3200000064000000c8000000f4010000e8030000b80b00007017000028230000c832000050460000606d0000409c0000d8d60000f8240100a0860100d0fb010000710200400d030090d00300e0930400
   levelTexts:
   - {fileID: 523561151}
   - {fileID: 574505181}
@@ -4919,50 +4919,50 @@ MonoBehaviour:
   - {fileID: 1957073401}
   - {fileID: 811448685}
   rarityWeightsByLevel:
-  - commonWeight: 50
+  - commonWeight: 60
     fineWeight: 30
-    superiorWeight: 15
-    epicWeight: 5
+    superiorWeight: 10
+    epicWeight: 0
     immortalWeight: 0
-  - commonWeight: 40
+  - commonWeight: 50
     fineWeight: 40
-    superiorWeight: 15
-    epicWeight: 5
+    superiorWeight: 8
+    epicWeight: 2
     immortalWeight: 0
   - commonWeight: 30
-    fineWeight: 45
-    superiorWeight: 20
+    fineWeight: 50
+    superiorWeight: 15
     epicWeight: 5
     immortalWeight: 0
   - commonWeight: 20
-    fineWeight: 40
-    superiorWeight: 30
-    epicWeight: 10
-    immortalWeight: 0
+    fineWeight: 50
+    superiorWeight: 22
+    epicWeight: 7
+    immortalWeight: 1
   - commonWeight: 20
-    fineWeight: 30
+    fineWeight: 35
     superiorWeight: 30
-    epicWeight: 15
-    immortalWeight: 5
+    epicWeight: 14
+    immortalWeight: 1
   minimumDiscountByLevel:
-  - 0.05
-  - 0.05
-  - 0.05
-  - 0.05
-  - 0.05
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
   maximumDiscountByLevel:
+  - 0.3
+  - 0.35
+  - 0.4
+  - 0.45
   - 0.5
-  - 0.6
-  - 0.7
-  - 0.8
-  - 0.9
   discountLambdaByLevel:
   - 4
   - 3.2
   - 2.5
   - 1.9
   - 1.4
-  maxTradeItemCountByLevel: 0100000002000000030000000400000005000000
+  maxTradeItemCountByLevel: 0100000001000000020000000200000003000000
   sellEfficiencyByLevel:
   - 1
   - 1.15
@@ -7546,7 +7546,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 648.182, y: -201.69118}
+  m_AnchoredPosition: {x: 648.01587, y: -201.74722}
   m_SizeDelta: {x: 400, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1805618258
@@ -7701,14 +7701,17 @@ MonoBehaviour:
   returnToStartMenuWhenEndingFails: 1
   commonVisitorAvatar: {fileID: 21300000, guid: 54575e164d1050b418aa18315fb44e55, type: 3}
   minCommonVisitorsPerRound: 3
-  maxCommonVisitorsPerRound: 6
+  maxCommonVisitorsPerRound: 5
   commonVisitorNames:
   - "\u9752\u8863\u6563\u4FEE"
   - "\u4E91\u6E38\u9053\u4EBA"
   - "\u8D76\u8DEF\u5251\u5BA2"
   - "\u5916\u95E8\u5F1F\u5B50"
   - "\u91C7\u836F\u4FEE\u58EB"
-  - "\u4E00\u822C\u8DEF\u8FC7\u7684\u70ED\u5FC3\u4FEE\u58EB"
+  - "\u70ED\u5FC3\u4FEE\u58EB"
+  - "\u96EA\u5C71\u5723\u5973"
+  - "\u9ED1\u8272\u515C\u5E3D\u4EBA"
+  - "\u9ED1\u8272\u515C\u5E3D\u4EBA"
 --- !u!114 &1811037546
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7747,7 +7750,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e56074463f760714186bc4e2cf825db9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingMoney: 80
+  startingMoney: 40
   roundScheduler: {fileID: 1811037546}
   economyBuffSystem: {fileID: 1109551584}
   roundText: {fileID: 1838022484}
@@ -8380,7 +8383,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 648.182, y: -470.61273}
+  m_AnchoredPosition: {x: 648.01587, y: -470.74353}
   m_SizeDelta: {x: 400, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1957073401
@@ -8787,7 +8790,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 648.182, y: -336.15198}
+  m_AnchoredPosition: {x: 648.01587, y: -336.2454}
   m_SizeDelta: {x: 400, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2093363387
