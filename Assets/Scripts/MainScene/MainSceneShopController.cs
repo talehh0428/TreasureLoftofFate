@@ -27,12 +27,12 @@ public class MainSceneShopController : MonoBehaviour
     [SerializeField] private DialogueJsonStoryPlayer storyPlayer;
 
     [Header("Start Flow")]
-    [SerializeField] private string prologueJsonPath = "Assets/Text/xuzhang.json";
+    [SerializeField] private TextAsset prologueJson;
     [SerializeField] private bool showDialogueBackgroundForPrologue = true;
     [SerializeField] private bool continueWhenPrologueFails = true;
 
     [Header("Ending Flow")]
-    [SerializeField] private string endingJsonPath = "Assets/Text/zhongzhang.json";
+    [SerializeField] private TextAsset endingJson;
     [SerializeField] private bool showDialogueBackgroundForEnding = true;
     [SerializeField] private bool returnToStartMenuWhenEndingFails = true;
 
@@ -313,7 +313,7 @@ public class MainSceneShopController : MonoBehaviour
 
     private IEnumerator PlayPrologueRoutine(StartMenuController startMenuController)
     {
-        if (string.IsNullOrWhiteSpace(prologueJsonPath))
+        if (prologueJson == null)
         {
             yield break;
         }
@@ -350,7 +350,7 @@ public class MainSceneShopController : MonoBehaviour
         storyPlayer.DialogueShown += HideStartMenuWhenDialogueShown;
         storyPlayer.StoryCompleted += HandlePrologueStoryCompleted;
         storyPlayer.StoryFailed += HandlePrologueStoryFailed;
-        storyPlayer.StartDialogueFromJsonPath(prologueJsonPath, showDialogueBackgroundForPrologue);
+        storyPlayer.StartDialogueFromJsonAsset(prologueJson, showDialogueBackgroundForPrologue);
 
         while (isWaitingForPrologueStory)
         {
@@ -706,9 +706,9 @@ public class MainSceneShopController : MonoBehaviour
         isEndingRunning = true;
         yield return UnloadShopSceneRoutine();
 
-        if (string.IsNullOrWhiteSpace(endingJsonPath))
+        if (endingJson == null)
         {
-            Debug.LogWarning("[MainSceneShopController] Ending JSON path is empty. Returning to start menu.");
+            Debug.LogWarning("[MainSceneShopController] Ending JSON asset is not assigned. Returning to start menu.");
             ReturnToStartMenu();
             isEndingRunning = false;
             yield break;
@@ -730,7 +730,7 @@ public class MainSceneShopController : MonoBehaviour
         isWaitingForEndingStory = true;
         storyPlayer.StoryCompleted += HandleEndingStoryCompleted;
         storyPlayer.StoryFailed += HandleEndingStoryFailed;
-        storyPlayer.StartDialogueFromJsonPath(endingJsonPath, showDialogueBackgroundForEnding);
+        storyPlayer.StartDialogueFromJsonAsset(endingJson, showDialogueBackgroundForEnding);
 
         while (isWaitingForEndingStory)
         {
