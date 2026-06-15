@@ -77,9 +77,7 @@ public class EndingsPanelController : MonoBehaviour
             for (int endingIndex = 0; endingIndex < group.Endings.Count; endingIndex++)
             {
                 NPCEventEndingRecord ending = group.Endings[endingIndex];
-                builder.Append(ending.Title);
-                builder.Append("——");
-                builder.AppendLine(ending.Text);
+                builder.AppendLine(ending.Title);
             }
         }
 

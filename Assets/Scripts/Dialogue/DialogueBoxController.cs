@@ -424,6 +424,7 @@ public class DialogueBoxController : MonoBehaviour
         }
 
         closeEndingButton.interactable = isAvailable;
+        closeEndingButton.gameObject.SetActive(isAvailable);
     }
 
     private bool HasRequiredReferences()

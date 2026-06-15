@@ -52,7 +52,7 @@ public static class GameSaveService
             })
             .Where(record => !string.IsNullOrWhiteSpace(record.npcId) &&
                 !string.IsNullOrWhiteSpace(record.eventId) &&
-                !string.IsNullOrWhiteSpace(record.text))
+                !string.IsNullOrWhiteSpace(record.title))
             .ToList();
         SaveRoot();
     }

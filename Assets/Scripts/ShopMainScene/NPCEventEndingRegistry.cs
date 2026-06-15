@@ -13,13 +13,13 @@ public static class NPCEventEndingRegistry
 
     public static bool RegisterEnding(NPCDefinition npc, NPCEventConfig eventConfig, NPCEventOutcome outcome)
     {
-        if (npc == null || eventConfig == null || outcome == null || !IsEndingEvent(eventConfig.id))
+        if (npc == null || eventConfig == null || !IsEndingEvent(eventConfig.id))
         {
             return false;
         }
 
-        string text = outcome.text ?? string.Empty;
-        if (string.IsNullOrWhiteSpace(text))
+        string title = string.IsNullOrWhiteSpace(eventConfig.title) ? eventConfig.id : eventConfig.title;
+        if (string.IsNullOrWhiteSpace(title))
         {
             return false;
         }
@@ -38,7 +38,7 @@ public static class NPCEventEndingRegistry
 
         bool alreadyRegistered = endings.Any(ending =>
             ending.EventId == eventConfig.id &&
-            ending.Text == text);
+            ending.Title == title);
 
         if (alreadyRegistered)
         {
@@ -51,8 +51,8 @@ public static class NPCEventEndingRegistry
             npc.DisplayName,
             npc.Avatar,
             eventConfig.id,
-            string.IsNullOrWhiteSpace(eventConfig.title) ? eventConfig.id : eventConfig.title,
-            text));
+            title,
+            string.Empty));
 
         Changed?.Invoke();
         if (!isRestoring)
@@ -90,7 +90,7 @@ public static class NPCEventEndingRegistry
                 if (endingSave == null ||
                     string.IsNullOrWhiteSpace(endingSave.npcId) ||
                     string.IsNullOrWhiteSpace(endingSave.eventId) ||
-                    string.IsNullOrWhiteSpace(endingSave.text))
+                    string.IsNullOrWhiteSpace(endingSave.title))
                 {
                     continue;
                 }
@@ -106,7 +106,7 @@ public static class NPCEventEndingRegistry
 
                 bool alreadyRegistered = endings.Any(ending =>
                     ending.EventId == endingSave.eventId &&
-                    ending.Text == endingSave.text);
+                    ending.Title == endingSave.title);
 
                 if (!alreadyRegistered)
                 {
