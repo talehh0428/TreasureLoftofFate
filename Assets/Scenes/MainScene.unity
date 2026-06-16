@@ -2352,7 +2352,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 50
+  m_text: 10
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ded9b449f00c5054b8f97f59796a394f, type: 2}
   m_sharedMaterial: {fileID: 5618616920204111152, guid: ded9b449f00c5054b8f97f59796a394f, type: 2}
@@ -2754,7 +2754,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u56FE\u9274"
+  m_text: "\u56FE\u5F55"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ded9b449f00c5054b8f97f59796a394f, type: 2}
   m_sharedMaterial: {fileID: 5618616920204111152, guid: ded9b449f00c5054b8f97f59796a394f, type: 2}
@@ -4946,16 +4946,16 @@ MonoBehaviour:
     immortalWeight: 1
   minimumDiscountByLevel:
   - 0
-  - 0
-  - 0
-  - 0
-  - 0
+  - 0.05
+  - 0.1
+  - 0.15
+  - 0.2
   maximumDiscountByLevel:
   - 0.3
-  - 0.35
   - 0.4
-  - 0.45
   - 0.5
+  - 0.55
+  - 0.6
   discountLambdaByLevel:
   - 4
   - 3.2
@@ -4971,10 +4971,10 @@ MonoBehaviour:
   - 1.75
   endRoundIncomeRateByLevel:
   - 0
-  - 0.03
-  - 0.06
+  - 0.05
   - 0.1
   - 0.15
+  - 0.2
 --- !u!1 &1164424721
 GameObject:
   m_ObjectHideFlags: 0
@@ -5137,7 +5137,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u4ED3\u5E93"
+  m_text: "\u79D8\u85CF"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ded9b449f00c5054b8f97f59796a394f, type: 2}
   m_sharedMaterial: {fileID: 5618616920204111152, guid: ded9b449f00c5054b8f97f59796a394f, type: 2}
@@ -6898,7 +6898,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u4E3B\u83DC\u5355"
+  m_text: "\u4E3B\u9601"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ded9b449f00c5054b8f97f59796a394f, type: 2}
   m_sharedMaterial: {fileID: 5618616920204111152, guid: ded9b449f00c5054b8f97f59796a394f, type: 2}
@@ -7750,7 +7750,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e56074463f760714186bc4e2cf825db9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingMoney: 40
+  startingMoney: 45
   roundScheduler: {fileID: 1811037546}
   economyBuffSystem: {fileID: 1109551584}
   roundText: {fileID: 1838022484}
@@ -9173,7 +9173,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u5347\u7EA7\u8FD8\u5DEE"
+  m_text: "\u8FDB\u9636\u8FD8\u5DEE"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ded9b449f00c5054b8f97f59796a394f, type: 2}
   m_sharedMaterial: {fileID: 5618616920204111152, guid: ded9b449f00c5054b8f97f59796a394f, type: 2}

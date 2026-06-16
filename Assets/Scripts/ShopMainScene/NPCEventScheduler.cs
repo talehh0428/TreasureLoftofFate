@@ -289,7 +289,8 @@ public class NPCEventScheduler : MonoBehaviour
 
             if (!database.TryGetEvent(npc.CurrentEventID, out NPCEventConfig eventConfig) ||
                 eventConfig.type != NPCEventTypes.Personal ||
-                !CanTriggerEvent(eventConfig, evaluator))
+                !CanTriggerEvent(eventConfig, evaluator) ||
+                !AreRequirementsMet(eventConfig, npcById))
             {
                 continue;
             }

@@ -1790,7 +1790,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u987E\u5BA2"
+  m_text: "\u4FEE\u58EB"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ded9b449f00c5054b8f97f59796a394f, type: 2}
   m_sharedMaterial: {fileID: 5618616920204111152, guid: ded9b449f00c5054b8f97f59796a394f, type: 2}
@@ -1823,7 +1823,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -2503,6 +2503,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2080995934dd81d4b8266a536c74f306, type: 2}
   - {fileID: 11400000, guid: d660e304da6712f408a9961fd6f3342d, type: 2}
   - {fileID: 11400000, guid: a7b5c1ed24a5119478411fbe552d7078, type: 2}
+  - {fileID: 11400000, guid: d3bb260e211a7b84294f5602ae955107, type: 2}
   - {fileID: 11400000, guid: 9e00f89081194e04e99b4b203952eda1, type: 2}
   - {fileID: 11400000, guid: 569e16889c43a4e45a2c48814821bef7, type: 2}
   - {fileID: 11400000, guid: 2e91f9887b23aca4eada3269a3a72218, type: 2}
@@ -3236,7 +3237,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u7269\u54C1"
+  m_text: "\u79D8\u5B9D"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ded9b449f00c5054b8f97f59796a394f, type: 2}
   m_sharedMaterial: {fileID: 5618616920204111152, guid: ded9b449f00c5054b8f97f59796a394f, type: 2}
@@ -3269,7 +3270,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
