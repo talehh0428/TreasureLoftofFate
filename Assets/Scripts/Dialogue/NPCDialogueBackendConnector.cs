@@ -17,7 +17,7 @@ public class NPCDialogueBackendConnector : MonoBehaviour
     [SerializeField] private string retryChoiceText = "尝试重连";
 
     [Header("Backend")]
-    [SerializeField] private string baseUrl = "http://127.0.0.1:3000";
+    [SerializeField] private string baseUrl = string.Empty;
     [SerializeField] private int timeoutSeconds = 30;
     [SerializeField] private NpcIdMapping[] npcIdMappings = Array.Empty<NpcIdMapping>();
 
@@ -582,12 +582,6 @@ public class NPCDialogueBackendConnector : MonoBehaviour
             return false;
         }
 
-        if (string.IsNullOrWhiteSpace(baseUrl))
-        {
-            Debug.LogError("[NPCDialogueBackendConnector] Base URL is empty.");
-            return false;
-        }
-
         if (string.IsNullOrWhiteSpace(npc.Prompt))
         {
             Debug.LogWarning("[NPCDialogueBackendConnector] NPC prompt is empty. Backend may receive a weak messages[0].content.");
@@ -620,10 +614,21 @@ public class NPCDialogueBackendConnector : MonoBehaviour
     private string CombineUrl(string root, string path)
     {
         string safeRoot = string.IsNullOrWhiteSpace(root)
-            ? "http://127.0.0.1:3000"
+            ? GetDefaultBaseUrl()
             : root.TrimEnd('/');
 
         return safeRoot + path;
+    }
+
+    private string GetDefaultBaseUrl()
+    {
+        Uri pageUri;
+        if (Uri.TryCreate(Application.absoluteURL, UriKind.Absolute, out pageUri))
+        {
+            return pageUri.GetLeftPart(UriPartial.Authority);
+        }
+
+        return "http://8.163.71.97:3000/";
     }
 
     private void AppendJsonString(StringBuilder builder, string key, string value)
