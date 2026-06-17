@@ -12,8 +12,6 @@ public class DialogueJsonStoryPlayer : MonoBehaviour
     [Header("Playback")]
     [SerializeField] private string defaultJsonPath;
     [SerializeField] private string fallbackSpeakerName = "旁白";
-    [SerializeField] private string continueChoiceText = "继续";
-    [SerializeField] private string finishChoiceText = "结束";
     [SerializeField] private string skipStoryButtonText = "跳过";
     [SerializeField] private bool unloadDialogueWhenFinished = true;
     [SerializeField] private bool showBackgroundForStory;
@@ -190,10 +188,6 @@ public class DialogueJsonStoryPlayer : MonoBehaviour
 
         StoryDialogueLine line = activeLines[activeLineIndex];
         NPCDefinition speaker = FindSpeaker(GetLineNpcId(line));
-        bool isLastLine = activeLineIndex >= activeLines.Length - 1;
-        string choiceText = string.IsNullOrWhiteSpace(line.choiceText)
-            ? (isLastLine ? finishChoiceText : continueChoiceText)
-            : line.choiceText;
 
         DialogueBody body = new DialogueBody
         {
@@ -201,14 +195,7 @@ public class DialogueJsonStoryPlayer : MonoBehaviour
             portrait = speaker == null ? null : speaker.Portrait,
             portraitAddress = speaker == null ? string.Empty : speaker.PortraitAddress,
             text = GetLineText(line),
-            choices = new[]
-            {
-                new DialogueChoice
-                {
-                    id = isLastLine ? "finish" : "next",
-                    text = choiceText
-                }
-            }
+            advanceMode = DialogueAdvanceMode.ScreenClick,
         };
 
         dialogueController.ShowDialogue(body, HandleChoiceSelected);

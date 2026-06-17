@@ -20,6 +20,9 @@
 - **[Dialogue]**: JSON 剧情播放时复用 `CloseEndingButton` 作为跳过按钮，序章和终章跳过后走原剧情完成收尾流程 — by beihaihaihai
   - 类型: 快速修改（无方案包）
   - 文件: Assets/Scripts/Dialogue/DialogueJsonStoryPlayer.cs:109
+- **[Dialogue]**: JSON 剧情推进改为点击屏幕，隐藏原本用于 NPC 对话选择的选项按钮 — by beihaihaihai
+  - 类型: 快速修改（无方案包）
+  - 文件: Assets/Scripts/Dialogue/DialogueBody.cs:12
 
 ## [0.1.1] - 2026-06-13
 

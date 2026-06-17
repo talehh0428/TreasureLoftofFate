@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class DialogueBoxController : MonoBehaviour
@@ -32,10 +34,13 @@ public class DialogueBoxController : MonoBehaviour
     private Action<DialogueChoiceResult> pendingChoiceCallback;
     private string activeFullText = string.Empty;
     private DialogueChoice[] activeChoices;
+    private DialogueAdvanceMode activeAdvanceMode = DialogueAdvanceMode.Choices;
     private string defaultCloseEndingButtonText = string.Empty;
     private bool closeEndingButtonEnabled = true;
     private bool hasDefaultCloseEndingButtonText;
     private bool isVisible;
+    private bool isAwaitingScreenClick;
+    private readonly List<RaycastResult> pointerRaycastResults = new List<RaycastResult>();
 
     public event Action CloseEndingRequested;
 
@@ -45,6 +50,31 @@ public class DialogueBoxController : MonoBehaviour
         ConfigureCloseEndingButton();
         HideChoices();
         SetCloseEndingButtonAvailable(false);
+    }
+
+    private void Update()
+    {
+        if (!isVisible || activeAdvanceMode != DialogueAdvanceMode.ScreenClick)
+        {
+            return;
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            HandleScreenClick(Input.mousePosition);
+            return;
+        }
+
+        if (Input.touchCount <= 0)
+        {
+            return;
+        }
+
+        Touch touch = Input.GetTouch(0);
+        if (touch.phase == TouchPhase.Began)
+        {
+            HandleScreenClick(touch.position);
+        }
     }
 
     public void Bind(
@@ -84,6 +114,8 @@ public class DialogueBoxController : MonoBehaviour
         StopLoading();
         activeFullText = body.text ?? string.Empty;
         activeChoices = body.choices;
+        activeAdvanceMode = body.advanceMode;
+        isAwaitingScreenClick = false;
         SetVisible(true);
         SetCloseEndingButtonAvailable(closeEndingButtonEnabled);
         HideChoices();
@@ -117,6 +149,8 @@ public class DialogueBoxController : MonoBehaviour
         StopLoading();
         StopPortraitLoad();
         pendingChoiceCallback = null;
+        activeAdvanceMode = DialogueAdvanceMode.Choices;
+        isAwaitingScreenClick = false;
         HideChoices();
         SetCloseEndingButtonAvailable(false);
         SetVisible(false);
@@ -139,6 +173,8 @@ public class DialogueBoxController : MonoBehaviour
         ConfigureCloseEndingButton();
         SetVisible(true);
         SetCloseEndingButtonAvailable(closeEndingButtonEnabled);
+        activeAdvanceMode = DialogueAdvanceMode.Choices;
+        isAwaitingScreenClick = false;
         HideChoices();
 
         if (typingCoroutine != null)
@@ -180,7 +216,29 @@ public class DialogueBoxController : MonoBehaviour
             dialogueText.text = activeFullText;
         }
 
-        ShowChoices(activeChoices);
+        ShowAdvanceControls(activeChoices);
+    }
+
+    private void HandleScreenClick(Vector2 screenPosition)
+    {
+        if (IsPointerOverButton(screenPosition))
+        {
+            return;
+        }
+
+        if (typingCoroutine != null)
+        {
+            SkipTyping();
+            return;
+        }
+
+        if (!isAwaitingScreenClick)
+        {
+            return;
+        }
+
+        isAwaitingScreenClick = false;
+        pendingChoiceCallback?.Invoke(new DialogueChoiceResult("screen_click", string.Empty, -1));
     }
 
     public void SetCloseEndingButtonEnabled(bool isEnabled)
@@ -215,8 +273,8 @@ public class DialogueBoxController : MonoBehaviour
 
         if (string.IsNullOrEmpty(text))
         {
-            ShowChoices(choices);
             typingCoroutine = null;
+            ShowAdvanceControls(choices);
             yield break;
         }
 
@@ -236,6 +294,19 @@ public class DialogueBoxController : MonoBehaviour
         }
 
         typingCoroutine = null;
+        ShowAdvanceControls(choices);
+    }
+
+    private void ShowAdvanceControls(DialogueChoice[] choices)
+    {
+        if (activeAdvanceMode == DialogueAdvanceMode.ScreenClick)
+        {
+            HideChoices();
+            isAwaitingScreenClick = true;
+            return;
+        }
+
+        isAwaitingScreenClick = false;
         ShowChoices(choices);
     }
 
@@ -337,6 +408,34 @@ public class DialogueBoxController : MonoBehaviour
             choiceButtons[i].interactable = false;
             choiceButtons[i].gameObject.SetActive(false);
         }
+    }
+
+    private bool IsPointerOverButton(Vector2 screenPosition)
+    {
+        EventSystem eventSystem = EventSystem.current;
+        if (eventSystem == null)
+        {
+            return false;
+        }
+
+        PointerEventData pointerData = new PointerEventData(eventSystem)
+        {
+            position = screenPosition
+        };
+
+        pointerRaycastResults.Clear();
+        eventSystem.RaycastAll(pointerData, pointerRaycastResults);
+
+        for (int index = 0; index < pointerRaycastResults.Count; index++)
+        {
+            GameObject hitObject = pointerRaycastResults[index].gameObject;
+            if (hitObject != null && hitObject.GetComponentInParent<Button>() != null)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private void SelectChoice(DialogueChoice choice, int index)
