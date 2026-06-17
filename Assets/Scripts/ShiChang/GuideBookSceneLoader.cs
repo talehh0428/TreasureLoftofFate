@@ -56,17 +56,7 @@ public class GuideBookSceneLoader : MonoBehaviour
     {
         isLoading = true;
 
-        AsyncOperation loadOperation = SceneManager.LoadSceneAsync(guideBookSceneName, loadSceneMode);
-        if (loadOperation == null)
-        {
-            isLoading = false;
-            yield break;
-        }
-
-        while (!loadOperation.isDone)
-        {
-            yield return null;
-        }
+        yield return AddressableSceneLoader.LoadSceneRoutine(guideBookSceneName, loadSceneMode);
 
         isLoading = false;
     }

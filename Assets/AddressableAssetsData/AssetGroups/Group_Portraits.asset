@@ -1,0 +1,135 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Group_Portraits
+  m_EditorClassIdentifier: 
+  m_GroupName: Group_Portraits
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 0a35fb335d0c2214199c676c8166a925
+  m_SerializeEntries:
+  - m_GUID: 0f940188cfcfb384ebcd8d0b49a1a4dc
+    m_Address: Assets/NPCItem/P22.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 183cf088cfb3e1e4ea467e2ddae29251
+    m_Address: Assets/Images/Avatar/shen-qi.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1e3f905d3fb030c468a1f37b45195b23
+    m_Address: Assets/Images/Portrait/fei-ren.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2004f4e28c459ee4597837046f931312
+    m_Address: Assets/NPCItem/P23.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 35bea4a8f7e586443a0ca6725babc4a4
+    m_Address: Assets/Images/Avatar/chen-jie.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3b8c54f0abbd1b84789938c3c451313e
+    m_Address: Assets/Images/Portrait/wu-xie.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3cc5705cb11f08849b9d9dbc197ad4a0
+    m_Address: Assets/Images/Avatar/cui-yuan.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 42d04ce4840be8642b09bb9fcff2daab
+    m_Address: Assets/Images/Portrait/bai-zhi.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 42e2a824d163548458261090362ea82a
+    m_Address: Assets/NPCItem/P24.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4f56833f7bb475f429acfd11fb25075c
+    m_Address: Assets/NPCItem/P01.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6bfe57416d75dea419a9506c8a80b030
+    m_Address: Assets/Images/Portrait/jiang-feng.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6d2c208da558c76469fc4c8486a75bc0
+    m_Address: Assets/Images/Avatar/bai-zhi.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 75f03db8b85778c4a9edd392e2955e96
+    m_Address: Assets/NPCItem/P27.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 92027695be348754e87f7f3e8e4f17f9
+    m_Address: Assets/Images/Avatar/wu-xie.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9b29f0eb7e5aded43bd374dedf246316
+    m_Address: Assets/Images/Portrait/chen-jie.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: adac6b7dc08a52b4487bf37851ce2c35
+    m_Address: Assets/Images/Avatar/fei-ren.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cc7c470561868094e91a9227722f0d4f
+    m_Address: Assets/Images/Avatar/jiang-feng.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d7547af352e03fa48a46223441cdea35
+    m_Address: Assets/Images/Portrait/cui-yuan.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: de6fc6f959131fd408aad733518199f6
+    m_Address: Assets/NPCItem/P25.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ec92ccb7ce483a14ca7e0a7525d0cbf7
+    m_Address: Assets/Images/Portrait/shen-qi.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f0ff63c321aaf53408f707bd697f18a4
+    m_Address: Assets/NPCItem/P21.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f83881f38ee90af4aac524011ae1dad2
+    m_Address: Assets/NPCItem/P26.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 536007f4dd582104db2614f1a0d12f6d, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 364df188490c8be4786cdea97130c1c2, type: 2}
+    - {fileID: 11400000, guid: ff3762d897aa2ad4b8339af21a9e58fe, type: 2}

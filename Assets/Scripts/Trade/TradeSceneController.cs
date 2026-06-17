@@ -99,7 +99,7 @@ public class TradeSceneController : MonoBehaviour
         Scene currentScene = gameObject.scene;
         if (currentScene.IsValid() && currentScene.isLoaded)
         {
-            SceneManager.UnloadSceneAsync(currentScene);
+            StartCoroutine(AddressableSceneLoader.UnloadSceneRoutine(currentScene));
         }
     }
 

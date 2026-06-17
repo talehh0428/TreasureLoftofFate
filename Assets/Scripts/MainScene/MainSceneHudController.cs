@@ -52,7 +52,7 @@ public class MainSceneHudController : MonoBehaviour
         if (!hasShownStartMenu)
         {
             hasShownStartMenu = true;
-            SceneManager.LoadScene(startMenuSceneName, LoadSceneMode.Additive);
+            StartCoroutine(AddressableSceneLoader.LoadSceneRoutine(startMenuSceneName, LoadSceneMode.Additive));
         }
     }
 
@@ -170,7 +170,7 @@ public class MainSceneHudController : MonoBehaviour
 
         isLoadingOrLoadedStartMenu = true;
         SceneManager.sceneLoaded += OnStartMenuLoaded;
-        SceneManager.LoadScene(startMenuSceneName, LoadSceneMode.Additive);
+        StartCoroutine(AddressableSceneLoader.LoadSceneRoutine(startMenuSceneName, LoadSceneMode.Additive));
     }
 
     private void OnStartMenuLoaded(Scene scene, LoadSceneMode mode)

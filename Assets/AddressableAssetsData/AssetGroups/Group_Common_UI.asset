@@ -1,0 +1,85 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Group_Common_UI
+  m_EditorClassIdentifier: 
+  m_GroupName: Group_Common_UI
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 4c61f0bd0e0a8a04cb64a246baf44195
+  m_SerializeEntries:
+  - m_GUID: 21629b365db31ff45ae4a5c33dc2823c
+    m_Address: Assets/Images/WarehouseUI.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 299f18617b4a1304f95dc86c56b02af9
+    m_Address: Assets/Images/QuestionMark.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 365cc90265083fd488db12f7ccc69660
+    m_Address: Assets/Images/btn_frame.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 36d2e1e4facbc3842938bb5832e30664
+    m_Address: Assets/Images/MainImage.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 514940e74d2ccee41906388c4a4cb2d4
+    m_Address: Assets/Images/DialogueButtonUI.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8e646d35f2f3e354a8eb5460ca27b706
+    m_Address: Assets/Images/SaveSlotSelection.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 993e82bcbac08ce45a2f3b0b9ace3ef6
+    m_Address: Assets/Images/DetailPanel_1.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 99f45dcb73c718e4b944cdbbe7d93aaa
+    m_Address: Assets/Images/MoneyImage.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b58b91c6df47c06409d36ce714a209d1
+    m_Address: Assets/Images/GuideBookFrame.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d0dfca78d10bd144c9523aa740c3384f
+    m_Address: Assets/Images/Back_UI.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ee1c575cb9c7921449c1949a04a9584c
+    m_Address: Assets/Images/ShopMainScene.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f53247e9b1c7e684080b7af5b794d989
+    m_Address: Assets/Images/DialogueSelection.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 536007f4dd582104db2614f1a0d12f6d, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: f2a6a695710169243abc4299d169bae5, type: 2}
+    - {fileID: 11400000, guid: 1688de7490f20734fabf47d8ab154587, type: 2}
