@@ -22,16 +22,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 3472fca36eb446948bcebe2695aaf129
-    m_Address: Assets/BGM/wood_tap.mp3
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: df723cb6bc7b26e41b937ead67ebe044
-    m_Address: Assets/BGM/coin_drop.mp3
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 536007f4dd582104db2614f1a0d12f6d, type: 2}
   m_SchemaSet:

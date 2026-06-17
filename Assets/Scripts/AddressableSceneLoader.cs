@@ -9,9 +9,15 @@ using UnityEngine.SceneManagement;
 public static class AddressableSceneLoader
 {
     private const string AddressPrefix = "Scenes/";
+    private const string DefaultLoadingMessage = "加载中";
     private static readonly Dictionary<string, SceneInstance> LoadedScenes = new Dictionary<string, SceneInstance>();
 
-    public static IEnumerator LoadSceneRoutine(string sceneKey, LoadSceneMode mode = LoadSceneMode.Single)
+    public static IEnumerator LoadSceneRoutine(
+        string sceneKey,
+        LoadSceneMode mode = LoadSceneMode.Single,
+        bool showOverlay = true,
+        bool hideOverlayWhenDone = true,
+        string loadingMessage = DefaultLoadingMessage)
     {
         string address = ToSceneAddress(sceneKey);
         if (string.IsNullOrWhiteSpace(address))
@@ -24,17 +30,33 @@ public static class AddressableSceneLoader
             yield break;
         }
 
+        if (showOverlay)
+        {
+            SceneLoadingOverlay.Show(loadingMessage);
+        }
+
         AsyncOperationHandle<SceneInstance> handle = Addressables.LoadSceneAsync(address, mode);
         yield return handle;
 
         if (handle.Status != AsyncOperationStatus.Succeeded)
         {
             Debug.LogError($"[AddressableSceneLoader] Failed to load scene: {address}");
+            if (showOverlay)
+            {
+                SceneLoadingOverlay.Hide();
+            }
+
             yield break;
         }
 
         SceneInstance sceneInstance = handle.Result;
         RememberLoadedScene(sceneKey, sceneInstance);
+        yield return null;
+
+        if (showOverlay && hideOverlayWhenDone)
+        {
+            SceneLoadingOverlay.Hide();
+        }
     }
 
     public static IEnumerator UnloadSceneRoutine(string sceneKey)

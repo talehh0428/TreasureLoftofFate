@@ -1,5 +1,7 @@
+using System.Collections;
 using UnityEngine;
-using UnityEngine.Serialization;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 /// <summary>
 /// 单例 BGM 管理器，负责跨场景播放一首全局背景音乐。
@@ -8,11 +10,13 @@ using UnityEngine.Serialization;
 public class BgmManager : MonoBehaviour
 {
     [Header("Global BGM")]
-    [FormerlySerializedAs("mainSceneBgm")]
-    [SerializeField] private AudioClip globalBgm;
+    [SerializeField] private string globalBgmAddress = "Assets/BGM/Porcelain Lanterns.mp3";
 
     private static BgmManager instance;
     private AudioSource audioSource;
+    private AudioClip loadedGlobalBgm;
+    private Coroutine loadRoutine;
+    private int loadVersion;
 
     public static BgmManager Instance
     {
@@ -46,17 +50,55 @@ public class BgmManager : MonoBehaviour
         audioSource.playOnAwake = false;
         transform.SetParent(null);
         DontDestroyOnLoad(gameObject);
-        PlayGlobalBGM();
     }
 
     public void PlayGlobalBGM()
     {
-        if (globalBgm == null)
+        if (loadedGlobalBgm != null)
         {
-            Debug.LogWarning("[BgmManager] globalBgm 未赋值！");
+            PlayClip(loadedGlobalBgm);
             return;
         }
-        PlayClip(globalBgm);
+
+        StartGlobalBgmLoad();
+    }
+
+    private void StartGlobalBgmLoad()
+    {
+        if (string.IsNullOrWhiteSpace(globalBgmAddress))
+        {
+            Debug.LogWarning("[BgmManager] globalBgmAddress 未配置！");
+            return;
+        }
+
+        if (loadRoutine != null)
+        {
+            return;
+        }
+
+        loadVersion++;
+        loadRoutine = StartCoroutine(LoadAndPlayGlobalBgmRoutine(globalBgmAddress.Trim(), loadVersion));
+    }
+
+    private IEnumerator LoadAndPlayGlobalBgmRoutine(string address, int version)
+    {
+        AsyncOperationHandle<AudioClip> handle = Addressables.LoadAssetAsync<AudioClip>(address);
+        yield return handle;
+
+        loadRoutine = null;
+        if (version != loadVersion)
+        {
+            yield break;
+        }
+
+        if (handle.Status != AsyncOperationStatus.Succeeded || handle.Result == null)
+        {
+            Debug.LogWarning($"[BgmManager] Failed to load BGM: {address}");
+            yield break;
+        }
+
+        loadedGlobalBgm = handle.Result;
+        PlayClip(loadedGlobalBgm);
     }
 
     private void PlayClip(AudioClip clip)

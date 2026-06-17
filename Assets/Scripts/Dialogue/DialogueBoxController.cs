@@ -26,6 +26,8 @@ public class DialogueBoxController : MonoBehaviour
 
     private Coroutine typingCoroutine;
     private Coroutine loadingCoroutine;
+    private Coroutine portraitLoadCoroutine;
+    private int portraitLoadVersion;
     private Action<DialogueChoiceResult> pendingChoiceCallback;
     private string activeFullText = string.Empty;
     private DialogueChoice[] activeChoices;
@@ -90,8 +92,7 @@ public class DialogueBoxController : MonoBehaviour
 
         if (portraitImage != null)
         {
-            portraitImage.sprite = body.portrait;
-            portraitImage.enabled = body.portrait != null;
+            StartPortraitLoad(body.portraitAddress, body.portrait);
         }
 
         if (typingCoroutine != null)
@@ -111,6 +112,7 @@ public class DialogueBoxController : MonoBehaviour
         }
 
         StopLoading();
+        StopPortraitLoad();
         pendingChoiceCallback = null;
         HideChoices();
         SetCloseEndingButtonAvailable(false);
@@ -118,6 +120,11 @@ public class DialogueBoxController : MonoBehaviour
     }
 
     public void ShowLoading(string npcName, Sprite portrait)
+    {
+        ShowLoading(npcName, string.Empty, portrait);
+    }
+
+    public void ShowLoading(string npcName, string portraitAddress, Sprite portrait)
     {
         TryAutoBindMissingReferences();
         if (!HasRequiredReferences())
@@ -144,8 +151,7 @@ public class DialogueBoxController : MonoBehaviour
 
         if (portraitImage != null)
         {
-            portraitImage.sprite = portrait;
-            portraitImage.enabled = portrait != null;
+            StartPortraitLoad(portraitAddress, portrait);
         }
 
         if (loadingCoroutine != null)
@@ -240,6 +246,29 @@ public class DialogueBoxController : MonoBehaviour
 
         StopCoroutine(loadingCoroutine);
         loadingCoroutine = null;
+    }
+
+    private void StartPortraitLoad(string address, Sprite fallback)
+    {
+        StopPortraitLoad();
+        if (portraitImage == null)
+        {
+            return;
+        }
+
+        portraitLoadVersion++;
+        int loadVersion = portraitLoadVersion;
+        portraitLoadCoroutine = StartCoroutine(AddressableSpriteLoader.SetImageSpriteRoutine(
+            portraitImage,
+            address,
+            fallback,
+            () => loadVersion == portraitLoadVersion));
+    }
+
+    private void StopPortraitLoad()
+    {
+        portraitLoadVersion++;
+        portraitLoadCoroutine = null;
     }
 
     private void ShowChoices(DialogueChoice[] choices)

@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   npcId: P26
   displayName: "\u8D39\u4EC1"
-  avatar: {fileID: 21300000, guid: adac6b7dc08a52b4487bf37851ce2c35, type: 3}
-  portrait: {fileID: 21300000, guid: 1e3f905d3fb030c468a1f37b45195b23, type: 3}
+  avatarAddress: Assets/Images/Avatar/fei-ren.png
+  portraitAddress: Assets/Images/Portrait/fei-ren.png
+  avatar: {fileID: 0}
+  portrait: {fileID: 0}
   description: "\u843D\u4ED9\u57CE\u5357\u574A\u6563\u4FEE"
   attack: 0
   defense: 4

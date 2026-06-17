@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   npcId: P27
   displayName: "\u9648\u6D01"
-  avatar: {fileID: 21300000, guid: 35bea4a8f7e586443a0ca6725babc4a4, type: 3}
-  portrait: {fileID: 21300000, guid: 9b29f0eb7e5aded43bd374dedf246316, type: 3}
+  avatarAddress: Assets/Images/Avatar/chen-jie.png
+  portraitAddress: Assets/Images/Portrait/chen-jie.png
+  avatar: {fileID: 0}
+  portrait: {fileID: 0}
   description: "\u4ECE\u5927\u4E16\u5BB6\u51FA\u6765\u5386\u7EC3\u7684\u4EBA\u7C7B\u4FEE\u58EB"
   attack: 10
   defense: 10
