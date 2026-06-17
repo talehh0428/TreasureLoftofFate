@@ -435,8 +435,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4f56833f7bb475f429acfd11fb25075c, type: 2}
   defaultJsonPath: 
   fallbackSpeakerName: "\u65C1\u767D"
-  continueChoiceText: "\u7EE7\u7EED"
-  finishChoiceText: "\u7ED3\u675F"
   skipStoryButtonText: "\u70B9\u5230\u4E3A\u6B62"
   unloadDialogueWhenFinished: 0
   showBackgroundForStory: 1
@@ -1168,8 +1166,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 40
+  m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

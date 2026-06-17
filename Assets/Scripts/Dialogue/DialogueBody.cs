@@ -9,8 +9,15 @@ public class DialogueBody
     public string portraitAddress;
     [TextArea] public string text;
     public DialogueChoice[] choices;
+    public DialogueAdvanceMode advanceMode = DialogueAdvanceMode.Choices;
 
     public bool HasChoices => choices != null && choices.Length > 0;
+}
+
+public enum DialogueAdvanceMode
+{
+    Choices = 0,
+    ScreenClick = 1,
 }
 
 [Serializable]
