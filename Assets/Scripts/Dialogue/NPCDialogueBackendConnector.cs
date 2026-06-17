@@ -401,7 +401,7 @@ public class NPCDialogueBackendConnector : MonoBehaviour
 
     private void HandleCloseEndingRequested()
     {
-        if (activeNpc == null && npc == null)
+        if (activeNpc == null && !isRequesting && currentRound <= 0 && string.IsNullOrEmpty(lastNpcDialogue))
         {
             return;
         }

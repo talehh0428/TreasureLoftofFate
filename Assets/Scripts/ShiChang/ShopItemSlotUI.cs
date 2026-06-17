@@ -22,11 +22,11 @@ public class ShopItemSlotUI : MonoBehaviour, IPointerClickHandler
     [SerializeField] private Color soldContentColor = new Color(0.55f, 0.55f, 0.55f, 1f);
 
     [Header("Rarity Colors")]
-    [SerializeField] private Color commonRarityColor = new Color(0.8f, 0.8f, 0.8f, 1f);
-    [SerializeField] private Color fineRarityColor = new Color(0.3f, 0.85f, 0.35f, 1f);
-    [SerializeField] private Color superiorRarityColor = new Color(0.62f, 0.35f, 0.9f, 1f);
-    [SerializeField] private Color epicRarityColor = new Color(1f, 0.82f, 0.18f, 1f);
-    [SerializeField] private Color immortalRarityColor = new Color(0.88f, 0.18f, 0.18f, 1f);
+    [SerializeField] private Color commonRarityColor = new Color(216f / 255f, 210f / 255f, 196f / 255f, 1f);
+    [SerializeField] private Color fineRarityColor = new Color(126f / 255f, 159f / 255f, 110f / 255f, 1f);
+    [SerializeField] private Color superiorRarityColor = new Color(122f / 255f, 92f / 255f, 142f / 255f, 1f);
+    [SerializeField] private Color epicRarityColor = new Color(176f / 255f, 138f / 255f, 74f / 255f, 1f);
+    [SerializeField] private Color immortalRarityColor = new Color(155f / 255f, 78f / 255f, 63f / 255f, 1f);
 
     private ShopItemInstance currentItem;
     private Color iconNormalColor = Color.white;

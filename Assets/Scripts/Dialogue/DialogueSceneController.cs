@@ -24,6 +24,7 @@ public class DialogueSceneController : MonoBehaviour
     private bool isLoadingScene;
     private bool shouldShowBackground;
     private bool closeEndingButtonEnabled = true;
+    private string closeEndingButtonTextOverride;
 
     private void Awake()
     {
@@ -153,6 +154,16 @@ public class DialogueSceneController : MonoBehaviour
         }
     }
 
+    public void SetCloseEndingButtonText(string text)
+    {
+        closeEndingButtonTextOverride = string.IsNullOrWhiteSpace(text) ? null : text.Trim();
+        EnsureDialogueBox(false);
+        if (dialogueBox != null)
+        {
+            dialogueBox.SetCloseEndingButtonText(closeEndingButtonTextOverride);
+        }
+    }
+
     private IEnumerator LoadDialogueSceneRoutine()
     {
         if (isLoadingScene)
@@ -230,6 +241,7 @@ public class DialogueSceneController : MonoBehaviour
         if (dialogueBox != null)
         {
             dialogueBox.SetCloseEndingButtonEnabled(closeEndingButtonEnabled);
+            dialogueBox.SetCloseEndingButtonText(closeEndingButtonTextOverride);
             BindDialogueBoxEvents();
             return;
         }
@@ -238,6 +250,7 @@ public class DialogueSceneController : MonoBehaviour
         if (dialogueBox != null)
         {
             dialogueBox.SetCloseEndingButtonEnabled(closeEndingButtonEnabled);
+            dialogueBox.SetCloseEndingButtonText(closeEndingButtonTextOverride);
             BindDialogueBoxEvents();
         }
 

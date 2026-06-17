@@ -1,5 +1,26 @@
 # CHANGELOG
 
+## [0.1.2] - 2026-06-17
+
+### 优化
+- **[ItemUI]**: 统一 GuideBook、Warehouse、TradeScene、shichang 物品展示项的五档稀有度视觉颜色 — by beihaihaihai
+  - 方案: [202606171514_unify-item-rarity-colors](archive/2026-06/202606171514_unify-item-rarity-colors/)
+  - 决策: unify item rarity colors#D001(同步脚本默认值与 prefab 序列化值)
+- **[EditorImport]**: 调整商品 JSON 导入工具，支持从 `修仙作品物品数据.json` 导入并按 itemID 匹配图标 — by beihaihaihai
+  - 方案: [202606171542_import-xianxia-shop-items-json](archive/2026-06/202606171542_import-xianxia-shop-items-json/)
+  - 决策: import xianxia shop items json#D001(字段规范化后复用 JsonUtility)
+
+### 快速修改
+- **[GuideBook]**: 图鉴物品列表改为运行时按 `Resources/ShopItem` 加载，不再依赖场景序列化的 `itemDefinitions` 缓存列表 — by beihaihaihai
+  - 类型: 快速修改（无方案包）
+  - 文件: Assets/Scripts/GuideBook/GuideBookController.cs:141
+- **[ItemUI]**: 交换物品展示项上品与极品稀有度颜色，上品改为藏经紫、极品改为金砂褐 — by beihaihaihai
+  - 类型: 快速修改（无方案包）
+  - 文件: Assets/Scripts/GuideBook/GuideBookItemEntryUI.cs:29
+- **[Dialogue]**: JSON 剧情播放时复用 `CloseEndingButton` 作为跳过按钮，序章和终章跳过后走原剧情完成收尾流程 — by beihaihaihai
+  - 类型: 快速修改（无方案包）
+  - 文件: Assets/Scripts/Dialogue/DialogueJsonStoryPlayer.cs:109
+
 ## [0.1.1] - 2026-06-13
 
 ### 快速修改

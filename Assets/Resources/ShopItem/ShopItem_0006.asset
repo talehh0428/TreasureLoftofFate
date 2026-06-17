@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 025c29d5619685c4f84dfa859ade29fa, type: 3}
+  m_Name: ShopItem_0006
+  m_EditorClassIdentifier: 
+  itemId: 0006
+  displayName: "\u7D2B\u7075\u4E39"
+  price: 74
+  icon: {fileID: 21300000, guid: f1704f3e82a30354bbd81718e9a8e574, type: 3}
+  description: "\u4E39\u4F53\u5448\u6DF1\u7D2B\u8272\uFF0C\u8868\u9762\u6709\u7EC6\u5C0F\u7075\u7EB9\u7F13\u7F13\u6D6E\u6C89\u3002\u5B83\u7684\u836F\u6027\u4E0D\u504F\u4E0D\u501A\uFF0C\u80FD\u540C\u65F6\u6E29\u517B\u7ECF\u8109\u3001\u62A4\u4F4F\u6C14\u5E9C\uFF0C\u5E76\u8BA9\u7075\u529B\u8FD0\u8F6C\u66F4\u987A\uFF0C\u662F\u7B51\u57FA\u524D\u540E\u4FEE\u58EB\u6700\u559C\u6B22\u7684\u7A33\u59A5\u4E39\u836F\u3002"
+  unlockedByDefault: 0
+  rarity: 1
+  attack: 5
+  defense: 4
+  movementSpeed: 3

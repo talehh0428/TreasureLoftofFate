@@ -18,11 +18,11 @@ public class TradeInventorySlotUI : MonoBehaviour, IPointerClickHandler
     [SerializeField] private Color quantityBarSelectedColor = new Color(1f, 0.9f, 0.45f, 1f);
 
     [Header("Rarity Backgrounds")]
-    [SerializeField] private Color commonColor = new Color(0.55f, 0.58f, 0.62f, 1f);
-    [SerializeField] private Color fineColor = new Color(0.32f, 0.62f, 0.48f, 1f);
-    [SerializeField] private Color superiorColor = new Color(0.28f, 0.52f, 0.72f, 1f);
-    [SerializeField] private Color epicColor = new Color(0.62f, 0.48f, 0.78f, 1f);
-    [SerializeField] private Color immortalColor = new Color(0.84f, 0.58f, 0.24f, 1f);
+    [SerializeField] private Color commonColor = new Color(216f / 255f, 210f / 255f, 196f / 255f, 1f);
+    [SerializeField] private Color fineColor = new Color(126f / 255f, 159f / 255f, 110f / 255f, 1f);
+    [SerializeField] private Color superiorColor = new Color(122f / 255f, 92f / 255f, 142f / 255f, 1f);
+    [SerializeField] private Color epicColor = new Color(176f / 255f, 138f / 255f, 74f / 255f, 1f);
+    [SerializeField] private Color immortalColor = new Color(155f / 255f, 78f / 255f, 63f / 255f, 1f);
 
     private TradeOfferStack currentStack;
 
