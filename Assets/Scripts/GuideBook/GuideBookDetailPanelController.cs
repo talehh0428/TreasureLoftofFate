@@ -20,6 +20,9 @@ public class GuideBookDetailPanelController : MonoBehaviour
     [SerializeField] private string lockedPrice = "???灵石";
     [SerializeField] private string lockedStat = "???";
 
+    private Coroutine iconLoadRoutine;
+    private int iconLoadVersion;
+
     private void Awake()
     {
         AutoBind();
@@ -62,8 +65,7 @@ public class GuideBookDetailPanelController : MonoBehaviour
 
         if (detailIcon != null)
         {
-            detailIcon.sprite = entryData.Icon;
-            detailIcon.enabled = entryData.Icon != null;
+            StartIconLoad(entryData.IconAddress, entryData.Icon);
         }
 
         SetActive(detailRarity, false);
@@ -81,6 +83,7 @@ public class GuideBookDetailPanelController : MonoBehaviour
     {
         if (detailIcon != null)
         {
+            StopIconLoad();
             detailIcon.sprite = lockedIcon;
             detailIcon.enabled = lockedIcon != null;
         }
@@ -100,8 +103,7 @@ public class GuideBookDetailPanelController : MonoBehaviour
     {
         if (detailIcon != null)
         {
-            detailIcon.sprite = entryData.Icon;
-            detailIcon.enabled = entryData.Icon != null;
+            StartIconLoad(entryData.IconAddress, entryData.Icon);
         }
 
         SetActive(detailRarity, true);
@@ -119,6 +121,7 @@ public class GuideBookDetailPanelController : MonoBehaviour
     {
         if (detailIcon != null)
         {
+            StopIconLoad();
             detailIcon.sprite = lockedIcon;
             detailIcon.enabled = lockedIcon != null;
         }
@@ -175,6 +178,29 @@ public class GuideBookDetailPanelController : MonoBehaviour
         {
             detailDescription = FindChildComponent<TMP_Text>("DetailDescription");
         }
+    }
+
+    private void StartIconLoad(string address, Sprite fallback)
+    {
+        StopIconLoad();
+        if (detailIcon == null)
+        {
+            return;
+        }
+
+        iconLoadVersion++;
+        int loadVersion = iconLoadVersion;
+        iconLoadRoutine = StartCoroutine(AddressableSpriteLoader.SetImageSpriteRoutine(
+            detailIcon,
+            address,
+            fallback,
+            () => loadVersion == iconLoadVersion));
+    }
+
+    private void StopIconLoad()
+    {
+        iconLoadVersion++;
+        iconLoadRoutine = null;
     }
 
     private void SetText(TMP_Text target, string value)

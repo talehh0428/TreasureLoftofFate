@@ -120,7 +120,7 @@ public class NPCDialogueBackendConnector : MonoBehaviour
 
         if (dialogueController != null && npc != null)
         {
-            dialogueController.ShowLoading(npc.DisplayName, npc.Portrait);
+            dialogueController.ShowLoading(npc.DisplayName, npc.PortraitAddress, npc.Portrait);
         }
 
         string url = CombineUrl(baseUrl, "/api/npc/dialogue");
@@ -329,6 +329,7 @@ public class NPCDialogueBackendConnector : MonoBehaviour
         {
             npcName = npc.DisplayName,
             portrait = npc.Portrait,
+            portraitAddress = npc.PortraitAddress,
             text = lastNpcDialogue,
             choices = shouldCloseAfterThisLine
                 ? CreateClosingChoices()
@@ -419,6 +420,7 @@ public class NPCDialogueBackendConnector : MonoBehaviour
         {
             npcName = npc != null ? npc.DisplayName : string.Empty,
             portrait = npc != null ? npc.Portrait : null,
+            portraitAddress = npc != null ? npc.PortraitAddress : string.Empty,
             text = lastNpcDialogue,
             choices = CreateClosingChoices()
         };
@@ -437,6 +439,7 @@ public class NPCDialogueBackendConnector : MonoBehaviour
         {
             npcName = npc != null ? npc.DisplayName : string.Empty,
             portrait = npc != null ? npc.Portrait : null,
+            portraitAddress = npc != null ? npc.PortraitAddress : string.Empty,
             text = string.IsNullOrWhiteSpace(text) ? $"{backendErrorDialoguePrefix}，请尝试重新连接。" : text,
             choices = new[]
             {

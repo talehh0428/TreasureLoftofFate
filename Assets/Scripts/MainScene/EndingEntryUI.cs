@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Text;
 using TMPro;
 using UnityEngine;
@@ -9,14 +10,16 @@ public class EndingEntryUI : MonoBehaviour
     [SerializeField] private TMP_Text npcNameText;
     [SerializeField] private TMP_Text endingText;
 
+    private Coroutine avatarLoadRoutine;
+    private int avatarLoadVersion;
+
     public void Setup(NPCEventEndingGroup group)
     {
         AutoBind();
 
         if (avatarImage != null)
         {
-            avatarImage.sprite = group.Avatar;
-            avatarImage.enabled = group.Avatar != null;
+            StartAvatarLoad(group.AvatarAddress, group.Avatar);
         }
 
         if (npcNameText != null)
@@ -28,6 +31,29 @@ public class EndingEntryUI : MonoBehaviour
         {
             endingText.text = BuildEndingText(group);
         }
+    }
+
+    private void StartAvatarLoad(string address, Sprite fallback)
+    {
+        StopAvatarLoad();
+        if (avatarImage == null)
+        {
+            return;
+        }
+
+        avatarLoadVersion++;
+        int loadVersion = avatarLoadVersion;
+        avatarLoadRoutine = StartCoroutine(AddressableSpriteLoader.SetImageSpriteRoutine(
+            avatarImage,
+            address,
+            fallback,
+            () => loadVersion == avatarLoadVersion));
+    }
+
+    private void StopAvatarLoad()
+    {
+        avatarLoadVersion++;
+        avatarLoadRoutine = null;
     }
 
     private static string BuildEndingText(NPCEventEndingGroup group)

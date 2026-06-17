@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -52,7 +53,7 @@ public class MainSceneHudController : MonoBehaviour
         if (!hasShownStartMenu)
         {
             hasShownStartMenu = true;
-            StartCoroutine(AddressableSceneLoader.LoadSceneRoutine(startMenuSceneName, LoadSceneMode.Additive));
+            StartCoroutine(LoadInitialStartMenuRoutine());
         }
     }
 
@@ -182,6 +183,16 @@ public class MainSceneHudController : MonoBehaviour
 
         SceneManager.sceneLoaded -= OnStartMenuLoaded;
         isLoadingOrLoadedStartMenu = false;
+    }
+
+    private IEnumerator LoadInitialStartMenuRoutine()
+    {
+        yield return AddressableSceneLoader.LoadSceneRoutine(
+            startMenuSceneName,
+            LoadSceneMode.Additive,
+            hideOverlayWhenDone: false);
+
+        SceneLoadingOverlay.ForceHide();
     }
 
     private void OnSceneUnloaded(Scene scene)

@@ -14,6 +14,7 @@ public class ShopVisitor
     public string RuntimeId => runtimeId;
     public string DisplayName => definition != null ? definition.DisplayName : displayName;
     public Sprite Avatar => definition != null ? definition.Avatar : avatar;
+    public string AvatarAddress => definition == null ? string.Empty : definition.AvatarAddress;
     public NPCDefinition Definition => definition;
     public bool IsSpecial => definition != null;
     public bool CanTalk => canTalk && definition != null;

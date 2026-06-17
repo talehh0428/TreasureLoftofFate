@@ -26,6 +26,8 @@ public class NPCDialogueController : MonoBehaviour
 
     private NPCDefinition currentNpc;
     private Coroutine typewriterRoutine;
+    private Coroutine avatarLoadRoutine;
+    private int avatarLoadVersion;
     private bool isTypewriterPlaying;
     private bool isVisible;
 
@@ -90,8 +92,7 @@ public class NPCDialogueController : MonoBehaviour
 
         if (npcAvatar != null)
         {
-            npcAvatar.sprite = npc.Avatar;
-            npcAvatar.enabled = npc.Avatar != null;
+            StartAvatarLoad(npc.AvatarAddress, npc.Avatar);
         }
 
         if (npcNameText != null)
@@ -131,6 +132,7 @@ public class NPCDialogueController : MonoBehaviour
 
         if (npcAvatar != null)
         {
+            StopAvatarLoad();
             npcAvatar.sprite = null;
             npcAvatar.enabled = false;
         }
@@ -275,6 +277,29 @@ public class NPCDialogueController : MonoBehaviour
         }
 
         isTypewriterPlaying = false;
+    }
+
+    private void StartAvatarLoad(string address, Sprite fallback)
+    {
+        StopAvatarLoad();
+        if (npcAvatar == null)
+        {
+            return;
+        }
+
+        avatarLoadVersion++;
+        int loadVersion = avatarLoadVersion;
+        avatarLoadRoutine = StartCoroutine(AddressableSpriteLoader.SetImageSpriteRoutine(
+            npcAvatar,
+            address,
+            fallback,
+            () => loadVersion == avatarLoadVersion));
+    }
+
+    private void StopAvatarLoad()
+    {
+        avatarLoadVersion++;
+        avatarLoadRoutine = null;
     }
 
     private void AutoBind()

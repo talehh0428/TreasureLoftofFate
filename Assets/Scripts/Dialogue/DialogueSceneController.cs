@@ -118,14 +118,19 @@ public class DialogueSceneController : MonoBehaviour
 
     public void ShowLoading(string npcName, Sprite portrait)
     {
+        ShowLoading(npcName, string.Empty, portrait);
+    }
+
+    public void ShowLoading(string npcName, string portraitAddress, Sprite portrait)
+    {
         if (!isLoaded || dialogueBox == null)
         {
             LoadDialogue();
-            StartCoroutine(ShowLoadingWhenReady(npcName, portrait));
+            StartCoroutine(ShowLoadingWhenReady(npcName, portraitAddress, portrait));
             return;
         }
 
-        dialogueBox.ShowLoading(npcName, portrait);
+        dialogueBox.ShowLoading(npcName, portraitAddress, portrait);
     }
 
     public void SetBackgroundVisible(bool visible)
@@ -173,7 +178,7 @@ public class DialogueSceneController : MonoBehaviour
         TryShowPendingDialogue();
     }
 
-    private IEnumerator ShowLoadingWhenReady(string npcName, Sprite portrait)
+    private IEnumerator ShowLoadingWhenReady(string npcName, string portraitAddress, Sprite portrait)
     {
         while (isLoadingScene)
         {
@@ -183,7 +188,7 @@ public class DialogueSceneController : MonoBehaviour
         EnsureDialogueBox(true);
         if (dialogueBox != null)
         {
-            dialogueBox.ShowLoading(npcName, portrait);
+            dialogueBox.ShowLoading(npcName, portraitAddress, portrait);
         }
     }
 

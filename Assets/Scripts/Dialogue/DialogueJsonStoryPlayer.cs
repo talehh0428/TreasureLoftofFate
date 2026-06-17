@@ -197,6 +197,7 @@ public class DialogueJsonStoryPlayer : MonoBehaviour
         {
             npcName = GetSpeakerName(line, speaker),
             portrait = speaker == null ? null : speaker.Portrait,
+            portraitAddress = speaker == null ? string.Empty : speaker.PortraitAddress,
             text = GetLineText(line),
             choices = new[]
             {

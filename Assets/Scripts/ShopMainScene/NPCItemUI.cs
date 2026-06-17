@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -16,6 +17,8 @@ public class NPCItemUI : MonoBehaviour, IPointerClickHandler
     private ShopVisitor currentVisitor;
     private Color normalColor;
     private bool hasLeft;
+    private Coroutine avatarLoadRoutine;
+    private int avatarLoadVersion;
 
     public event Action<NPCItemUI> Clicked;
 
@@ -62,8 +65,7 @@ public class NPCItemUI : MonoBehaviour, IPointerClickHandler
 
         if (npcAvatar != null)
         {
-            npcAvatar.sprite = currentVisitor.Avatar;
-            npcAvatar.enabled = currentVisitor.Avatar != null;
+            StartAvatarLoad(currentVisitor.AvatarAddress, currentVisitor.Avatar);
             npcAvatar.color = Color.white;
         }
 
@@ -127,6 +129,7 @@ public class NPCItemUI : MonoBehaviour, IPointerClickHandler
 
         if (npcAvatar != null)
         {
+            StopAvatarLoad();
             npcAvatar.sprite = null;
             npcAvatar.enabled = false;
             npcAvatar.color = Color.white;
@@ -164,6 +167,29 @@ public class NPCItemUI : MonoBehaviour, IPointerClickHandler
         {
             normalColor = backgroundImage.color;
         }
+    }
+
+    private void StartAvatarLoad(string address, Sprite fallback)
+    {
+        StopAvatarLoad();
+        if (npcAvatar == null)
+        {
+            return;
+        }
+
+        avatarLoadVersion++;
+        int loadVersion = avatarLoadVersion;
+        avatarLoadRoutine = StartCoroutine(AddressableSpriteLoader.SetImageSpriteRoutine(
+            npcAvatar,
+            address,
+            fallback,
+            () => loadVersion == avatarLoadVersion));
+    }
+
+    private void StopAvatarLoad()
+    {
+        avatarLoadVersion++;
+        avatarLoadRoutine = null;
     }
 
     public void OnPointerClick(PointerEventData eventData)

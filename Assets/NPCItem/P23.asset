@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   npcId: P23
   displayName: "\u6BB7\u65E0\u90AA"
-  avatar: {fileID: 21300000, guid: 92027695be348754e87f7f3e8e4f17f9, type: 3}
-  portrait: {fileID: 21300000, guid: 3b8c54f0abbd1b84789938c3c451313e, type: 3}
+  avatarAddress: Assets/Images/Avatar/wu-xie.png
+  portraitAddress: Assets/Images/Portrait/wu-xie.png
+  avatar: {fileID: 0}
+  portrait: {fileID: 0}
   description: "\u88AB\u8840\u715E\u5B97\u8FFD\u6740\u7684\u6D41\u4EA1\u4FEE\u58EB"
   attack: 25
   defense: 5

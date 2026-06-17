@@ -24,6 +24,7 @@ public readonly struct GuideBookEntryData
     public string DisplayName => Definition != null ? Definition.DisplayName : NpcDefinition == null ? string.Empty : NpcDefinition.DisplayName;
     public string Description => Definition != null ? Definition.Description : NpcDefinition == null ? string.Empty : NpcDefinition.Description;
     public Sprite Icon => Definition != null ? Definition.Icon : NpcDefinition == null ? null : NpcDefinition.Avatar;
+    public string IconAddress => Definition != null ? string.Empty : NpcDefinition == null ? string.Empty : NpcDefinition.AvatarAddress;
     public ShopItemRarity Rarity => Definition == null ? ShopItemRarity.Common : Definition.Rarity;
     public int Price => Definition == null ? 0 : Definition.Price;
     public int Attack => Definition != null ? Definition.Attack : NpcDefinition == null ? 0 : NpcDefinition.Attack;

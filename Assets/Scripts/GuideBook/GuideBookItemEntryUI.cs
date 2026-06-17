@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,6 +31,8 @@ public class GuideBookItemEntryUI : MonoBehaviour
     [SerializeField] private Color immortalRarityColor = new Color(0.88f, 0.18f, 0.18f, 1f);
 
     private GuideBookEntryData currentEntry;
+    private Coroutine iconLoadRoutine;
+    private int iconLoadVersion;
 
     public event Action<GuideBookItemEntryUI> Clicked;
 
@@ -67,8 +70,15 @@ public class GuideBookItemEntryUI : MonoBehaviour
         bool isUnlocked = entryData.IsUnlocked;
         if (iconImage != null)
         {
-            iconImage.sprite = isUnlocked ? entryData.Icon : lockedIcon;
-            iconImage.enabled = iconImage.sprite != null;
+            if (isUnlocked)
+            {
+                StartIconLoad(entryData.IconAddress, entryData.Icon);
+            }
+            else
+            {
+                StartIconLoad(string.Empty, lockedIcon);
+            }
+
             iconImage.color = isUnlocked ? unlockedTintColor : lockedTintColor;
         }
 
@@ -101,6 +111,29 @@ public class GuideBookItemEntryUI : MonoBehaviour
     private void HandleClicked()
     {
         Clicked?.Invoke(this);
+    }
+
+    private void StartIconLoad(string address, Sprite fallback)
+    {
+        StopIconLoad();
+        if (iconImage == null)
+        {
+            return;
+        }
+
+        iconLoadVersion++;
+        int loadVersion = iconLoadVersion;
+        iconLoadRoutine = StartCoroutine(AddressableSpriteLoader.SetImageSpriteRoutine(
+            iconImage,
+            address,
+            fallback,
+            () => loadVersion == iconLoadVersion));
+    }
+
+    private void StopIconLoad()
+    {
+        iconLoadVersion++;
+        iconLoadRoutine = null;
     }
 
     private void AutoBind()

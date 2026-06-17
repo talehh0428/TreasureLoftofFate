@@ -49,6 +49,7 @@ public static class NPCEventEndingRegistry
             npc,
             npc.NpcId,
             npc.DisplayName,
+            npc.AvatarAddress,
             npc.Avatar,
             eventConfig.id,
             title,
@@ -114,6 +115,7 @@ public static class NPCEventEndingRegistry
                         npc,
                         endingSave.npcId,
                         npc == null ? endingSave.npcName : npc.DisplayName,
+                        npc == null ? string.Empty : npc.AvatarAddress,
                         npc == null ? null : npc.Avatar,
                         endingSave.eventId,
                         endingSave.title,
@@ -145,6 +147,7 @@ public readonly struct NPCEventEndingRecord
         NPCDefinition npc,
         string npcId,
         string npcName,
+        string avatarAddress,
         Sprite avatar,
         string eventId,
         string title,
@@ -153,6 +156,7 @@ public readonly struct NPCEventEndingRecord
         Npc = npc;
         NpcId = npcId ?? string.Empty;
         NpcName = npcName ?? string.Empty;
+        AvatarAddress = avatarAddress ?? string.Empty;
         Avatar = avatar;
         EventId = eventId ?? string.Empty;
         Title = title ?? string.Empty;
@@ -162,6 +166,7 @@ public readonly struct NPCEventEndingRecord
     public readonly NPCDefinition Npc;
     public readonly string NpcId;
     public readonly string NpcName;
+    public readonly string AvatarAddress;
     public readonly Sprite Avatar;
     public readonly string EventId;
     public readonly string Title;
@@ -175,17 +180,20 @@ public readonly struct NPCEventEndingGroup
         Npc = firstRecord.Npc;
         npcId = firstRecord.NpcId;
         npcName = firstRecord.NpcName;
+        avatarAddress = firstRecord.AvatarAddress;
         avatar = firstRecord.Avatar;
         Endings = endings ?? Array.Empty<NPCEventEndingRecord>();
     }
 
     private readonly string npcId;
     private readonly string npcName;
+    private readonly string avatarAddress;
     private readonly Sprite avatar;
 
     public NPCDefinition Npc { get; }
     public IReadOnlyList<NPCEventEndingRecord> Endings { get; }
     public string NpcId => Npc == null ? npcId : Npc.NpcId;
     public string NpcName => Npc == null ? npcName : Npc.DisplayName;
+    public string AvatarAddress => Npc == null ? avatarAddress : Npc.AvatarAddress;
     public Sprite Avatar => Npc == null ? avatar : Npc.Avatar;
 }

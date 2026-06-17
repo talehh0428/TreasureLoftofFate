@@ -6,6 +6,7 @@ public class DialogueBody
 {
     public string npcName;
     public Sprite portrait;
+    public string portraitAddress;
     [TextArea] public string text;
     public DialogueChoice[] choices;
 
