@@ -138,7 +138,7 @@ public class MainSceneShopController : MonoBehaviour
         }
 
         UnbindShopSceneController();
-        SceneManager.UnloadSceneAsync(loadedScene);
+        StartCoroutine(AddressableSceneLoader.UnloadSceneRoutine(loadedScene));
     }
 
     public void CloseMarketScene()
@@ -150,7 +150,7 @@ public class MainSceneShopController : MonoBehaviour
         }
 
         UnbindMarketSceneController();
-        SceneManager.UnloadSceneAsync(loadedScene);
+        StartCoroutine(AddressableSceneLoader.UnloadSceneRoutine(loadedScene));
     }
 
     public void CompleteTradeForNpc(NPCDefinition npc)
@@ -286,7 +286,7 @@ public class MainSceneShopController : MonoBehaviour
             Scene startMenuScene = startMenuController.gameObject.scene;
             if (startMenuScene.IsValid() && startMenuScene.isLoaded)
             {
-                SceneManager.UnloadSceneAsync(startMenuScene);
+                StartCoroutine(AddressableSceneLoader.UnloadSceneRoutine(startMenuScene));
             }
         }
 
@@ -381,17 +381,7 @@ public class MainSceneShopController : MonoBehaviour
     {
         isLoadingShopScene = true;
 
-        AsyncOperation loadOperation = SceneManager.LoadSceneAsync(shopSceneName, loadSceneMode);
-        if (loadOperation == null)
-        {
-            isLoadingShopScene = false;
-            yield break;
-        }
-
-        while (!loadOperation.isDone)
-        {
-            yield return null;
-        }
+        yield return AddressableSceneLoader.LoadSceneRoutine(shopSceneName, loadSceneMode);
 
         isLoadingShopScene = false;
         BindLoadedShopScene();
@@ -401,17 +391,7 @@ public class MainSceneShopController : MonoBehaviour
     {
         isLoadingMarketScene = true;
 
-        AsyncOperation loadOperation = SceneManager.LoadSceneAsync(marketSceneName, loadSceneMode);
-        if (loadOperation == null)
-        {
-            isLoadingMarketScene = false;
-            yield break;
-        }
-
-        while (!loadOperation.isDone)
-        {
-            yield return null;
-        }
+        yield return AddressableSceneLoader.LoadSceneRoutine(marketSceneName, loadSceneMode);
 
         isLoadingMarketScene = false;
         BindLoadedMarketScene();
@@ -859,16 +839,7 @@ public class MainSceneShopController : MonoBehaviour
         }
 
         UnbindMarketSceneController();
-        AsyncOperation unloadOperation = SceneManager.UnloadSceneAsync(loadedScene);
-        if (unloadOperation == null)
-        {
-            yield break;
-        }
-
-        while (!unloadOperation.isDone)
-        {
-            yield return null;
-        }
+        yield return AddressableSceneLoader.UnloadSceneRoutine(loadedScene);
     }
 
     private IEnumerator UnloadShopSceneRoutine()
@@ -880,16 +851,7 @@ public class MainSceneShopController : MonoBehaviour
         }
 
         UnbindShopSceneController();
-        AsyncOperation unloadOperation = SceneManager.UnloadSceneAsync(loadedScene);
-        if (unloadOperation == null)
-        {
-            yield break;
-        }
-
-        while (!unloadOperation.isDone)
-        {
-            yield return null;
-        }
+        yield return AddressableSceneLoader.UnloadSceneRoutine(loadedScene);
     }
 
     private IEnumerator PlayTransitionRoutine(string message, IEnumerator coveredOperation)
@@ -994,17 +956,7 @@ public class MainSceneShopController : MonoBehaviour
     {
         isLoadingTradeScene = true;
 
-        AsyncOperation loadOperation = SceneManager.LoadSceneAsync(tradeSceneName, loadSceneMode);
-        if (loadOperation == null)
-        {
-            isLoadingTradeScene = false;
-            yield break;
-        }
-
-        while (!loadOperation.isDone)
-        {
-            yield return null;
-        }
+        yield return AddressableSceneLoader.LoadSceneRoutine(tradeSceneName, loadSceneMode);
 
         isLoadingTradeScene = false;
     }

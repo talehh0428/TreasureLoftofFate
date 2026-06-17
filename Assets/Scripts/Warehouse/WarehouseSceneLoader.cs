@@ -56,17 +56,7 @@ public class WarehouseSceneLoader : MonoBehaviour
     {
         isLoading = true;
 
-        AsyncOperation loadOperation = SceneManager.LoadSceneAsync(warehouseSceneName, loadSceneMode);
-        if (loadOperation == null)
-        {
-            isLoading = false;
-            yield break;
-        }
-
-        while (!loadOperation.isDone)
-        {
-            yield return null;
-        }
+        yield return AddressableSceneLoader.LoadSceneRoutine(warehouseSceneName, loadSceneMode);
 
         isLoading = false;
     }

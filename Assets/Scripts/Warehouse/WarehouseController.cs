@@ -87,7 +87,7 @@ public class WarehouseController : MonoBehaviour
         }
 
         isUnloading = true;
-        SceneManager.UnloadSceneAsync(currentScene);
+        StartCoroutine(AddressableSceneLoader.UnloadSceneRoutine(currentScene));
     }
 
     private void HandleSlotClicked(WarehouseItemSlotUI clickedSlot)

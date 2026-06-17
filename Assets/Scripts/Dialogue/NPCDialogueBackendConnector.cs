@@ -628,7 +628,7 @@ public class NPCDialogueBackendConnector : MonoBehaviour
             return pageUri.GetLeftPart(UriPartial.Authority);
         }
 
-        return "http://8.163.71.97:3000/";
+        return "http://8.163.71.97:3000";
     }
 
     private void AppendJsonString(StringBuilder builder, string key, string value)

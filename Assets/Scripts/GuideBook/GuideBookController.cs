@@ -142,7 +142,7 @@ public class GuideBookController : MonoBehaviour
         }
 
         isUnloading = true;
-        SceneManager.UnloadSceneAsync(currentScene);
+        StartCoroutine(AddressableSceneLoader.UnloadSceneRoutine(currentScene));
     }
 
     private void LoadDefinitions()

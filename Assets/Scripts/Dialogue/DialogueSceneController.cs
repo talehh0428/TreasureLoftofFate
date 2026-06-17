@@ -92,7 +92,7 @@ public class DialogueSceneController : MonoBehaviour
 
         if (!string.IsNullOrWhiteSpace(dialogueSceneName) && IsSceneLoaded(dialogueSceneName) && CanUnloadDialogueScene())
         {
-            SceneManager.UnloadSceneAsync(dialogueSceneName);
+            StartCoroutine(AddressableSceneLoader.UnloadSceneRoutine(dialogueSceneName));
         }
 
         isLoaded = false;
@@ -157,15 +157,7 @@ public class DialogueSceneController : MonoBehaviour
 
         isLoadingScene = true;
 
-        AsyncOperation loadOperation = SceneManager.LoadSceneAsync(dialogueSceneName, LoadSceneMode.Additive);
-        if (loadOperation == null)
-        {
-            Debug.LogError($"[DialogueSceneController] Failed to load dialogue scene: {dialogueSceneName}");
-            isLoadingScene = false;
-            yield break;
-        }
-
-        yield return loadOperation;
+        yield return AddressableSceneLoader.LoadSceneRoutine(dialogueSceneName, LoadSceneMode.Additive);
 
         isLoadingScene = false;
         EnsureDialogueBox(false);
