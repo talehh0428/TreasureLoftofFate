@@ -4,9 +4,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 public class GuideBookController : MonoBehaviour
 {
@@ -20,8 +17,6 @@ public class GuideBookController : MonoBehaviour
 
     [Header("Data Source")]
     [SerializeField] private string resourcesFolderName = "ShopItem";
-    [SerializeField] private string editorAssetFolder = "Assets/ShopItem";
-    [SerializeField] private List<ShopItemDefinition> itemDefinitions = new List<ShopItemDefinition>();
     [SerializeField] private string defaultSelectedItemId = "0001";
     [SerializeField] private List<NPCDefinition> npcDefinitions = new List<NPCDefinition>();
     [SerializeField] private string defaultSelectedNpcId;
@@ -106,7 +101,6 @@ public class GuideBookController : MonoBehaviour
     private void OnValidate()
     {
         AutoBind();
-        SyncDefinitionsInEditor();
         SetupTabPresentation();
     }
 
@@ -147,14 +141,7 @@ public class GuideBookController : MonoBehaviour
 
     private void LoadDefinitions()
     {
-        List<ShopItemDefinition> loadedDefinitions = itemDefinitions
-            .Where(definition => definition != null)
-            .ToList();
-
-        if (loadedDefinitions.Count == 0)
-        {
-            loadedDefinitions = Resources.LoadAll<ShopItemDefinition>(resourcesFolderName).ToList();
-        }
+        ShopItemDefinition[] loadedDefinitions = Resources.LoadAll<ShopItemDefinition>(resourcesFolderName);
 
         sortedDefinitions.Clear();
         sortedDefinitions.AddRange(loadedDefinitions
@@ -461,33 +448,6 @@ public class GuideBookController : MonoBehaviour
                 detailPanel = rightPage.GetComponent<GuideBookDetailPanelController>();
             }
         }
-    }
-
-    private void SyncDefinitionsInEditor()
-    {
-#if UNITY_EDITOR
-        if (Application.isPlaying || string.IsNullOrWhiteSpace(editorAssetFolder))
-        {
-            return;
-        }
-
-        string[] assetGuids = AssetDatabase.FindAssets("t:ShopItemDefinition", new[] { editorAssetFolder });
-        List<ShopItemDefinition> discoveredDefinitions = new List<ShopItemDefinition>();
-
-        for (int index = 0; index < assetGuids.Length; index++)
-        {
-            string assetPath = AssetDatabase.GUIDToAssetPath(assetGuids[index]);
-            ShopItemDefinition definition = AssetDatabase.LoadAssetAtPath<ShopItemDefinition>(assetPath);
-            if (definition != null)
-            {
-                discoveredDefinitions.Add(definition);
-            }
-        }
-
-        itemDefinitions = discoveredDefinitions
-            .OrderBy(definition => definition.ItemId)
-            .ToList();
-#endif
     }
 
     private Button FindButtonByName(params string[] names)

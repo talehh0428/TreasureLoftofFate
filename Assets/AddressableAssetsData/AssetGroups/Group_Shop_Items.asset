@@ -17,8 +17,18 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 2385696f898ffd8499546e9e390ada11
   m_SerializeEntries:
+  - m_GUID: 05fcb1d2d1e226d4ba8445784beaeb72
+    m_Address: Assets/Images/ShopItemImage/0011.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 09dec01324484a442922ecb893d4d757
     m_Address: Assets/Images/ShopItemImage/fabao_chiyanfazhang.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1469b3ee940814d41bfadb07e0df0722
+    m_Address: Assets/Images/ShopItemImage/0021.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -29,6 +39,16 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1948383804e6b9741b04c2ff7289917e
     m_Address: Assets/Images/ShopItemImage/danyao_jingangsheli.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1cb6f123962745949b55761e93b17c4d
+    m_Address: Assets/Images/ShopItemImage/0026.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 28f7f7228a9317842a94aa9553b3ef83
+    m_Address: Assets/Images/ShopItemImage/0020.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -57,6 +77,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3c647b5a065ae7c4dbb40b11c2323ed5
+    m_Address: Assets/Images/ShopItemImage/0001.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4032529233e2dce4f8d6b275dca6a652
+    m_Address: Assets/Images/ShopItemImage/0019.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 49e7bc2ec4130c946bff238a0b6ea07e
     m_Address: Assets/Images/ShopItemImage/fabao_liulibaoyi.png
     m_ReadOnly: 0
@@ -72,6 +102,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5d5d6f6464ba1c249be62a84619ac535
+    m_Address: Assets/Images/ShopItemImage/0029.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 628bcd0dda5a977468b49348173757ab
     m_Address: Assets/Images/ShopItemImage/danyao_jifengsan.png
     m_ReadOnly: 0
@@ -79,6 +114,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6d726059bf854e644936b937ec733533
     m_Address: Assets/Images/ShopItemImage/fabao_tiemuzhang.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6e44e3f7ea0384246ad8fa8f741e2ccd
+    m_Address: Assets/Images/ShopItemImage/0016.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -92,8 +132,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7b70f1a6c2c243e48b3d5b0f2645daca
+    m_Address: Assets/Images/ShopItemImage/0023.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7d684a184e82efe4e8299447fd983fea
     m_Address: Assets/Images/ShopItemImage/danyao_huiqisan.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 804fd00cbc9935c4482b49a77f68f5e6
+    m_Address: Assets/Images/ShopItemImage/0024.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -102,13 +152,43 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8d10c2232f4f1504cb6c72ba41ab4347
+    m_Address: Assets/Images/ShopItemImage/0018.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 908beee899ee1ca4b8a1c1970eba45cd
+    m_Address: Assets/Images/ShopItemImage/0010.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 924c9def5993d374ba37660101eb0982
+    m_Address: Assets/Images/ShopItemImage/0002.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9301b0c5dba526646b303fe5b9078199
+    m_Address: Assets/Images/ShopItemImage/0022.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 974abeac1bad03c41b45e17e0977edff
     m_Address: Assets/Images/BuffIcon/boost_spirit_stone.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9c6cfa3e33fdf364ba1960ed98eff4b8
+    m_Address: Assets/Images/ShopItemImage/0015.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9e53c66df8a16a7419871d46b4bca8d6
     m_Address: Assets/Images/ShopItemImage/fabao_tianganbaojia.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9f4cc45362ea95b4882cd0d3c21530d9
+    m_Address: Assets/Images/ShopItemImage/0008.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -119,6 +199,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a3a282227a77888468fb4f2626ce4217
     m_Address: Assets/Images/ShopItemImage/danyao_bumiedan.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a57f192c2a3dff14ca6e88215fbfebe4
+    m_Address: Assets/Images/ShopItemImage/0027.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -147,8 +232,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c1917315af098d045a201324310a4d6d
+    m_Address: Assets/Images/ShopItemImage/0013.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c262543fe2b4c314d84d3ab85ef22435
     m_Address: Assets/Images/ShopItemImage/fabao_lieshifu.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c3b3ac10bdd170642ab51005ea533bc4
+    m_Address: Assets/Images/ShopItemImage/0007.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -157,8 +252,23 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c77f8d29353ae4843973132bfe59e300
+    m_Address: Assets/Images/ShopItemImage/0005.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c84de5f4324fa284cbf579864d4cf55b
+    m_Address: Assets/Images/ShopItemImage/0004.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ca21b05d3f07541419d74b997bf901cf
     m_Address: Assets/Images/ShopItemImage/danyao_zengyuandan.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ca9886070be59b1449a29244b6cb3cd1
+    m_Address: Assets/Images/ShopItemImage/0028.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -192,6 +302,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e454ac77feffd7c4390041c14f9e5388
+    m_Address: Assets/Images/ShopItemImage/0012.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e58c0ca38d4459a41a9eda7bdae59366
+    m_Address: Assets/Images/ShopItemImage/0017.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e653c79c7128a4f40ace1909d1e51459
     m_Address: Assets/Images/BuffIcon/boost_sell_price.png
     m_ReadOnly: 0
@@ -202,13 +322,38 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: eb29e0789ab0fa34c8ad592fe187c7e8
+    m_Address: Assets/Images/ShopItemImage/0003.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ec3f014b5d8957a40ae18e119cd2406f
     m_Address: Assets/Images/ShopItemImage/danyao_jinshendan.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f04a3b20bb5e7d940a88ee6f696ecf95
+    m_Address: Assets/Images/ShopItemImage/0025.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f1471d80079df3046a566805526cc2bc
     m_Address: Assets/Images/ShopItemImage/fabao_zhanlongjian.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f1704f3e82a30354bbd81718e9a8e574
+    m_Address: Assets/Images/ShopItemImage/0006.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f1998507fe77dcc4caf0bab54505f302
+    m_Address: Assets/Images/ShopItemImage/0014.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f2216c6468638a1469d097a59748b4f0
+    m_Address: Assets/Images/ShopItemImage/0009.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

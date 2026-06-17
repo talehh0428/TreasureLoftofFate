@@ -16,6 +16,7 @@ public class DialogueBoxController : MonoBehaviour
     [SerializeField] private Button[] choiceButtons = new Button[ChoiceButtonCount];
     [SerializeField] private TMP_Text[] choiceTexts = new TMP_Text[ChoiceButtonCount];
     [SerializeField] private Button closeEndingButton;
+    [SerializeField] private TMP_Text closeEndingButtonText;
 
     [Header("Typing")]
     [SerializeField] private float charactersPerSecond = 35f;
@@ -31,7 +32,9 @@ public class DialogueBoxController : MonoBehaviour
     private Action<DialogueChoiceResult> pendingChoiceCallback;
     private string activeFullText = string.Empty;
     private DialogueChoice[] activeChoices;
+    private string defaultCloseEndingButtonText = string.Empty;
     private bool closeEndingButtonEnabled = true;
+    private bool hasDefaultCloseEndingButtonText;
     private bool isVisible;
 
     public event Action CloseEndingRequested;
@@ -184,6 +187,21 @@ public class DialogueBoxController : MonoBehaviour
     {
         closeEndingButtonEnabled = isEnabled;
         SetCloseEndingButtonAvailable(isEnabled && isVisible);
+    }
+
+    public void SetCloseEndingButtonText(string text)
+    {
+        TryAutoBindMissingReferences();
+        CacheDefaultCloseEndingButtonText();
+
+        if (closeEndingButtonText == null)
+        {
+            return;
+        }
+
+        closeEndingButtonText.text = string.IsNullOrWhiteSpace(text)
+            ? defaultCloseEndingButtonText
+            : text.Trim();
     }
 
     private IEnumerator TypeText(string text, DialogueChoice[] choices)
@@ -371,6 +389,11 @@ public class DialogueBoxController : MonoBehaviour
             closeEndingButton = FindButtonByName(buttons, "CloseEndingButton");
         }
 
+        if (closeEndingButtonText == null && closeEndingButton != null)
+        {
+            closeEndingButtonText = closeEndingButton.GetComponentInChildren<TMP_Text>(true);
+        }
+
         if (choiceButtons == null || choiceButtons.Length < ChoiceButtonCount)
         {
             choiceButtons = new Button[ChoiceButtonCount];
@@ -436,8 +459,30 @@ public class DialogueBoxController : MonoBehaviour
             return;
         }
 
+        CacheDefaultCloseEndingButtonText();
         closeEndingButton.onClick.RemoveListener(HandleCloseEndingClicked);
         closeEndingButton.onClick.AddListener(HandleCloseEndingClicked);
+    }
+
+    private void CacheDefaultCloseEndingButtonText()
+    {
+        if (hasDefaultCloseEndingButtonText)
+        {
+            return;
+        }
+
+        if (closeEndingButtonText == null && closeEndingButton != null)
+        {
+            closeEndingButtonText = closeEndingButton.GetComponentInChildren<TMP_Text>(true);
+        }
+
+        if (closeEndingButtonText == null)
+        {
+            return;
+        }
+
+        defaultCloseEndingButtonText = closeEndingButtonText.text;
+        hasDefaultCloseEndingButtonText = true;
     }
 
     private void HandleCloseEndingClicked()

@@ -178,11 +178,11 @@ MonoBehaviour:
   selectedColor: {r: 1, g: 0.88, b: 0.45, a: 0.49019608}
   soldBackgroundColor: {r: 0.45, g: 0.45, b: 0.45, a: 1}
   soldContentColor: {r: 0.55, g: 0.55, b: 0.55, a: 1}
-  commonRarityColor: {r: 0.8, g: 0.8, b: 0.8, a: 1}
-  fineRarityColor: {r: 0.3, g: 0.85, b: 0.35, a: 1}
-  superiorRarityColor: {r: 0.62, g: 0.35, b: 0.9, a: 1}
-  epicRarityColor: {r: 1, g: 0.82, b: 0.18, a: 1}
-  immortalRarityColor: {r: 0.88, g: 0.18, b: 0.18, a: 1}
+  commonRarityColor: {r: 0.84705883, g: 0.8235294, b: 0.76862746, a: 1}
+  fineRarityColor: {r: 0.49411765, g: 0.62352943, b: 0.43137255, a: 1}
+  superiorRarityColor: {r: 0.47843137, g: 0.36078432, b: 0.5568628, a: 1}
+  epicRarityColor: {r: 0.6901961, g: 0.5411765, b: 0.2901961, a: 1}
+  immortalRarityColor: {r: 0.60784316, g: 0.30588236, b: 0.24705882, a: 1}
 --- !u!1 &3506322495193065535
 GameObject:
   m_ObjectHideFlags: 0
@@ -275,7 +275,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
+  m_fontSize: 18
   m_fontSizeBase: 32
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -375,7 +375,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+  m_Color: {r: 0.84705883, g: 0.8235294, b: 0.76862746, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -466,8 +466,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278255615
-  m_fontColor: {r: 1, g: 1, b: 0, a: 1}
+    rgba: 4283075248
+  m_fontColor: {r: 0.6901961, g: 0.5411765, b: 0.2901961, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -600,8 +600,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4280690431
-  m_fontColor: {r: 1, g: 0.1490565, b: 0.1490565, a: 1}
+    rgba: 4278190335
+  m_fontColor: {r: 1, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

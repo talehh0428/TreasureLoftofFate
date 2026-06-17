@@ -7,7 +7,7 @@ using UnityEngine;
 
 public static class ImportShopItemsFromJson
 {
-    private const string JsonPath = "Assets/Text/商品数据.json";
+    private const string JsonPath = "Assets/Text/修仙作品物品数据.json";
     private const string AssetFolder = "Assets/Resources/ShopItem";
     private const string IconFolder = "Assets/Images/ShopItemImage";
 
@@ -29,12 +29,12 @@ public static class ImportShopItemsFromJson
 
         foreach (ShopItemJson item in items)
         {
-            if (item == null || string.IsNullOrWhiteSpace(item.itemId))
+            if (item == null || string.IsNullOrWhiteSpace(item.ItemId))
             {
                 continue;
             }
 
-            string itemId = item.itemId.Trim();
+            string itemId = item.ItemId.Trim();
             bool hasExisting = existingById.TryGetValue(itemId, out ShopItemDefinition definition);
             if (!hasExisting)
             {
@@ -64,11 +64,29 @@ public static class ImportShopItemsFromJson
     private static List<ShopItemJson> LoadItems()
     {
         string json = File.ReadAllText(JsonPath);
-        json = json.Replace("\"Unlocked By Default\"", "\"unlockedByDefault\"");
+        json = NormalizeJsonKeys(json);
         ShopItemJsonWrapper wrapper = JsonUtility.FromJson<ShopItemJsonWrapper>("{\"items\":" + json + "}");
         return wrapper != null && wrapper.items != null
-            ? wrapper.items.ToList()
+            ? wrapper.items.Where(item => item != null).ToList()
             : new List<ShopItemJson>();
+    }
+
+    private static string NormalizeJsonKeys(string json)
+    {
+        json = json.Replace("\"ItemId\"", "\"itemId\"");
+        json = json.Replace("\"ItemID\"", "\"itemId\"");
+        json = json.Replace("\"itemID\"", "\"itemId\"");
+        json = json.Replace("\"DisplayName\"", "\"displayName\"");
+        json = json.Replace("\"Price\"", "\"price\"");
+        json = json.Replace("\"Icon\"", "\"icon\"");
+        json = json.Replace("\"Description\"", "\"description\"");
+        json = json.Replace("\"Unlocked By Default\"", "\"unlockedByDefault\"");
+        json = json.Replace("\"UnlockedByDefault\"", "\"unlockedByDefault\"");
+        json = json.Replace("\"Rarity\"", "\"rarity\"");
+        json = json.Replace("\"Attack\"", "\"attack\"");
+        json = json.Replace("\"Defense\"", "\"defense\"");
+        json = json.Replace("\"MovementSpeed\"", "\"movementSpeed\"");
+        return json;
     }
 
     private static Dictionary<string, ShopItemDefinition> LoadExistingItems()
@@ -95,27 +113,57 @@ public static class ImportShopItemsFromJson
     {
         definition.name = $"ShopItem_{itemId}";
         definition.SetItemId(itemId);
-        definition.SetDisplayName(item.displayName);
-        definition.SetPrice(item.price);
-        definition.SetIcon(LoadIcon(itemId));
-        definition.SetDescription(item.description);
-        definition.SetUnlockedByDefault(item.unlockedByDefault);
-        definition.SetRarity(ParseRarity(item.rarity));
-        definition.SetAttack(item.attack);
-        definition.SetDefense(item.defense);
-        definition.SetMovementSpeed(item.movementSpeed);
+        definition.SetDisplayName(item.DisplayName);
+        definition.SetPrice(item.Price);
+        definition.SetIcon(LoadIcon(itemId, item.Icon, definition.Icon));
+        definition.SetDescription(item.Description);
+        definition.SetUnlockedByDefault(item.UnlockedByDefault);
+        definition.SetRarity(ParseRarity(item.Rarity));
+        definition.SetAttack(item.Attack);
+        definition.SetDefense(item.Defense);
+        definition.SetMovementSpeed(item.MovementSpeed);
     }
 
-    private static Sprite LoadIcon(string itemId)
+    private static Sprite LoadIcon(string itemId, string jsonIcon, Sprite fallbackIcon)
     {
-        string iconPath = $"{IconFolder}/{itemId}.png";
-        Sprite icon = AssetDatabase.LoadAssetAtPath<Sprite>(iconPath);
-        if (icon == null)
+        Sprite icon = LoadIconByName(itemId);
+        if (icon != null)
         {
-            Debug.LogWarning($"未找到商品图标: {iconPath}");
+            return icon;
         }
 
-        return icon;
+        if (!string.IsNullOrWhiteSpace(jsonIcon))
+        {
+            icon = LoadIconByName(Path.GetFileNameWithoutExtension(jsonIcon.Trim()));
+            if (icon != null)
+            {
+                return icon;
+            }
+        }
+
+        Debug.LogWarning($"未找到商品图标: {IconFolder}/{itemId}.*");
+        return fallbackIcon;
+    }
+
+    private static Sprite LoadIconByName(string iconName)
+    {
+        string[] guids = AssetDatabase.FindAssets($"{iconName} t:Sprite", new[] { IconFolder });
+        foreach (string guid in guids)
+        {
+            string path = AssetDatabase.GUIDToAssetPath(guid);
+            if (Path.GetFileNameWithoutExtension(path) != iconName)
+            {
+                continue;
+            }
+
+            Sprite icon = AssetDatabase.LoadAssetAtPath<Sprite>(path);
+            if (icon != null)
+            {
+                return icon;
+            }
+        }
+
+        return null;
     }
 
     private static ShopItemRarity ParseRarity(string value)
@@ -153,6 +201,7 @@ public static class ImportShopItemsFromJson
     }
 
     [Serializable]
+#pragma warning disable 0649
     private class ShopItemJsonWrapper
     {
         public ShopItemJson[] items;
@@ -168,7 +217,20 @@ public static class ImportShopItemsFromJson
         public int defense;
         public int movementSpeed;
         public string rarity;
+        public string icon;
         public string description;
         public int price;
+
+        public string ItemId => itemId;
+        public string DisplayName => displayName;
+        public bool UnlockedByDefault => unlockedByDefault;
+        public int Attack => attack;
+        public int Defense => defense;
+        public int MovementSpeed => movementSpeed;
+        public string Rarity => rarity;
+        public string Icon => icon;
+        public string Description => description;
+        public int Price => price;
     }
+#pragma warning restore 0649
 }

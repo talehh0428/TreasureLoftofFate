@@ -14,6 +14,7 @@ public class DialogueJsonStoryPlayer : MonoBehaviour
     [SerializeField] private string fallbackSpeakerName = "旁白";
     [SerializeField] private string continueChoiceText = "继续";
     [SerializeField] private string finishChoiceText = "结束";
+    [SerializeField] private string skipStoryButtonText = "跳过";
     [SerializeField] private bool unloadDialogueWhenFinished = true;
     [SerializeField] private bool showBackgroundForStory;
 
@@ -105,10 +106,11 @@ public class DialogueJsonStoryPlayer : MonoBehaviour
         }
 
         dialogueController.SetBackgroundVisible(showBackground);
-        dialogueController.SetCloseEndingButtonEnabled(false);
+        EnableStorySkipButton();
 
         if (!TryLoadJson(jsonPath, out string jsonText))
         {
+            DisableStorySkipButton();
             Fail($"Cannot load dialogue JSON from path: {jsonPath}");
             return;
         }
@@ -134,10 +136,11 @@ public class DialogueJsonStoryPlayer : MonoBehaviour
         }
 
         dialogueController.SetBackgroundVisible(showBackground);
-        dialogueController.SetCloseEndingButtonEnabled(false);
+        EnableStorySkipButton();
 
         if (string.IsNullOrWhiteSpace(jsonText))
         {
+            DisableStorySkipButton();
             Fail($"Dialogue JSON asset is empty: {sourceName}");
             return;
         }
@@ -165,15 +168,14 @@ public class DialogueJsonStoryPlayer : MonoBehaviour
         activeLines = null;
         activeLineIndex = 0;
         isPlaying = false;
+        DisableStorySkipButton();
 
         if (dialogueController != null && unloadDialogueWhenFinished)
         {
-            dialogueController.SetCloseEndingButtonEnabled(true);
             dialogueController.UnloadDialogue();
         }
         else if (dialogueController != null)
         {
-            dialogueController.SetCloseEndingButtonEnabled(true);
             dialogueController.SetBackgroundVisible(false);
         }
     }
@@ -228,18 +230,49 @@ public class DialogueJsonStoryPlayer : MonoBehaviour
         activeLines = null;
         activeLineIndex = 0;
         isPlaying = false;
+        DisableStorySkipButton();
 
         if (dialogueController != null && unloadDialogueWhenFinished)
         {
-            dialogueController.SetCloseEndingButtonEnabled(true);
             dialogueController.UnloadDialogue();
-        }
-        else if (dialogueController != null)
-        {
-            dialogueController.SetCloseEndingButtonEnabled(true);
         }
 
         StoryCompleted?.Invoke();
+    }
+
+    private void EnableStorySkipButton()
+    {
+        if (dialogueController == null)
+        {
+            return;
+        }
+
+        dialogueController.CloseEndingRequested -= HandleSkipStoryRequested;
+        dialogueController.CloseEndingRequested += HandleSkipStoryRequested;
+        dialogueController.SetCloseEndingButtonText(skipStoryButtonText);
+        dialogueController.SetCloseEndingButtonEnabled(true);
+    }
+
+    private void DisableStorySkipButton()
+    {
+        if (dialogueController == null)
+        {
+            return;
+        }
+
+        dialogueController.CloseEndingRequested -= HandleSkipStoryRequested;
+        dialogueController.SetCloseEndingButtonText(null);
+        dialogueController.SetCloseEndingButtonEnabled(true);
+    }
+
+    private void HandleSkipStoryRequested()
+    {
+        if (!isPlaying)
+        {
+            return;
+        }
+
+        CompleteStory();
     }
 
     private void BuildNpcLookup()
@@ -425,9 +458,9 @@ public class DialogueJsonStoryPlayer : MonoBehaviour
         isPlaying = false;
         activeLines = null;
         activeLineIndex = 0;
+        DisableStorySkipButton();
         if (dialogueController != null)
         {
-            dialogueController.SetCloseEndingButtonEnabled(true);
             dialogueController.SetBackgroundVisible(false);
         }
 
