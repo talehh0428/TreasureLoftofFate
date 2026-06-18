@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 025c29d5619685c4f84dfa859ade29fa, type: 3}
+  m_Name: ShopItem_shengling
+  m_EditorClassIdentifier: 
+  itemId: shengling
+  displayName: "\u5723\u94C3"
+  price: 99999
+  icon: {fileID: 21300000, guid: 769aba37411c2a142b5ebd7bc2e15d94, type: 3}
+  description: "\u4F20\u8BF4\uFF0C\u6700\u521D\u7684\u4ED9\u4EBA\u66FE\u53BB\u8FC7\u4E00\u5EA7\u6DF1\u57CB\u5728\u5BC6\u5883\u4E2D\u7684\uFF0C\u7EC8\u5E74\u767D\u96EA\u7691\u7691\u7684\u5723\u5C71\u3002\u636E\u540E\u4E16\u8BB0\u8F7D\uFF0C\u4ED9\u4EBA\u5728\u5386\u7ECF\u4E8615\u91CD\u8003\u9A8C\u540E\uFF0C\u7EC8\u4E8E\u5C06\u7075\u5DE7\u8C22\u62C9\u683C\u4E4B\u529B\u4FEE\u70BC\u5230\u6781\u81F4\uFF0C\u7834\u89E3\u4E86\u5723\u5C71\u7684\u9690\u79D8\u6838\u5FC3\uFF0C\u5E26\u51FA\u4E86\u8FD9\u679A\u6709\u7740\u7FA4\u5C71\u8BB8\u8BFA\u4E4B\u529B\u7684\u5723\u94C3"
+  unlockedByDefault: 0
+  rarity: 4
+  attack: 0
+  defense: 999
+  movementSpeed: 999

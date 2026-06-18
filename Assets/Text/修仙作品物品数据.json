@@ -346,5 +346,17 @@
     "Attack": 60,
     "Defense": 80,
     "MovementSpeed": 40
+  },
+  {
+    "ItemId": "shengling",
+    "DisplayName": "圣铃",
+    "Price": 99999,
+    "Icon": "",
+    "Description": "传说，最初的仙人曾去过一座深埋在密境中的，终年白雪皑皑的圣山。据后世记载，仙人在历经了15重考验后，终于将灵巧谢拉格之力修炼到极致，破解了圣山的隐秘核心，带出了这枚有着群山许诺之力的圣铃",
+    "Unlocked By Default": false,
+    "Rarity": "Immortal",
+    "Attack": 0,
+    "Defense": 999,
+    "MovementSpeed": 999
   }
 ]
