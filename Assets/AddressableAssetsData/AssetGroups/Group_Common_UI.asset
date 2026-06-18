@@ -32,11 +32,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 36d2e1e4facbc3842938bb5832e30664
-    m_Address: Assets/Images/MainImage.png
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 514940e74d2ccee41906388c4a4cb2d4
     m_Address: Assets/Images/DialogueButtonUI.png
     m_ReadOnly: 0

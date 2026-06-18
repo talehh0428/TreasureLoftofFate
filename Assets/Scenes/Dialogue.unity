@@ -564,6 +564,7 @@ MonoBehaviour:
   - {fileID: 1098614191}
   - {fileID: 706790802}
   closeEndingButton: {fileID: 1863529247}
+  closeEndingButtonText: {fileID: 0}
   charactersPerSecond: 35
   loadingPrefix: "\u601D\u8003\u4E2D"
   loadingFrameSeconds: 0.35
