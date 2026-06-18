@@ -1116,7 +1116,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.00012207031, y: -9.104702}
+  m_AnchoredPosition: {x: -0.00024414062, y: -9.104706}
   m_SizeDelta: {x: 204.8, y: -25.1046}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &239313481
@@ -2351,7 +2351,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 5
+  m_text: 50
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 14b108d264f31b84b9d3152646850235, type: 2}
   m_sharedMaterial: {fileID: -5031798205452438562, guid: 14b108d264f31b84b9d3152646850235, type: 2}
@@ -4970,10 +4970,10 @@ MonoBehaviour:
   - 1.5
   endRoundIncomeRateByLevel:
   - 0
+  - 0.03
+  - 0.06
+  - 0.08
   - 0.1
-  - 0.15
-  - 0.2
-  - 0.25
 --- !u!1 &1164424721
 GameObject:
   m_ObjectHideFlags: 0
